@@ -1,0 +1,24 @@
+======================================================
+    PASSOS A SEGUIR PER INSTAL·LAR UN NOU DISC DUR    
+======================================================
+
+1. DEFINIR UNA LLETRA FIXA PEL DISC
+	- Botó dret sobre "Mi PC" i seleccionem l'opció "Administrar".
+	- Seleccionem l'opció "Almacenamiento" -> "Administración de discos".
+	- Seleccionem la unitat USB, botó dret i marquem "Cambiar la letra y rutas de accesso de la unidad..."
+	- Seleccionarem una unitat entre la M i la Z
+	Cal tenir present no repetir els noms de les lletres, per evitar problemes d'accessos.
+
+2. CONFIGURAR EL DISC DUR EXTERN
+	- Cal crear un directori a l'arrel anomenat GD
+	- Cal crear el fitxer gd.properties al directori GD on definirem els següents paràmetres.
+
+3. DEFINIR UNA "JUNCTION" PER FER EL DISC FUNCIONAL
+	- Obrim el cmd amb permisos d'administració
+	- Ens posicionem al espai de terball del gestor documental C:/GD
+	- Executem la instrucció: 
+		mklink /J GD_REIS_N Z:GD
+		GD_REIS_N, on N es un numerador diferent per cada disc dur (definit al fitxer gd.properties)
+		Z:GD, on Z es la unitat especifica del disc dur
+
+4. CONFIGURAR EL DISC DUR DINS DE L'APLICACIÓ

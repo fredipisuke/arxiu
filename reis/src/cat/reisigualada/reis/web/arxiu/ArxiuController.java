@@ -1,0 +1,257 @@
+package cat.reisigualada.reis.web.arxiu;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import cat.reisigualada.reis.model.Clau;
+import cat.reisigualada.reis.model.Fitxer;
+import cat.reisigualada.reis.model.lists.ExcelList;
+import cat.reisigualada.reis.model.lists.PDFList;
+import cat.reisigualada.reis.service.ClauService;
+import cat.reisigualada.reis.service.DBUtils;
+import cat.reisigualada.reis.service.FitxerService;
+import cat.reisigualada.reis.utils.AjaxResponseBody;
+import cat.reisigualada.reis.utils.Constants;
+import cat.reisigualada.reis.utils.FileUtils;
+import cat.reisigualada.reis.utils.ListUtils;
+import cat.reisigualada.reis.validator.FitxerValidator;
+
+@Controller
+public class ArxiuController {
+    @Autowired
+    private ClauService clauService;
+    @Autowired
+    private FitxerService fitxerService;
+    @Autowired
+    private FitxerValidator fitxerValidator;
+
+    private static String UPLOADED_FOLDER = "D://temp//gd_reis1//";
+    
+    @RequestMapping(value = "/arxiu/consulta", method = RequestMethod.GET)
+    public String consulta(Model model) {
+    	model.addAttribute("NavBarArxiuActive", "active");
+        model.addAttribute("NavBarArxiuConsultaActive", "active");
+        
+        return "/arxiu/consulta";
+    }
+    
+    @RequestMapping(value = "/arxiu/consultaFitxers", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+   	public @ResponseBody AjaxResponseBody consultaFitxers(@RequestBody SearchCriteriaFitxers criteria, BindingResult bindingResult, Model model) {
+		AjaxResponseBody result = new AjaxResponseBody();
+		
+		if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau())){
+			// Convertim les paraules clau a Claus
+	    	HashSet<Clau> hsC = new HashSet<Clau>();
+	        for(String clau : criteria.getParaulesClau().split(",")){
+	        	Clau c = clauService.findByNameAndType(clau, criteria.getTypeDocument());
+	        	hsC.add(c);
+	        }
+	        criteria.setClaus(hsC);
+		}
+		try{
+			result.setResult(DBUtils.searchByCriteria(criteria));
+		} catch(Exception e){
+			result.setMsg("S'ha produit un error recuperant les dades");
+		}
+		return result;
+    }
+    
+    @RequestMapping(value = "/arxiu/downloadExcel", method = RequestMethod.GET)
+    public void downloadExcel(Model model, String titol, Long year, Long typeDocument, String paraulesClau, HttpServletResponse response) throws Exception {
+    	response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment; filename=fitxers.xlsx");
+        
+    	SearchCriteriaFitxers criteria = new SearchCriteriaFitxers();
+    	criteria.setTitol(titol);
+    	criteria.setYear(year);
+    	criteria.setTypeDocument(typeDocument);
+    	criteria.setParaulesClau(paraulesClau);
+    	criteria.setSearchKeys(true);
+    	if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau())){
+			// Convertim les paraules clau a Claus
+	    	HashSet<Clau> hsC = new HashSet<Clau>();
+	        for(String clau : criteria.getParaulesClau().split(",")){
+	        	Clau c = clauService.findByNameAndType(clau, criteria.getTypeDocument());
+	        	hsC.add(c);
+	        }
+	        criteria.setClaus(hsC);
+		}
+    	List<Fitxer> listFitxers = null;
+		try{
+			listFitxers = DBUtils.searchByCriteria(criteria);
+		} catch(Exception e){ 
+			System.out.println("S'ha produit un error recuperant les dades");
+		}
+    	
+    	ExcelList.excelFitxers(response.getOutputStream(), listFitxers);
+        response.flushBuffer();
+    }
+    
+    @RequestMapping(value = "/arxiu/downloadPDF", method = RequestMethod.GET)
+    public void downloadPDF(Model model, String titol, Long year, Long typeDocument, String paraulesClau, HttpServletResponse response) throws Exception {
+    	response.setContentType("application/x-pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=fitxers.pdf");
+        
+        SearchCriteriaFitxers criteria = new SearchCriteriaFitxers();
+    	criteria.setTitol(titol);
+    	criteria.setYear(year);
+    	criteria.setTypeDocument(typeDocument);
+    	criteria.setParaulesClau(paraulesClau);
+    	criteria.setSearchKeys(true);
+    	if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau())){
+			// Convertim les paraules clau a Claus
+	    	HashSet<Clau> hsC = new HashSet<Clau>();
+	        for(String clau : criteria.getParaulesClau().split(",")){
+	        	Clau c = clauService.findByNameAndType(clau, criteria.getTypeDocument());
+	        	hsC.add(c);
+	        }
+	        criteria.setClaus(hsC);
+		}
+    	List<Fitxer> listFitxers = null;
+		try{
+			listFitxers = DBUtils.searchByCriteria(criteria);
+		} catch(Exception e){ 
+			System.out.println("S'ha produit un error recuperant les dades");
+		}    	
+
+    	PDFList.pdfFitxers(response.getOutputStream(), listFitxers);
+        response.flushBuffer();
+    }
+    
+    @RequestMapping(value = "/arxiu/registre", method = RequestMethod.GET)
+    public String registre(Model model, Long id) {
+    	boolean editMode = false;
+    	Fitxer fForm;
+    	if(id!=null){
+    		editMode = true;
+    		fForm = fitxerService.findById(id);
+        	model.addAttribute("fitxerForm", fForm);
+        	// Claus relacionades amb el tipus de document seleccionat
+        	List<Clau> lK = clauService.findByType(fForm.getTypeDocument());
+        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+    	} else {
+    		fForm = new Fitxer();
+        	fForm.setTypeDocument(Constants.TYPE_KEY_IMAGE);
+        	model.addAttribute("fitxerForm", fForm);
+        	// Claus relacionades amb el tipus de document per defecte
+        	List<Clau> lK = clauService.findByType(fForm.getTypeDocument());
+        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+    	}
+    	model.addAttribute("NavBarArxiuActive", "active");
+        model.addAttribute("NavBarArxiuRegistreActive", "active");
+    	model.addAttribute("editMode", editMode);        
+        return "/arxiu/registre";
+    }
+    
+    @RequestMapping(value = "/arxiu/create", method = RequestMethod.POST)
+    public String create(@RequestParam("file") MultipartFile file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
+    	// Validem el formulari
+    	fitxerValidator.validate(fitxerForm, bindingResult);
+    	// Comprovem els errors
+        if (bindingResult.hasErrors()) {
+        	model.addAttribute("NavBarArxiuActive", "active");
+            model.addAttribute("NavBarArxiuRegistreActive", "active");
+            // Claus relacionades amb el tipus de document seleccionat
+        	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
+        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+            if(fitxerForm.getId()==null){
+            	model.addAttribute("editMode", false);
+            } else {
+            	model.addAttribute("editMode", true);
+            }
+        	return "/arxiu/registre";
+        }
+        
+        // Només en les altes
+        if(fitxerForm.getId()==null){
+	    	if (file.isEmpty()) {
+	        	model.addAttribute("messageError", "Cal seleccionar un fitxer");
+	        	model.addAttribute("NavBarArxiuActive", "active");
+	            model.addAttribute("NavBarArxiuRegistreActive", "active");
+	            // Claus relacionades amb el tipus de document seleccionat
+	        	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
+	        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+	            if(fitxerForm.getId()==null){
+	            	model.addAttribute("editMode", false);
+	            } else {
+	            	model.addAttribute("editMode", true);
+	            }
+	        	return "/arxiu/registre";
+	        } else {
+	        	// Obtenim el format
+	        	fitxerForm.setFormat(FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
+	        	// Generem el nom del fitxer
+	        	fitxerForm.setFileName(FileUtils.generateFileName(fitxerForm));
+	        }
+        }
+
+    	// Convertim les paraules clau a Claus
+    	HashSet<Clau> hsC = new HashSet<Clau>();
+        for(String clau : fitxerForm.getParaulesClau().split(",")){
+        	Clau c = clauService.findByNameAndType(clau, fitxerForm.getTypeDocument());
+        	if(c==null){
+        		model.addAttribute("messageError", "La clau '" + clau + "' no existeix");
+	        	model.addAttribute("NavBarArxiuActive", "active");
+	            model.addAttribute("NavBarArxiuRegistreActive", "active");
+	            // Claus relacionades amb el tipus de document seleccionat
+	        	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
+	        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+	            if(fitxerForm.getId()==null){
+	            	model.addAttribute("editMode", false);
+	            } else {
+	            	model.addAttribute("editMode", true);
+	            }
+	        	return "/arxiu/registre";
+        	}
+        	hsC.add(c);
+        }
+        fitxerForm.setClaus(hsC);
+    	
+    	// Creem el nou fitxer
+    	fitxerService.save(fitxerForm);
+        try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(UPLOADED_FOLDER + fitxerForm.getFileName());
+            Files.write(path, bytes);
+            model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    	model.addAttribute("NavBarArxiuActive", "active");
+        model.addAttribute("NavBarArxiuRegistreActive", "active");
+        // Claus relacionades amb el tipus de document seleccionat
+    	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
+    	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+        if(fitxerForm.getId()==null){
+        	model.addAttribute("editMode", false);
+        } else {
+        	model.addAttribute("editMode", true);
+        }
+        return "/arxiu/registre";
+    }
+    
+    @RequestMapping(value = "/arxiu/uploadStatus", method = RequestMethod.GET)
+    public String uploadStatus(Model model) {
+		
+        return "/arxiu/uploadStatus";
+    }
+}
