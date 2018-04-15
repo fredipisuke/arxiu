@@ -79,7 +79,11 @@ public class DBUtils {
 	        	f.setFileName(rs.getString("fileName"));
 	        	f.setFormat(rs.getString("format"));
 	        	f.setData(rs.getDate("data"));
+	        	f.setAutor(rs.getString("autor"));
 	        	f.setDataCreacio(rs.getTimestamp("dataCreacio"));
+	        	f.setUbicacio(rs.getString("ubicacio"));
+	        	f.setUbicacioArxiu(rs.getString("ubicacioArxiu"));
+	        	f.setProcedencia(rs.getString("procedencia"));
 	        	// Obtenim el llistat de claus del fitxer
 	        	if(criteria.isSearchKeys()){
 	        		f.setClaus(searchClaus(f));

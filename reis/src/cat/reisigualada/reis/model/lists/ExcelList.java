@@ -79,9 +79,9 @@ public class ExcelList {
 		cellTitle = row.createCell(4);
 		cellTitle.setCellValue("AUTOR");
 		cellTitle = row.createCell(5);
-		cellTitle.setCellValue("UBICACIÓ");
+		cellTitle.setCellValue("UBICACIÓ FOTOGRAFIA / UBICACIÓ ARXIU");
 		cellTitle = row.createCell(6);
-		cellTitle.setCellValue("PROCEDENCIA");
+		cellTitle.setCellValue("PROCEDÈNCIA");
 		cellTitle = row.createCell(7);
 		cellTitle.setCellValue("OBSERVACIONS");
 		
@@ -105,7 +105,11 @@ public class ExcelList {
 			cellValue = row.createCell(4);
 			cellValue.setCellValue(f.getAutor());
 			cellValue = row.createCell(5);
-			cellValue.setCellValue(f.getUbicacio());
+			if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
+				cellValue.setCellValue(f.getUbicacio());
+			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTE)){
+				cellValue.setCellValue(f.getUbicacioArxiu());
+			}
 			cellValue = row.createCell(6);
 			cellValue.setCellValue(f.getProcedencia());
 			cellValue = row.createCell(7);
