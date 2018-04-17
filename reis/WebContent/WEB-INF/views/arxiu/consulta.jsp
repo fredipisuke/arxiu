@@ -50,6 +50,7 @@
 			</sec:authorize>
 			<sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_ARXIU')">
 				<input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<input type="hidden" id="searchOn" name="searchOn" value="${searchOn}" />
 		    	<div class="container">
 					<div class="row">
 						<div class="col">
@@ -58,24 +59,24 @@
 					        </h2>
 					        
 				         	<div class="form-group">
-								<input id="titol" name="titol" type="text" class="form-control" placeholder="Títol document" autofocus="true" required="true"></input>
+								<input id="titol" name="titol" type="text" class="form-control" placeholder="Títol document" autofocus="true" required="true" value="${titol}"></input>
 							</div>
 							
 							<div class="form-group">
-								<input id="year" name="year" type="text" class="form-control" placeholder="Data" autofocus="true" required="true"></input>
+								<input id="year" name="year" type="text" class="form-control" placeholder="Data" autofocus="true" required="true" value="${year}"></input>
 							</div>
 							
 							<h4 class="form-signin-heading">Tipologia</h4>
 							<div class="form-group">
 								<select id="typeDocument" name="typeDocument" class="form-control" required="true">
 									<option value="">-- Seleccionar  --</option>
-									<option value="1">Imatge</option>
-									<option value="2">Document</option>
+									<option value="1" ${typeDocument=="1" ? "selected" : ""}>Imatge</option>
+									<option value="2" ${typeDocument=="2" ? "selected" : ""}>Document</option>
 								</select>
 							</div>
 							
 							<div class="form-group">
-								<input type="text" id="paraulesClau" name="paraulesClau" class="form-control" placeholder="Paraules clau" autofocus="true"></input>
+								<input type="text" id="paraulesClau" name="paraulesClau" class="form-control" placeholder="Paraules clau" autofocus="true" value="${paraulesClau}"></input>
 							</div>
 							<div align="center">
 				        		<a href="#" class="btn btn-success" id="btnSearch" name="btnSearch">
@@ -114,7 +115,7 @@
 							        </tr>
 							    </thead>
 							    <tbody>
-							        <c:forEach var="entry" items="${listImages}">
+							        <c:forEach var="entry" items="${listFitxers}">
 								    	<tr>
 								    		<td align="center">
 												<c:if test="${entry.typeDocument == 1}">
@@ -147,6 +148,9 @@
 												<a href="${contextPath}/arxiu/registre?id=${entry.id}" class="btn btn-primary" title="Editar">
 													<span class="glyphicon glyphicon-pencil" aria-hidden="true" style="font-size: 1.6em;vertical-align: middle;"></span>
 												</a>
+												<a href="${contextPath}/arxiu/eliminar?id=${entry.id}" class="btn btn-danger" title="Eliminar">
+													<span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size: 1.6em;vertical-align: middle;"></span>
+												</a>
 								    		</td>
 								    	</tr>
 								    </c:forEach>
@@ -168,7 +172,7 @@
 		<script src="${contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 		<script src="${contextPath}/resources/js/lightbox.js"></script>
 		<script type="text/javascript">
-    		var elements = [];
+    		var elements = [${paraulesClauList}];
 	    </script>
 		<script src="${contextPath}/resources/js/arxiu/consulta.js"></script>
 	</body>

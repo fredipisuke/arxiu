@@ -170,8 +170,8 @@ public class Fitxer {
 	@Transient
     public String getObservacionsResum() {
 		if(observacions!=null){
-			if(observacions.length()>50){
-				return observacions.substring(0, 50) + "...";
+			if(observacions.length()>200){
+				return observacions.substring(0, 250) + "...";
 			} else {
 				return observacions;	
 			}

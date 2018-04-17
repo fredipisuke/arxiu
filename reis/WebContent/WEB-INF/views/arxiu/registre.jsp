@@ -98,17 +98,34 @@
 							</div>
 						</spring:bind>
 						
-						<h4 class="form-signin-heading">Tipologia</h4>
-						<spring:bind path="typeDocument">
-							<div class="form-group ${status.error ? 'has-error' : ''}">
-								<form:select path="typeDocument" class="form-control" required="true">
-									<form:option value="">-- Seleccionar  --</form:option>
-									<form:option value="1">Imatge</form:option>
-									<form:option value="2">Document</form:option>
-								</form:select>
-								<form:errors path="typeDocument"></form:errors>
-							</div>
-						</spring:bind>
+						
+						<c:if test="${editMode == false}">
+							<h4 class="form-signin-heading">Tipologia</h4>
+							<spring:bind path="typeDocument">
+								<div class="form-group ${status.error ? 'has-error' : ''}">
+									<form:select path="typeDocument" class="form-control" required="true">
+										<form:option value="">-- Seleccionar  --</form:option>
+										<form:option value="1">Imatge</form:option>
+										<form:option value="2">Document</form:option>
+									</form:select>
+									<form:errors path="typeDocument"></form:errors>
+								</div>
+							</spring:bind>
+						</c:if>
+						<c:if test="${editMode == true}">
+							<h4 class="form-signin-heading">
+								Tipologia:
+								<c:if test="${fitxerForm.typeDocument == '1'}">
+									<b>Imatge</b>
+								</c:if>
+								<c:if test="${fitxerForm.typeDocument == '2'}">
+									<b>Document</b>
+								</c:if>
+							</h4>
+							<spring:bind path="typeDocument">
+								<form:input type="hidden" path="typeDocument" class="form-control"></form:input>
+							</spring:bind>
+						</c:if>
 						
 						<spring:bind path="paraulesClau">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
@@ -227,6 +244,7 @@
 						<div align="center">
 							<button class="btn btn-lg btn-default" type="button" onclick="javascript:window.location='consulta';">Tornar</button>
 							<c:if test="${editMode == true}">
+								<a href="#" class="btn btn-lg btn-danger" title="Eliminar" onclick="eliminarFitxer(${fitxerForm.id})">Eliminar</a>
 								<button class="btn btn-lg btn-primary" type="submit">Modificar</button>
 							</c:if>
 							<c:if test="${editMode == false}">

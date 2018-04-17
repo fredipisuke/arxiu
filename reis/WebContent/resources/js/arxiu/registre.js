@@ -17,10 +17,21 @@ $(document).ready(function(){
 		$('#paraulesClau').tokenfield('destroy');
 		$('#paraulesClau').val("");
 		if($("#typeDocument").val()!=null && $("#typeDocument").val()!=""){
+			if($("#typeDocument").val()!="1"){
+				$("#ubicacio").show();
+				$("#procedencia").show();
+			} else if($("#typeDocument").val()!="2"){
+				$("#ubicacio").hide();
+				$("#procedencia").hide();
+			}
 			searchClaus();
 		}
 	});
 });
+
+function eliminarFitxer(id){
+	window.location = "/reis/arxiu/eliminar?id=" + id;
+}
 
 function searchClaus(){
 	var params = {}

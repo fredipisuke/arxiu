@@ -38,16 +38,9 @@ public class DBUtils {
 	public static List<Fitxer> searchByCriteria(SearchCriteriaFitxers criteria){
 		String SELECT_FITXERS = "select distinct f.* from fitxer f where 1=1";
 		if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau()) && criteria.getClaus()!=null && criteria.getClaus().size()>0){
-			SELECT_FITXERS = "select distinct f.* from fitxer f " 
-					+ " left join fitxer_clau fc ON f.id = fc.fitxer_id "
-					+ " where 1=1 ";
-			String inClaus = "";
-			int i=0;
 			for(Clau c : criteria.getClaus()){
-				if(i==0) inClaus += c.getId();
-				else inClaus += ", " + c.getId();
+				SELECT_FITXERS += " and exists (select * from fitxer_clau fc where f.id=fc.fitxer_id and fc.clau_id=" + c.getId() + ")";
 			}
-			SELECT_FITXERS += " and fc.clau_id in (" + inClaus + ") ";
 		}
 		if(criteria.getYear()!=null){
 			SELECT_FITXERS += " and year(f.data) = " + criteria.getYear();

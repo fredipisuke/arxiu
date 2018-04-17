@@ -62,7 +62,7 @@ public class ArxiuController {
 			// Convertim les paraules clau a Claus
 	    	HashSet<Clau> hsC = new HashSet<Clau>();
 	        for(String clau : criteria.getParaulesClau().split(",")){
-	        	Clau c = clauService.findByNameAndType(clau, criteria.getTypeDocument());
+	        	Clau c = clauService.findByNameAndType(clau.trim(), criteria.getTypeDocument());
 	        	hsC.add(c);
 	        }
 	        criteria.setClaus(hsC);
@@ -90,7 +90,7 @@ public class ArxiuController {
 			// Convertim les paraules clau a Claus
 	    	HashSet<Clau> hsC = new HashSet<Clau>();
 	        for(String clau : criteria.getParaulesClau().split(",")){
-	        	Clau c = clauService.findByNameAndType(clau, criteria.getTypeDocument());
+	        	Clau c = clauService.findByNameAndType(clau.trim(), criteria.getTypeDocument());
 	        	hsC.add(c);
 	        }
 	        criteria.setClaus(hsC);
@@ -121,7 +121,7 @@ public class ArxiuController {
 			// Convertim les paraules clau a Claus
 	    	HashSet<Clau> hsC = new HashSet<Clau>();
 	        for(String clau : criteria.getParaulesClau().split(",")){
-	        	Clau c = clauService.findByNameAndType(clau, criteria.getTypeDocument());
+	        	Clau c = clauService.findByNameAndType(clau.trim(), criteria.getTypeDocument());
 	        	hsC.add(c);
 	        }
 	        criteria.setClaus(hsC);
@@ -207,7 +207,7 @@ public class ArxiuController {
     	// Convertim les paraules clau a Claus
     	HashSet<Clau> hsC = new HashSet<Clau>();
         for(String clau : fitxerForm.getParaulesClau().split(",")){
-        	Clau c = clauService.findByNameAndType(clau, fitxerForm.getTypeDocument());
+        	Clau c = clauService.findByNameAndType(clau.trim(), fitxerForm.getTypeDocument());
         	if(c==null){
         		model.addAttribute("messageError", "La clau '" + clau + "' no existeix");
 	        	model.addAttribute("NavBarArxiuActive", "active");
@@ -249,9 +249,50 @@ public class ArxiuController {
         return "/arxiu/registre";
     }
     
-    @RequestMapping(value = "/arxiu/uploadStatus", method = RequestMethod.GET)
-    public String uploadStatus(Model model) {
-		
-        return "/arxiu/uploadStatus";
+    @RequestMapping(value = "/arxiu/eliminar", method = RequestMethod.GET)
+    public String eliminar(Model model, Long id, Boolean searchOn, String titol, Long year, Long typeDocument, String paraulesClau) {
+    	// Eliminem el fitxer
+    	//fitxerService.deleteById(id);
+    	// Eliminem el fitxer fisic del disc
+    	
+    	// Cerquem els resultats
+    	if(searchOn!=null && searchOn){
+    		SearchCriteriaFitxers criteria = new SearchCriteriaFitxers();
+        	criteria.setTitol(titol);
+        	criteria.setYear(year);
+        	criteria.setTypeDocument(typeDocument);
+        	criteria.setParaulesClau(paraulesClau);
+        	criteria.setSearchKeys(true);
+        	if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau())){
+    			// Convertim les paraules clau a Claus
+    	    	HashSet<Clau> hsC = new HashSet<Clau>();
+    	        for(String clau : criteria.getParaulesClau().split(",")){
+    	        	Clau c = clauService.findByNameAndType(clau.trim(), criteria.getTypeDocument());
+    	        	hsC.add(c);
+    	        }
+    	        criteria.setClaus(hsC);
+    		}
+        	List<Fitxer> listFitxers = null;
+    		try{
+    			listFitxers = DBUtils.searchByCriteria(criteria);
+    		} catch(Exception e){ 
+    			System.out.println("S'ha produit un error recuperant les dades");
+    		}
+    		model.addAttribute("searchOn", searchOn);
+    		model.addAttribute("titol", titol);
+    		model.addAttribute("year", year);
+    		model.addAttribute("typeDocument", typeDocument);
+    		// Cerquem les paraules clau
+    		if(typeDocument!=null){
+    			List<Clau> lK = clauService.findByType(typeDocument);
+    			model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+    		}
+    		model.addAttribute("paraulesClau", paraulesClau);
+    		model.addAttribute("listFitxers", listFitxers);
+    	}
+    	model.addAttribute("NavBarArxiuActive", "active");
+        model.addAttribute("NavBarArxiuConsultaActive", "active");
+        
+    	return "/arxiu/consulta";
     }
 }

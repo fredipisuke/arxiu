@@ -36,7 +36,9 @@ $(document).ready(function(){
         }
 	});
 	// Ocult per defecte
-	hideData();
+	if($('#searchOn').val()!="true"){
+		hideData();
+	}
 	
 	$("#titol").change(function(){
 		hideData();
@@ -61,11 +63,16 @@ $(document).ready(function(){
 		});
 	$('#paraulesClau').on('tokenfield:createtoken', function (e) {
 		hideData();
+		// INTERNET EXPLORER FALLA
 		if(!elements.includes(e.attrs.value)){
 			alert("Clau invalida")
 			return false;
 		}
 	});
+	if($("#typeDocument").val()==""){
+		$('#paraulesClau').tokenfield('destroy');
+		$('#paraulesClau').hide();
+	}
 	
 	$('#btnSearch').click(function () {
 		search();
@@ -164,8 +171,21 @@ function createTable(data){
 			+ "<a href=\"registre?id=" + data.result[i].id + "\" class=\"btn btn-primary\" title=\"Editar\">"
 				+ "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
 			+ "</a>"
+			+ "&nbsp;"
+			+ "<a href=\"#\" class=\"btn btn-danger\" title=\"Eliminar\" onclick=\"eliminarFitxer(" + data.result[i].id + ")\">"
+				+ "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
+			+ "</a>"
         ] ).draw( false );
 	}
+}
+
+function eliminarFitxer(id){
+	window.location = "/reis/arxiu/eliminar?id=" + id
+						+ "&searchOn=true" 
+						+ "&titol=" + $("#titol").val()
+						+ "&year=" + $("#year").val()
+						+ "&typeDocument=" + $("#typeDocument").val()
+						+ "&paraulesClau=" + $("#paraulesClau").val();
 }
 
 function searchClaus(){
