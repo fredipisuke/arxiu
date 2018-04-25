@@ -22,7 +22,7 @@ public class DBUtils {
 		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
 		    Statement st = conn.createStatement();
 		    st = conn.createStatement();
-		    ResultSet rs = st.executeQuery("QUERY");
+		    ResultSet rs = st.executeQuery(QUERY);
 	        while (rs.next()) {
 	            return rs.getLong(1) + 1;
 	        }

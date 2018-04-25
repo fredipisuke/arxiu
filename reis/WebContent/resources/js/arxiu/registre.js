@@ -17,10 +17,10 @@ $(document).ready(function(){
 		$('#paraulesClau').tokenfield('destroy');
 		$('#paraulesClau').val("");
 		if($("#typeDocument").val()!=null && $("#typeDocument").val()!=""){
-			if($("#typeDocument").val()!="1"){
+			if($("#typeDocument").val()=="1"){
 				$("#ubicacio").show();
 				$("#procedencia").show();
-			} else if($("#typeDocument").val()!="2"){
+			} else if($("#typeDocument").val()=="2"){
 				$("#ubicacio").hide();
 				$("#procedencia").hide();
 			}

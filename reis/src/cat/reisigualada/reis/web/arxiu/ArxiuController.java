@@ -1,5 +1,6 @@
 package cat.reisigualada.reis.web.arxiu;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -164,20 +165,14 @@ public class ArxiuController {
     
     @RequestMapping(value = "/arxiu/create", method = RequestMethod.POST)
     public String create(@RequestParam("file") MultipartFile file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
+    	boolean newFile = true;
+    	if(fitxerForm.getId()!=null) newFile = false;
+    	
     	// Validem el formulari
     	fitxerValidator.validate(fitxerForm, bindingResult);
     	// Comprovem els errors
         if (bindingResult.hasErrors()) {
-        	model.addAttribute("NavBarArxiuActive", "active");
-            model.addAttribute("NavBarArxiuRegistreActive", "active");
-            // Claus relacionades amb el tipus de document seleccionat
-        	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
-        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
-            if(fitxerForm.getId()==null){
-            	model.addAttribute("editMode", false);
-            } else {
-            	model.addAttribute("editMode", true);
-            }
+        	loadViewRegistre(model, fitxerForm, newFile);
         	return "/arxiu/registre";
         }
         
@@ -185,16 +180,7 @@ public class ArxiuController {
         if(fitxerForm.getId()==null){
 	    	if (file.isEmpty()) {
 	        	model.addAttribute("messageError", "Cal seleccionar un fitxer");
-	        	model.addAttribute("NavBarArxiuActive", "active");
-	            model.addAttribute("NavBarArxiuRegistreActive", "active");
-	            // Claus relacionades amb el tipus de document seleccionat
-	        	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
-	        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
-	            if(fitxerForm.getId()==null){
-	            	model.addAttribute("editMode", false);
-	            } else {
-	            	model.addAttribute("editMode", true);
-	            }
+	        	loadViewRegistre(model, fitxerForm, newFile);
 	        	return "/arxiu/registre";
 	        } else {
 	        	// Obtenim el format
@@ -209,25 +195,15 @@ public class ArxiuController {
         for(String clau : fitxerForm.getParaulesClau().split(",")){
         	Clau c = clauService.findByNameAndType(clau.trim(), fitxerForm.getTypeDocument());
         	if(c==null){
-        		model.addAttribute("messageError", "La clau '" + clau + "' no existeix");
-	        	model.addAttribute("NavBarArxiuActive", "active");
-	            model.addAttribute("NavBarArxiuRegistreActive", "active");
-	            // Claus relacionades amb el tipus de document seleccionat
-	        	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
-	        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
-	            if(fitxerForm.getId()==null){
-	            	model.addAttribute("editMode", false);
-	            } else {
-	            	model.addAttribute("editMode", true);
-	            }
+            	model.addAttribute("messageError", "La clau '" + clau + "' no existeix");
+            	loadViewRegistre(model, fitxerForm, newFile);
 	        	return "/arxiu/registre";
         	}
         	hsC.add(c);
         }
         fitxerForm.setClaus(hsC);
-    	
-    	// Creem el nou fitxer
-    	fitxerService.save(fitxerForm);
+        
+    	// Guardem el fitxer
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + fitxerForm.getFileName());
@@ -235,25 +211,58 @@ public class ArxiuController {
             model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
         } catch (IOException e) {
             e.printStackTrace();
+            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
+            loadViewRegistre(model, fitxerForm, newFile);
+            return "/arxiu/registre";
         }
+
+    	// Creem el nou fitxer
+        try {
+        	fitxerService.save(fitxerForm);
+        } catch(Exception e){
+        	e.printStackTrace();
+        	model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear");
+            loadViewRegistre(model, fitxerForm, newFile);
+            return "/arxiu/registre";
+        }
+        
+        // Parametres per poder carregar la vista
+        loadViewRegistre(model, fitxerForm, newFile);
+        return "/arxiu/registre";
+    }
+    
+    private void loadViewRegistre(Model model, Fitxer fitxerForm, boolean newFile){
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuRegistreActive", "active");
         // Claus relacionades amb el tipus de document seleccionat
     	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
     	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
-        if(fitxerForm.getId()==null){
+        if(newFile){
+        	fitxerForm.setId(null);
+        	fitxerForm.setFormat(null);
+        	fitxerForm.setFileName(null);
         	model.addAttribute("editMode", false);
         } else {
         	model.addAttribute("editMode", true);
         }
-        return "/arxiu/registre";
     }
     
     @RequestMapping(value = "/arxiu/eliminar", method = RequestMethod.GET)
     public String eliminar(Model model, Long id, Boolean searchOn, String titol, Long year, Long typeDocument, String paraulesClau) {
-    	// Eliminem el fitxer
-    	//fitxerService.deleteById(id);
+    	// Obtenim el fitxer
+    	Fitxer f = fitxerService.findById(id);
+    	
     	// Eliminem el fitxer fisic del disc
+    	File file = new File(UPLOADED_FOLDER + f.getFileName());
+    	if(file!=null){
+			if(file.delete()){
+				System.out.println(file.getName() + " esborrat");
+			} else {
+				System.out.println("Error esborrant el fitxer");
+			}
+    	}
+    	// Eliminem el fitxer
+    	fitxerService.deleteById(id);
     	
     	// Cerquem els resultats
     	if(searchOn!=null && searchOn){
@@ -289,6 +298,8 @@ public class ArxiuController {
     		}
     		model.addAttribute("paraulesClau", paraulesClau);
     		model.addAttribute("listFitxers", listFitxers);
+    	} else {
+    		
     	}
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuConsultaActive", "active");
