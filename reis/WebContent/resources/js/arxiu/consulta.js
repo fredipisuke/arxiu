@@ -165,109 +165,111 @@ function createTable(data){
 	var totalPages = Math.round(parseInt(data.total)/$("#nElementsPerPage").val());
 	var nElements = (pagina * $("#nElementsPerPage").val()) + 1;
 	if(data.total>0){
-		jQuery("#tableFitxersInfo").text("Mostrant " + nElements + " de " + data.total);
+		jQuery("#tableFitxersInfo").html("Mostrant " + nElements + " de " + data.total);
 	} else {
-		jQuery("#tableFitxersInfo").text("No hi han resultats amb els par&agrave;metres introduits");
+		jQuery("#tableFitxersInfo").html("No hi han resultats amb els par&agrave;metres introduits");
 	}
-	var tableFitxersPaginacio = "<ul class='pagination'>";
 	
-	// BOTÓ PRIMER
-	if(pagina>=1){
-		tableFitxersPaginacio += "<li class='paginate_button previous' id='tableFitxers_previous'>"
-									+ "<a href='javascript:searchBack()' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Anterior</a>"
-								+ "</li>";
-		if(pagina>1){
-			tableFitxersPaginacio += "<li class='paginate_button'>"
-										+ "<a href='javascript:searchPage(0)' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>1</a>"
+	// BOTONS DE PÀGINACIÓ
+	var tableFitxersPaginacio = "";
+	if(data.total>0){
+		tableFitxersPaginacio = "<ul class='pagination'>";
+		// BOTÓ PRIMER
+		if(pagina>=1){
+			tableFitxersPaginacio += "<li class='paginate_button previous' id='tableFitxers_previous'>"
+										+ "<a href='javascript:searchBack()' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Anterior</a>"
 									+ "</li>";
-		}
-	} else {
-		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
-									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Anterior</a>"
-								+ "</li>";
-	}
-	
-	// BOTONS INTERMITJOS
-	if(pagina<4){
-		var count = 2;
-		if(pagina<=1){
-			count = 1;
-		}
-		for(var i=count; i<=5 && i<=totalPages+1; i++){
-			var idPage = i - 1;
-			if(pagina==idPage){
-				tableFitxersPaginacio += "<li class='paginate_button active'>"
-											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
-										+ "</li>";
-			} else {
+			if(pagina>1){
 				tableFitxersPaginacio += "<li class='paginate_button'>"
-											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+											+ "<a href='javascript:searchPage(0)' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>1</a>"
 										+ "</li>";
 			}
+		} else {
+			tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+										+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Anterior</a>"
+									+ "</li>";
 		}
-		if(totalPages>5){
+		
+		// BOTONS INTERMITJOS
+		if(pagina<4){
+			var count = 2;
+			if(pagina<=1){
+				count = 1;
+			}
+			for(var i=count; i<=5 && i<=totalPages+1; i++){
+				var idPage = i - 1;
+				if(pagina==idPage){
+					tableFitxersPaginacio += "<li class='paginate_button active'>"
+												+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+											+ "</li>";
+				} else {
+					tableFitxersPaginacio += "<li class='paginate_button'>"
+												+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+											+ "</li>";
+				}
+			}
+			if(totalPages>5){
+				tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+											+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
+										+ "</li>";
+			}
+		} else if(pagina < totalPages-4){
 			tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
 										+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
 									+ "</li>";
+			for(var i=pagina; i<pagina+3; i++){
+				var idPage = i - 1;
+				if(pagina==idPage){
+					tableFitxersPaginacio += "<li class='paginate_button active'>"
+												+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+											+ "</li>";
+				} else {
+					tableFitxersPaginacio += "<li class='paginate_button'>"
+												+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+											+ "</li>";
+				}
+			}
+			tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+										+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
+									+ "</li>";
+		} else {
+			tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+										+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
+									+ "</li>";
+			for(var i=totalPages-4; i<=totalPages+1; i++){
+				var idPage = i - 1;
+				if(pagina==idPage){
+					tableFitxersPaginacio += "<li class='paginate_button active'>"
+												+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+											+ "</li>";
+				} else {
+					tableFitxersPaginacio += "<li class='paginate_button'>"
+												+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+											+ "</li>";
+				}
+			}
 		}
-	} else if(pagina < totalPages-4){
-		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
-									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
-								+ "</li>";
-		for(var i=pagina; i<pagina+3; i++){
-			var idPage = i - 1;
-			if(pagina==idPage){
-				tableFitxersPaginacio += "<li class='paginate_button active'>"
-											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
-										+ "</li>";
-			} else {
+		
+		// BOTÓ ÚLTIM
+		if(pagina < totalPages){
+			if(pagina < totalPages-4){
+				var idPage = totalPages;
+				var i = totalPages + 1;
 				tableFitxersPaginacio += "<li class='paginate_button'>"
 											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
 										+ "</li>";
 			}
-		}
-		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
-									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
-								+ "</li>";
-	} else {
-		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
-									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
-								+ "</li>";
-		for(var i=totalPages-4; i<=totalPages+1; i++){
-			var idPage = i - 1;
-			if(pagina==idPage){
-				tableFitxersPaginacio += "<li class='paginate_button active'>"
-											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
-										+ "</li>";
-			} else {
-				tableFitxersPaginacio += "<li class='paginate_button'>"
-											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
-										+ "</li>";
-			}
-		}
-	}
-	
-	// BOTÓ ÚLTIM
-	if(pagina < totalPages){
-		if(pagina < totalPages-4){
-			var idPage = totalPages;
-			var i = totalPages + 1;
-			tableFitxersPaginacio += "<li class='paginate_button'>"
-										+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+			tableFitxersPaginacio += "<li class='paginate_button next' id='tableFitxers_next'>"
+										+ "<a href='javascript:searchNext()' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Seg&uuml;ent</a>"
+									+ "</li>";
+		} else {
+			tableFitxersPaginacio += "<li class='paginate_button next disabled' id='tableFitxers_next'>"
+										+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Seg&uuml;ent</a>"
 									+ "</li>";
 		}
-		tableFitxersPaginacio += "<li class='paginate_button next' id='tableFitxers_next'>"
-									+ "<a href='javascript:searchNext()' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Seg&uuml;ent</a>"
-								+ "</li>";
-	} else {
-		tableFitxersPaginacio += "<li class='paginate_button next disabled' id='tableFitxers_next'>"
-									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Seg&uuml;ent</a>"
-								+ "</li>";
+		tableFitxersPaginacio += "</ul>";
 	}
-	tableFitxersPaginacio += "</ul>";
-	if(data.total>0){
-		jQuery("#tableFitxersPaginacio").html(tableFitxersPaginacio);
-	}
+	jQuery("#tableFitxersPaginacio").html(tableFitxersPaginacio);
 	jQuery("#tableFitxersTotals").show();
 }
 
