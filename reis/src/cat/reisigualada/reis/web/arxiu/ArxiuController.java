@@ -57,8 +57,6 @@ public class ArxiuController {
     
     @RequestMapping(value = "/arxiu/consultaFitxers", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
    	public @ResponseBody AjaxResponseBody consultaFitxers(@RequestBody SearchCriteriaFitxers criteria, BindingResult bindingResult, Model model) {
-		AjaxResponseBody result = new AjaxResponseBody();
-		
 		if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau())){
 			// Convertim les paraules clau a Claus
 	    	HashSet<Clau> hsC = new HashSet<Clau>();
@@ -68,8 +66,9 @@ public class ArxiuController {
 	        }
 	        criteria.setClaus(hsC);
 		}
+		AjaxResponseBody result = new AjaxResponseBody();
 		try{
-			result.setResult(DBUtils.searchByCriteria(criteria));
+			result = DBUtils.searchForView(criteria);
 		} catch(Exception e){
 			result.setMsg("S'ha produit un error recuperant les dades");
 		}
@@ -98,7 +97,7 @@ public class ArxiuController {
 		}
     	List<Fitxer> listFitxers = null;
 		try{
-			listFitxers = DBUtils.searchByCriteria(criteria);
+			listFitxers = DBUtils.searchForDocument(criteria);
 		} catch(Exception e){ 
 			System.out.println("S'ha produit un error recuperant les dades");
 		}
@@ -129,7 +128,7 @@ public class ArxiuController {
 		}
     	List<Fitxer> listFitxers = null;
 		try{
-			listFitxers = DBUtils.searchByCriteria(criteria);
+			listFitxers = DBUtils.searchForDocument(criteria);
 		} catch(Exception e){ 
 			System.out.println("S'ha produit un error recuperant les dades");
 		}    	
@@ -247,7 +246,8 @@ public class ArxiuController {
         }
     }
     
-    @RequestMapping(value = "/arxiu/eliminar", method = RequestMethod.GET)
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/arxiu/eliminar", method = RequestMethod.GET)
     public String eliminar(Model model, Long id, Boolean searchOn, String titol, Long year, Long typeDocument, String paraulesClau) {
     	// Obtenim el fitxer
     	Fitxer f = fitxerService.findById(id);
@@ -283,7 +283,7 @@ public class ArxiuController {
     		}
         	List<Fitxer> listFitxers = null;
     		try{
-    			listFitxers = DBUtils.searchByCriteria(criteria);
+    			listFitxers = (List<Fitxer>)DBUtils.searchForView(criteria).getResult();
     		} catch(Exception e){ 
     			System.out.println("S'ha produit un error recuperant les dades");
     		}

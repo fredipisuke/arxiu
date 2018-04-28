@@ -22,7 +22,7 @@
 		</c:if>
 		
 		<link href="${contextPath}/resources/css/common2.css" rel="stylesheet">
-		<link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+		<link href="${contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/tokenfield-typeahead.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/bootstrap-tokenfield.min.css" rel="stylesheet">
@@ -259,8 +259,8 @@
 		
 		<!-- /container -->
 		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script src="${contextPath}/resources/js/jquery/1.9.1/jquery.min.js"></script>
+		<script src="${contextPath}/resources/js/jquery-ui.js"></script>
 		<script src="${contextPath}/resources/js/moment.min.js"></script>
 		<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 		<script src="${contextPath}/resources/js/bootstrap-tokenfield.min.js"></script>

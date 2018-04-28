@@ -12,6 +12,9 @@ public class SearchCriteriaFitxers {
     private String paraulesClau;
     private Set<Clau> claus;
     private boolean searchKeys = false;
+    // Parametres del cercador
+    private Long pagina = new Long(0);
+    private Long nElementsPerPage = new Long(10);    
     
 	public String getTitol() {
 		return titol;
@@ -48,5 +51,17 @@ public class SearchCriteriaFitxers {
 	}
 	public void setSearchKeys(boolean searchKeys) {
 		this.searchKeys = searchKeys;
+	}
+	public Long getPagina() {
+		return pagina;
+	}
+	public void setPagina(Long pagina) {
+		this.pagina = pagina;
+	}
+	public Long getnElementsPerPage() {
+		return nElementsPerPage;
+	}
+	public void setnElementsPerPage(Long nElementsPerPage) {
+		this.nElementsPerPage = nElementsPerPage;
 	}
 }

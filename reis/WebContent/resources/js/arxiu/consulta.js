@@ -1,45 +1,8 @@
 $(document).ready(function(){
-	var table = $('#tableFitxers').DataTable( {
-		"columnDefs": [
-		      { className: "text-center", "targets": [0] },
-		      { className: "text-center text-middle", "targets": [2] }
-		    ],
-		"columns": [
-		      { "orderable": false },
-		      null,
-		      null
-		    ],
-	    order: [[1, 'asc']],
-		"language": {
-			"decimal":        	",",
-			"emptyTable":     	"No hi han dades",
-			"info": 			"Mostrant p&agrave;gina _PAGE_ de _PAGES_",
-            "infoEmpty": 		"Sense dades disponibles",
-            "infoFiltered": 	"(filtrant per _MAX_ total de resultats)",
-            "infoPostFix":    	"",
-            "thousands":      	".",
-            "lengthMenu": 		"Mostrant _MENU_ elements per p&agrave;gina",
-            "loadingRecords": 	"Carregant...",
-            "processing":     	"Processant...",
-            "search":         	"Cercar:",
-            "zeroRecords": 		"No hi han dades",
-            "paginate": {
-                "first":      "Primer",
-                "last":       "&Uacute;ltim",
-                "next":       "Seg&uumlent",
-                "previous":   "Anterior"
-            },
-            "aria": {
-                "sortAscending":  ": activa ordenació ascendent de la columna",
-                "sortDescending": ": activa ordenació descendent de la columna"
-            }
-        }
-	});
 	// Ocult per defecte
 	if($('#searchOn').val()!="true"){
 		hideData();
 	}
-	
 	$("#titol").change(function(){
 		hideData();
 	});
@@ -73,8 +36,13 @@ $(document).ready(function(){
 		$('#paraulesClau').tokenfield('destroy');
 		$('#paraulesClau').hide();
 	}
-	
+	$("#nElementsPerPage").change(function(){
+		hideData();
+		$("#pagina").val(0);
+		search();
+	});
 	$('#btnSearch').click(function () {
+		$("#pagina").val(0);
 		search();
     });
 	$('#btnExcel').click(function () {
@@ -96,20 +64,36 @@ $(document).ready(function(){
 });
 
 function hideData(){
-	$('#tableFitxers_wrapper').hide();
+	$('#tableFitxers').hide();
+	$('#tableFitxersLength').hide();
+	jQuery("#tableFitxersTotals").hide();
 	$('#btnExcel').hide();
 	$('#btnPDF').hide();
-	var tbl = $('#tableFitxers').DataTable();
-	// Borrem els elements de la taula
-	tbl.rows().remove().draw(false);
 }
 
+
+function searchPage(pg){
+	$("#pagina").val(pg);
+	search();
+}
+function searchNext(){
+	$("#pagina").val(parseInt($("#pagina").val()) + 1);
+	search();
+}
+function searchBack(){
+	$("#pagina").val(parseInt($("#pagina").val()) - 1);
+	search();
+}
 function search(){
 	var params = {}
 	params["titol"] = $("#titol").val();
 	params["year"] = $("#year").val();
 	params["typeDocument"] = $("#typeDocument").val();
 	params["paraulesClau"] = $("#paraulesClau").val();
+	var pagina = $("#pagina").val();
+	if(pagina==null || pagina=="") pagina = 0;
+	params["pagina"] = pagina;
+	params["nElementsPerPage"] = $("#nElementsPerPage").val();
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",
@@ -126,7 +110,6 @@ function goSuccess(data){
 	if(data.msg!=null && data.msg!="") goError(data);
 	if(data.result!=null){
 		createTable(data);
-		$("#tableFitxers_wrapper").show();
 		if(data.result.length>0){
 			$('#btnExcel').show();
 			$('#btnPDF').show();
@@ -135,10 +118,10 @@ function goSuccess(data){
 }
 
 function createTable(data){
-	var tbl = $('#tableFitxers').DataTable();
-	// Borrem els elements de la taula
-	tbl.rows().remove().draw(false);
-	
+	jQuery("#tableFitxers").show();
+	jQuery("#tableFitxersLength").show();
+	jQuery("#tableFitxers").find("tr:gt(0)").remove();
+	var tbody = jQuery("#tableFitxers");
 	// Carraguem els nous valors a la taula
 	for(var i=0; i<data.result.length; i++){
 		var miniImage = "";
@@ -155,28 +138,137 @@ function createTable(data){
 				miniImage = "<div style=\"background-image:url('/reis/resources/images/file.png'); position: relative; float: center; width: 50px; height: 50px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;\"></div>";
 			}
 		}
-		
-        tbl.row.add( [
-        	// Document
-        	miniImage,
-        	
-        	// Titol/Descripció
-        	"<strong>" + data.result[i].titol + "</strong><br>" + data.result[i].observacionsResum,
-        	
-        	// Accions
-        	"<a download=\"" + data.result[i].fileName + "\" href=\"/project/images/gd_reis1/" + data.result[i].fileName + "\" target=\"_blank\" class=\"btn btn-success\" title=\"Descarregar\">"
-				+ "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
-			+ "</a>"
-			+ "&nbsp;"
-			+ "<a href=\"registre?id=" + data.result[i].id + "\" class=\"btn btn-primary\" title=\"Editar\">"
-				+ "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
-			+ "</a>"
-			+ "&nbsp;"
-			+ "<a href=\"#\" class=\"btn btn-danger\" title=\"Eliminar\" onclick=\"eliminarFitxer(" + data.result[i].id + ")\">"
-				+ "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
-			+ "</a>"
-        ] ).draw( false );
+		var trow = jQuery("<tr>");
+		jQuery("<td align='center'>")
+					.html(miniImage)
+					.appendTo(trow);
+		jQuery("<td align='left'>")
+					.html("<strong>" + data.result[i].titol + "</strong><br>" + data.result[i].observacionsResum)
+					.appendTo(trow);
+		jQuery("<td align='center' style='vertical-align: middle;'>")
+					.html("<a download=\"" + data.result[i].fileName + "\" href=\"/project/images/gd_reis1/" + data.result[i].fileName + "\" target=\"_blank\" class=\"btn btn-success\" title=\"Descarregar\">"
+							+ "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
+							+ "</a>"
+							+ "&nbsp;"
+							+ "<a href=\"registre?id=" + data.result[i].id + "\" class=\"btn btn-primary\" title=\"Editar\">"
+								+ "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
+							+ "</a>"
+							+ "&nbsp;"
+							+ "<a href=\"#\" class=\"btn btn-danger\" title=\"Eliminar\" onclick=\"eliminarFitxer(" + data.result[i].id + ")\">"
+								+ "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
+							+ "</a>")
+					.appendTo(trow);
+		trow.appendTo(tbody);
 	}
+
+	var pagina = parseInt($("#pagina").val());
+	var totalPages = Math.round(parseInt(data.total)/$("#nElementsPerPage").val());
+	var nElements = (pagina * $("#nElementsPerPage").val()) + 1;
+	if(data.total>0){
+		jQuery("#tableFitxersInfo").text("Mostrant " + nElements + " de " + data.total);
+	} else {
+		jQuery("#tableFitxersInfo").text("No hi han resultats amb els par&agrave;metres introduits");
+	}
+	var tableFitxersPaginacio = "<ul class='pagination'>";
+	
+	// BOTÓ PRIMER
+	if(pagina>=1){
+		tableFitxersPaginacio += "<li class='paginate_button previous' id='tableFitxers_previous'>"
+									+ "<a href='javascript:searchBack()' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Anterior</a>"
+								+ "</li>";
+		if(pagina>1){
+			tableFitxersPaginacio += "<li class='paginate_button'>"
+										+ "<a href='javascript:searchPage(0)' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>1</a>"
+									+ "</li>";
+		}
+	} else {
+		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Anterior</a>"
+								+ "</li>";
+	}
+	
+	// BOTONS INTERMITJOS
+	if(pagina<4){
+		var count = 2;
+		if(pagina<=1){
+			count = 1;
+		}
+		for(var i=count; i<=5 && i<=totalPages+1; i++){
+			var idPage = i - 1;
+			if(pagina==idPage){
+				tableFitxersPaginacio += "<li class='paginate_button active'>"
+											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+										+ "</li>";
+			} else {
+				tableFitxersPaginacio += "<li class='paginate_button'>"
+											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+										+ "</li>";
+			}
+		}
+		if(totalPages>5){
+			tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+										+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
+									+ "</li>";
+		}
+	} else if(pagina < totalPages-4){
+		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
+								+ "</li>";
+		for(var i=pagina; i<pagina+3; i++){
+			var idPage = i - 1;
+			if(pagina==idPage){
+				tableFitxersPaginacio += "<li class='paginate_button active'>"
+											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+										+ "</li>";
+			} else {
+				tableFitxersPaginacio += "<li class='paginate_button'>"
+											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+										+ "</li>";
+			}
+		}
+		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
+								+ "</li>";
+	} else {
+		tableFitxersPaginacio += "<li class='paginate_button previous disabled' id='tableFitxers_previous'>"
+									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='...' tabindex='...'>...</a>"
+								+ "</li>";
+		for(var i=totalPages-4; i<=totalPages+1; i++){
+			var idPage = i - 1;
+			if(pagina==idPage){
+				tableFitxersPaginacio += "<li class='paginate_button active'>"
+											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+										+ "</li>";
+			} else {
+				tableFitxersPaginacio += "<li class='paginate_button'>"
+											+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+										+ "</li>";
+			}
+		}
+	}
+	
+	// BOTÓ ÚLTIM
+	if(pagina < totalPages){
+		if(pagina < totalPages-4){
+			var idPage = totalPages;
+			var i = totalPages + 1;
+			tableFitxersPaginacio += "<li class='paginate_button'>"
+										+ "<a href='javascript:searchPage(" + idPage + ")' aria-controls='tableFitxers' data-dt-idx='" + i + "' tabindex='" + i + "'>" + i + "</a>"
+									+ "</li>";
+		}
+		tableFitxersPaginacio += "<li class='paginate_button next' id='tableFitxers_next'>"
+									+ "<a href='javascript:searchNext()' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Seg&uuml;ent</a>"
+								+ "</li>";
+	} else {
+		tableFitxersPaginacio += "<li class='paginate_button next disabled' id='tableFitxers_next'>"
+									+ "<a href='#' aria-controls='tableFitxers' data-dt-idx='0' tabindex='0'>Seg&uuml;ent</a>"
+								+ "</li>";
+	}
+	tableFitxersPaginacio += "</ul>";
+	if(data.total>0){
+		jQuery("#tableFitxersPaginacio").html(tableFitxersPaginacio);
+	}
+	jQuery("#tableFitxersTotals").show();
 }
 
 function eliminarFitxer(id){

@@ -15,10 +15,10 @@
 	    <meta name="author" content="Reis d'Igualada">
 	
 	    <title>Reis d'Igualada :: Consulta fitxers</title>
+	    
 	    <link href="${contextPath}/resources/css/common2.css" rel="stylesheet">
-		<link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet">
+		<link href="${contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-	    <link href="${contextPath}/resources/css/dataTables.bootstrap.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/tokenfield-typeahead.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/bootstrap-tokenfield.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/lightbox.css" rel="stylesheet">
@@ -100,7 +100,25 @@
 								</a>
 							</div>
 							
-							<table id="tableFitxers" class="table table-striped table-bordered" style="width:100%;">
+							<input type="hidden" id="pagina" name="pagina" value="${pagina ? pagina : '0'}" />
+							<div class="row" id="tableFitxersLength" name="tableFitxersLength" style="${listFitxers.size()>0 ? 'display:;' : 'display:none;'}">
+								<div class="col-sm-6">
+									<div class="dataTables_length" id="tableFitxers_length">
+										<label> 
+											Mostrant 
+											<select id="nElementsPerPage" name="nElementsPerPage" aria-controls="tableFitxers" class="input-sm">
+												<option value="10">10</option>
+												<option value="25">25</option>
+												<option value="50">50</option>
+												<option value="100">100</option>
+											</select> 
+											elements per pàgina
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-6"></div>
+							</div>
+							<table id="tableFitxers" class="table table-striped table-bordered" style="width:100%; ${listFitxers.size()>0 ? 'display:;' : 'display:none;'}">
 						        <thead>
 							        <tr class="info">
 							        	<th width="10%" class="info">
@@ -156,6 +174,32 @@
 								    </c:forEach>
 							    </tbody>
 						    </table>
+						    
+						    <div class="row" id="tableFitxersTotals" name="tableFitxersTotals" style="${listFitxers.size()>0 ? 'display:;' : 'display:none;'}">
+						    	<div class="col-sm-5" align="left">
+						    		<div class="dataTables_info" id="tableFitxersInfo" name="tableFitxersInfo" role="status" aria-live="polite">
+						    			
+						    		</div>
+						    	</div>
+						    	<div class="col-sm-7" align="right">
+						    		<div id="tableFitxersPaginacio" name="tableFitxersPaginacio">
+						    			<ul class="pagination">
+						    				<li class="paginate_button previous disabled" id="tableFitxers_previous">
+						    					<a href="#" aria-controls="tableFitxers" data-dt-idx="0" tabindex="0">Anterior</a>
+						    				</li>
+						    				<li class="paginate_button active">
+						    					<a href="#" aria-controls="tableFitxers" data-dt-idx="1" tabindex="0">1</a>
+						    				</li>
+						    				<li class="paginate_button ">
+						    					<a href="#" aria-controls="tableFitxers" data-dt-idx="2" tabindex="0">2</a>
+						    				</li>
+											<li class="paginate_button next" id="tableFitxers_next">
+												<a href="#" aria-controls="tableFitxers" data-dt-idx="8" tabindex="0">Seguent</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -163,13 +207,11 @@
 	    </c:if>
 		
 		<!-- /container -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script src="${contextPath}/resources/js/jquery/1.9.1/jquery.min.js"></script>
+		<script src="${contextPath}/resources/js/jquery-ui.js"></script>
 		<script src="${contextPath}/resources/js/moment.min.js"></script>
 		<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 		<script src="${contextPath}/resources/js/bootstrap-tokenfield.min.js"></script>
-		<script src="${contextPath}/resources/js/jquery.dataTables.min.js"></script>
-		<script src="${contextPath}/resources/js/dataTables.bootstrap.min.js"></script>
 		<script src="${contextPath}/resources/js/lightbox.js"></script>
 		<script type="text/javascript">
     		var elements = [${paraulesClauList}];

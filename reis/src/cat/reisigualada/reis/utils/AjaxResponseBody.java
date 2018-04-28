@@ -11,6 +11,9 @@ public class AjaxResponseBody {
 	@JsonView(Views.Public.class)
 	String code;
 	
+	@JsonView(Views.Public.class)
+	Long total;
+	
 	@SuppressWarnings("rawtypes")
 	@JsonView(Views.Public.class)
 	List result;
@@ -26,6 +29,12 @@ public class AjaxResponseBody {
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+	public Long getTotal() {
+		return total;
+	}
+	public void setTotal(Long total) {
+		this.total = total;
 	}
 	@SuppressWarnings("rawtypes")
 	public List getResult() {
@@ -43,6 +52,8 @@ public class AjaxResponseBody {
 		builder.append(msg);
 		builder.append(", code=");
 		builder.append(code);
+		builder.append(", total=");
+		builder.append(total);
 		builder.append(", result=");
 		builder.append(result);
 		builder.append("]");
