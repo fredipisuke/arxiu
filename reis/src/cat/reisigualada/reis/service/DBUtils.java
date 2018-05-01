@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import cat.reisdigualada.reis.vo.EstadistiquesVO;
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
 import cat.reisigualada.reis.utils.AjaxResponseBody;
+import cat.reisigualada.reis.utils.Constants;
 import cat.reisigualada.reis.web.arxiu.SearchCriteriaFitxers;
 
 public class DBUtils {
@@ -34,6 +36,101 @@ public class DBUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static EstadistiquesVO getStatistics(){
+		EstadistiquesVO estadistiques = new EstadistiquesVO();
+		
+		// TOTAL IMATGES
+		String QUERY = "select max(id) from fitxer where typeDocument = " + Constants.TYPE_KEY_IMAGE;
+		System.out.println("DBUtils.getMaxIdFitxer: " + QUERY);
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+		    ResultSet rs = st.executeQuery(QUERY);
+	        while (rs.next()) {
+	        	estadistiques.setTotalImatges(rs.getLong(1));
+	            break;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		
+		// TOTAL DOCUMENTS
+		QUERY = "select max(id) from fitxer where typeDocument = " + Constants.TYPE_KEY_DOCUMENTE;
+		System.out.println("DBUtils.getMaxIdFitxer: " + QUERY);
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+		    ResultSet rs = st.executeQuery(QUERY);
+	        while (rs.next()) {
+	        	estadistiques.setTotalDocuments(rs.getLong(1));
+	            break;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		return estadistiques;
+	}
+	
+	public static AjaxResponseBody searchForWellcome(SearchCriteriaFitxers criteria){
+		AjaxResponseBody result = new AjaxResponseBody();
+		String SELECT_FITXERS = "select distinct f.* from fitxer f where 1=1";
+		// CONDICIONANTS
+		SELECT_FITXERS += mountWheres(criteria);
+		// ORDENACIÓ
+		SELECT_FITXERS += " order by rand() ";
+		// LÍMITS I NÚMERO D'ELEMENTS
+		SELECT_FITXERS += " LIMIT 4 ";
+		
+		// EJECUTAMOS LA QUERY
+		List<Fitxer> listF = new ArrayList<Fitxer>();
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.searchByCriteria: " + SELECT_FITXERS);
+		    ResultSet rs = st.executeQuery(SELECT_FITXERS);
+	        while (rs.next()) {
+	        	Fitxer f = new Fitxer();
+	        	f.setId(rs.getLong("id"));
+	        	f.setTitol(rs.getString("titol"));
+	        	f.setTypeDocument(rs.getLong("typeDocument"));
+	        	f.setObservacions(rs.getString("observacions"));
+	        	f.setFileName(rs.getString("fileName"));
+	        	f.setFormat(rs.getString("format"));
+	        	f.setData(rs.getDate("data"));
+	        	f.setAutor(rs.getString("autor"));
+	        	f.setDataCreacio(rs.getTimestamp("dataCreacio"));
+	        	f.setUbicacio(rs.getString("ubicacio"));
+	        	f.setUbicacioArxiu(rs.getString("ubicacioArxiu"));
+	        	f.setProcedencia(rs.getString("procedencia"));
+	        	// Obtenim el llistat de claus del fitxer
+	        	if(criteria.isSearchKeys()){
+	        		f.setClaus(searchClaus(f));
+	        	}
+	        	listF.add(f);
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		result.setResult(listF);
+		
+		return result;
 	}
 	
 	public static List<Fitxer> searchForDocument(SearchCriteriaFitxers criteria){
@@ -149,7 +246,6 @@ public class DBUtils {
 		    ResultSet rs = st.executeQuery(SELECT_FITXERS);
 	        while (rs.next()) {
 	        	result.setTotal(rs.getLong("num_total"));
-	        	System.out.println("===========> "+ result.getTotal());
 	        	break;
 	        }
 	        rs.close();

@@ -14,11 +14,12 @@
 	    <meta name="description" content="">
 	    <meta name="author" content="Reis d'Igualada">
 	
-	    <title>Reis d'Igualada :: Consulta fitxers</title>
-	    
+	    <title>Arxiu Reis d'Igualada :: Consulta fitxers</title>
+		<link rel="icon" href="${contextPath}/resources/images/favicon.ico" type="image/x-icon">
 	    <link href="${contextPath}/resources/css/common2.css" rel="stylesheet">
 		<link href="${contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="${contextPath}/resources/css/dataTables.bootstrap.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/tokenfield-typeahead.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/bootstrap-tokenfield.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/lightbox.css" rel="stylesheet">
@@ -107,6 +108,7 @@
 										<label> 
 											Mostrant 
 											<select id="nElementsPerPage" name="nElementsPerPage" aria-controls="tableFitxers" class="input-sm">
+												<option value="5">5</option>
 												<option value="10">10</option>
 												<option value="25">25</option>
 												<option value="50">50</option>
@@ -138,7 +140,7 @@
 								    		<td align="center">
 												<c:if test="${entry.typeDocument == 1}">
 							                    	<a href="/project/images/gd_reis1/${entry.fileName}" data-lightbox="images" data-title="${entry.titol}" title="Veure">
-								                    	<div style="background-image:url('/project/images/gd_reis1/${entry.fileName}'); position: relative; float: center; width: 50px; height: 50px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
+								                    	<div style="background-image:url('/project/images/gd_reis1/${entry.fileName}'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
 								                    		<span class="glyphicon glyphicon-search" aria-hidden="true" style="margin-top: 30px; margin-left: 55px"></span>
 								                    	</div>
 								                    </a>
@@ -146,10 +148,10 @@
 							                    <c:if test="${entry.typeDocument == 2}">
 							                    	<c:choose>
 													    <c:when test="${entry.format == 'doc' || entry.format == 'docx' || entry.format == 'xls' || entry.format == 'xlsx' || entry.format == 'ppt' || entry.format == 'pdf'}">
-													        <div style="background-image:url('${contextPath}/resources/images/${entry.format}.png'); position: relative; float: center; width: 50px; height: 50px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"></div>
+													        <div style="background-image:url('${contextPath}/resources/images/${entry.format}.png'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"></div>
 													    </c:when>
 													    <c:otherwise>
-													        <div style="background-image:url('${contextPath}/resources/images/file.png'); position: relative; float: center; width: 50px; height: 50px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"></div>
+													        <div style="background-image:url('${contextPath}/resources/images/file.png'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"></div>
 													    </c:otherwise>
 													</c:choose>
 							                    </c:if>
@@ -177,13 +179,11 @@
 						    
 						    <div class="row" id="tableFitxersTotals" name="tableFitxersTotals" style="${listFitxers.size()>0 ? 'display:;' : 'display:none;'}">
 						    	<div class="col-sm-5" align="left">
-						    		<div class="dataTables_info" id="tableFitxersInfo" name="tableFitxersInfo" role="status" aria-live="polite">
-						    			
-						    		</div>
+						    		<div class="dataTables_info" id="tableFitxersInfo" name="tableFitxersInfo" role="status" aria-live="polite" style="margin-top:0px; white-space:nowrap"></div>
 						    	</div>
 						    	<div class="col-sm-7" align="right">
 						    		<div id="tableFitxersPaginacio" name="tableFitxersPaginacio">
-						    			<ul class="pagination">
+						    			<ul class="pagination" style="margin-top:0px; white-space:nowrap">
 						    				<li class="paginate_button previous disabled" id="tableFitxers_previous">
 						    					<a href="#" aria-controls="tableFitxers" data-dt-idx="0" tabindex="0">Anterior</a>
 						    				</li>

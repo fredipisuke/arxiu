@@ -15,11 +15,10 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		
-		<title>Reis d'Igualada</title>
-		
+		<title>Arxiu Reis d'Igualada :: Login</title>
+		<link rel="icon" href="${contextPath}/resources/images/favicon.ico" type="image/x-icon">
 		<link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 		<link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-		
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
 		    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -30,7 +29,10 @@
 	<body>
 		<div class="container">
 			<form method="POST" action="${contextPath}/login" class="form-signin">
-				<h2 class="form-heading">Accès</h2>
+				<div style="text-align: center;">
+					<img class="img-circle" src="${contextPath}/resources/images/icon-192x192.png">
+				</div>
+				<h2 class="form-heading" style="text-align: center;">Accès Arxiu Reis d'Igualada</h2>
 	
 				<div class="form-group ${error != null ? 'has-error' : ''}">
 					<span>${message}</span> 

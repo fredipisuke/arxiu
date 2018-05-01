@@ -203,19 +203,21 @@ public class ArxiuController {
         fitxerForm.setClaus(hsC);
         
     	// Guardem el fitxer
-        try {
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + fitxerForm.getFileName());
-            Files.write(path, bytes);
-            model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
-        } catch (IOException e) {
-            e.printStackTrace();
-            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
-            loadViewRegistre(model, fitxerForm, newFile);
-            return "/arxiu/registre";
+        if(newFile){
+	        try {
+	            byte[] bytes = file.getBytes();
+	            Path path = Paths.get(UPLOADED_FOLDER + fitxerForm.getFileName());
+	            Files.write(path, bytes);
+	            model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
+	            loadViewRegistre(model, fitxerForm, newFile);
+	            return "/arxiu/registre";
+	        }
         }
 
-    	// Creem el nou fitxer
+    	// Registrem a la BBDD el fitxer
         try {
         	fitxerService.save(fitxerForm);
         } catch(Exception e){
@@ -233,17 +235,20 @@ public class ArxiuController {
     private void loadViewRegistre(Model model, Fitxer fitxerForm, boolean newFile){
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuRegistreActive", "active");
+        // Reiniciem el fitxer
+        if(newFile){
+        	fitxerForm = new Fitxer();
+        	fitxerForm.setTypeDocument(Constants.TYPE_KEY_IMAGE);
+        }
         // Claus relacionades amb el tipus de document seleccionat
     	List<Clau> lK = clauService.findByType(fitxerForm.getTypeDocument());
     	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
         if(newFile){
-        	fitxerForm.setId(null);
-        	fitxerForm.setFormat(null);
-        	fitxerForm.setFileName(null);
         	model.addAttribute("editMode", false);
         } else {
         	model.addAttribute("editMode", true);
         }
+        model.addAttribute("fitxerForm", fitxerForm);
     }
     
     @SuppressWarnings("unchecked")

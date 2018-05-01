@@ -14,8 +14,8 @@
 		<meta name="description" content="">
 		<meta name="author" content="Reis d'Igualada">
 		
-		<title>Reis d'Igualada :: Impresora</title>
-		
+		<title>Arxiu Reis d'Igualada :: Impresora</title>
+		<link rel="icon" href="${contextPath}/resources/images/favicon.ico" type="image/x-icon">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 		<link href="${contextPath}/resources/css/common2.css" rel="stylesheet">
 	    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

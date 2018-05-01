@@ -14,8 +14,11 @@
 	    <meta name="description" content="">
 	    <meta name="author" content="Reis d'Igualada">
 	
-	    <title>Reis d'Igualada :: Benvinguts</title>
+	    <title>Arxiu Reis d'Igualada :: Benvinguts</title>
+		<link rel="icon" href="${contextPath}/resources/images/favicon.ico" type="image/x-icon">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="${contextPath}/resources/css/thumbnail-gallery.css" rel="stylesheet">
+	    <link href="${contextPath}/resources/css/lightbox.css" rel="stylesheet">
 	    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	    <!--[if lt IE 9]>
 		    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -29,15 +32,62 @@
 				<div class="row">
 					<div class="col">
 				        <h2>
-				        	Benvingut
+				        	Benvingut al arxiu documental dels Reis d'Igualada
 				        </h2>
+					</div>
+				</div>
+				
+				<div class="tz-gallery">
+					<c:forEach var="entry" items="${listImages}" varStatus="loop">
+						<div style="width: 265px; float: left; padding-left: 15px; padding-right: 15px">
+			                <div class="thumbnail">
+			                	<c:if test="${entry.typeDocument == 1}">
+			                    	<div style="background-image:url('/project/images/gd_reis1/${entry.fileName}'); position: relative; float: left; width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+			                    </c:if>
+			                    <c:if test="${entry.typeDocument == 2}">
+			                    	<c:choose>
+									    <c:when test="${entry.format == 'doc' || entry.format == 'docx' || entry.format == 'xls' || entry.format == 'xlsx' || entry.format == 'ppt' || entry.format == 'pdf'}">
+									        <div style="background-image:url('${contextPath}/resources/images/${entry.format}.png'); position: relative; float: left; width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+									    </c:when>
+									    <c:otherwise>
+									        <div style="background-image:url('${contextPath}/resources/images/file.png'); position: relative; float: left; width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+									    </c:otherwise>
+									</c:choose>
+			                    </c:if>
+			                    <div class="caption">
+			                        <h3>${entry.titolResum}</h3>
+			                        <p style="font-style: italic; text-align: justify; height: 40px;">
+			                        	${entry.observacionsResum}
+			                        </p>
+			                    </div>
+			                </div>
+			            </div>
+					</c:forEach>
+				</div>
+				
+				<div class="row">
+					<div class="col">
+				        <h2>
+				        	Estadístiques
+				        </h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<strong>Nombre total d'imatges:</strong> ${estadistiques.totalImatges}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<strong>Nombre total de documents:</strong> ${estadistiques.totalDocuments}
 					</div>
 				</div>
 			</div>
 	    </c:if>
 		
-		<!-- /container -->
+		<!-- /container -->		
 		<script src="${contextPath}/resources/js/jquery/3.3.1/jquery.min.js"></script>
 		<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+		<script src="${contextPath}/resources/js/lightbox.js"></script>
 	</body>
 </html>

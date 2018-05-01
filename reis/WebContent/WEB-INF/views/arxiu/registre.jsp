@@ -15,12 +15,12 @@
 	    <meta name="author" content="Reis d'Igualada">
 	
 	    <c:if test="${editMode == true}">
-			<title>Reis d'Igualada :: Editar document</title>
+			<title>Arxiu Reis d'Igualada :: Editar document</title>
 		</c:if>
 		<c:if test="${editMode == false}">
-			<title>Reis d'Igualada :: Crear document</title>
+			<title>Arxiu Reis d'Igualada :: Crear document</title>
 		</c:if>
-		
+		<link rel="icon" href="${contextPath}/resources/images/favicon.ico" type="image/x-icon">
 		<link href="${contextPath}/resources/css/common2.css" rel="stylesheet">
 		<link href="${contextPath}/resources/css/jquery-ui.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">

@@ -14,7 +14,8 @@
 	    <meta name="description" content="">
 	    <meta name="author" content="Reis d'Igualada">
 	
-	    <title>Reis d'Igualada :: Consulta claus</title>
+	    <title>Arxiu Reis d'Igualada :: Consulta claus</title>
+		<link rel="icon" href="${contextPath}/resources/images/favicon.ico" type="image/x-icon">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/dataTables.bootstrap.min.css" rel="stylesheet">
 	    <style>

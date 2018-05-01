@@ -7,7 +7,12 @@
 				<span class="icon-bar"></span> 
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#"><strong>Reis d'Igualada</strong></a>
+			<a class="navbar-brand" href="#">
+				<strong>
+					<img class="img-circle" src="/reis/resources/images/icon-36x36.png" width="25px">
+					Arxiu Reis d'Igualada
+				</strong>
+			</a>
 		</div>
 
 		<div class="collapse navbar-collapse"
