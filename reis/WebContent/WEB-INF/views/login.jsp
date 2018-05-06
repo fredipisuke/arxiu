@@ -34,7 +34,7 @@
 				</div>
 				<h2 class="form-heading" style="text-align: center;">Accès Arxiu Reis d'Igualada</h2>
 	
-				<div class="form-group ${error != null ? 'has-error' : ''}">
+				<div class="form-group ${error != null ? 'has-error' : ''}" style="text-align: center;">
 					<span>${message}</span> 
 					<input name="username" type="text" class="form-control" placeholder="Usuari" autofocus="true" /> 
 					<input name="password" type="password" class="form-control" placeholder="Contrasenya" /> 

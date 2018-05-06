@@ -227,7 +227,7 @@
 											</c:choose>
 											<div class="caption">
 												<h3>Document</h3>
-												<a href="/project/images/gd_reis1/${fitxerForm.fileName}.${fitxerForm.format}" target="_blank" class="btn btn-sm btn-success">
+												<a href="/project/images/gd_reis1/${fitxerForm.fileName}" target="_blank" class="btn btn-sm btn-success">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
 												</a>

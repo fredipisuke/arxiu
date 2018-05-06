@@ -120,60 +120,17 @@
 								<div class="col-sm-6"></div>
 							</div>
 							<table id="tableFitxers" class="table table-striped table-bordered" style="width:100%; ${listFitxers.size()>0 ? 'display:;' : 'display:none;'}">
-						        <thead>
-							        <tr class="info">
-							        	<th width="10%" class="info">
-							        		Document
-							        	</th>
-							        	<th width="75%" class="info">
-							        		Titol/Descripció
-							        	</th>
-							        	<th width="15%" class="info"> 
-							        		Accions
-							        	</th>
-							        </tr>
-							    </thead>
-							    <tbody>
-							        <c:forEach var="entry" items="${listFitxers}">
-								    	<tr>
-								    		<td align="center">
-												<c:if test="${entry.typeDocument == 1}">
-							                    	<a href="/project/images/gd_reis1/${entry.fileName}" data-lightbox="images" data-title="${entry.titol}" title="Veure">
-								                    	<div style="background-image:url('/project/images/gd_reis1/${entry.fileName}'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;">
-								                    		<span class="glyphicon glyphicon-search" aria-hidden="true" style="margin-top: 30px; margin-left: 55px"></span>
-								                    	</div>
-								                    </a>
-							                    </c:if>
-							                    <c:if test="${entry.typeDocument == 2}">
-							                    	<c:choose>
-													    <c:when test="${entry.format == 'doc' || entry.format == 'docx' || entry.format == 'xls' || entry.format == 'xlsx' || entry.format == 'ppt' || entry.format == 'pdf'}">
-													        <div style="background-image:url('${contextPath}/resources/images/${entry.format}.png'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"></div>
-													    </c:when>
-													    <c:otherwise>
-													        <div style="background-image:url('${contextPath}/resources/images/file.png'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;"></div>
-													    </c:otherwise>
-													</c:choose>
-							                    </c:if>
-											</td>
-								    		<td> 
-									    		<strong>${entry.titol}</strong>
-									    		<br>
-									    		${entry.observacionsResum}
-								    		</td>
-								    		<td>
-												<a download="${entry.fileName}" href="/project/images/gd_reis1/${entry.fileName}" target="_blank" class="btn btn-success" title="Descarregar">
-													<span class="glyphicon glyphicon-download" aria-hidden="true" style="font-size: 1.6em;vertical-align: middle;"></span>
-												</a>
-												<a href="${contextPath}/arxiu/registre?id=${entry.id}" class="btn btn-primary" title="Editar">
-													<span class="glyphicon glyphicon-pencil" aria-hidden="true" style="font-size: 1.6em;vertical-align: middle;"></span>
-												</a>
-												<a href="${contextPath}/arxiu/eliminar?id=${entry.id}" class="btn btn-danger" title="Eliminar">
-													<span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size: 1.6em;vertical-align: middle;"></span>
-												</a>
-								    		</td>
-								    	</tr>
-								    </c:forEach>
-							    </tbody>
+						        <tr class="info">
+						        	<th width="10%" class="info">
+						        		Document
+						        	</th>
+						        	<th width="75%" class="info">
+						        		Titol/Descripció
+						        	</th>
+						        	<th width="15%" class="info"> 
+						        		Accions
+						        	</th>
+						        </tr>
 						    </table>
 						    
 						    <div class="row" id="tableFitxersTotals" name="tableFitxersTotals" style="${listFitxers.size()>0 ? 'display:;' : 'display:none;'}">
@@ -181,22 +138,7 @@
 						    		<div class="dataTables_info" id="tableFitxersInfo" name="tableFitxersInfo" role="status" aria-live="polite" style="margin-top:0px; white-space:nowrap"></div>
 						    	</div>
 						    	<div class="col-sm-7" align="right">
-						    		<div id="tableFitxersPaginacio" name="tableFitxersPaginacio">
-						    			<ul class="pagination" style="margin-top:0px; white-space:nowrap">
-						    				<li class="paginate_button previous disabled" id="tableFitxers_previous">
-						    					<a href="#" aria-controls="tableFitxers" data-dt-idx="0" tabindex="0">Anterior</a>
-						    				</li>
-						    				<li class="paginate_button active">
-						    					<a href="#" aria-controls="tableFitxers" data-dt-idx="1" tabindex="0">1</a>
-						    				</li>
-						    				<li class="paginate_button ">
-						    					<a href="#" aria-controls="tableFitxers" data-dt-idx="2" tabindex="0">2</a>
-						    				</li>
-											<li class="paginate_button next" id="tableFitxers_next">
-												<a href="#" aria-controls="tableFitxers" data-dt-idx="8" tabindex="0">Seguent</a>
-											</li>
-										</ul>
-									</div>
+						    		<div id="tableFitxersPaginacio" name="tableFitxersPaginacio"></div>
 								</div>
 							</div>
 						</div>

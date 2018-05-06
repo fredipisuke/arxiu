@@ -42,7 +42,7 @@ public class DBUtils {
 		EstadistiquesVO estadistiques = new EstadistiquesVO();
 		
 		// TOTAL IMATGES
-		String QUERY = "select max(id) from fitxer where typeDocument = " + Constants.TYPE_KEY_IMAGE;
+		String QUERY = "select count(1) from fitxer where typeDocument = " + Constants.TYPE_KEY_IMAGE;
 		System.out.println("DBUtils.getMaxIdFitxer: " + QUERY);
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -62,7 +62,7 @@ public class DBUtils {
 		}
 		
 		// TOTAL DOCUMENTS
-		QUERY = "select max(id) from fitxer where typeDocument = " + Constants.TYPE_KEY_DOCUMENTE;
+		QUERY = "select count(1) from fitxer where typeDocument = " + Constants.TYPE_KEY_DOCUMENTS;
 		System.out.println("DBUtils.getMaxIdFitxer: " + QUERY);
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();

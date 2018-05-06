@@ -40,7 +40,7 @@ public class ExcelList {
 			cellValue = row.createCell(1);
 			if(key.getType().equals(Constants.TYPE_KEY_IMAGE)){
 				cellValue.setCellValue("Imatge");
-			} else if(key.getType().equals(Constants.TYPE_KEY_DOCUMENTE)){
+			} else if(key.getType().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				cellValue.setCellValue("Document");
 			} else {
 				cellValue.setCellValue(key.getType());
@@ -95,7 +95,7 @@ public class ExcelList {
 			cellValue = row.createCell(2);
 			if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				cellValue.setCellValue("Imatge");
-			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTE)){
+			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				cellValue.setCellValue("Document");
 			} else {
 				cellValue.setCellValue(f.getTypeDocument());
@@ -107,7 +107,7 @@ public class ExcelList {
 			cellValue = row.createCell(5);
 			if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				cellValue.setCellValue(f.getUbicacio());
-			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTE)){
+			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				cellValue.setCellValue(f.getUbicacioArxiu());
 			}
 			cellValue = row.createCell(6);

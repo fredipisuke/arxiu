@@ -19,7 +19,7 @@ public class FileUtils {
     	String name = "";
     	if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
     		name = "PIC_" + f.getYear() + "_" + generateCode(id, 10);
-    	} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTE)){
+    	} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
     		name = "DOC_" + f.getYear() + "_" + generateCode(id, 10) + "." + f.getFormat();
     	}    	
     	return name;

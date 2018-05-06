@@ -33,12 +33,12 @@
 	<body>
 		<%@ include file="../headers/login_header.jsp" %>
 		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<sec:authorize access="!hasRole('ROLE_ADMIN')">
+			<sec:authorize access="!hasRole('ROLE_ADMIN') && !hasRole('ROLE_ARXIU')">
 				<div class="container">
 					<%@ include file="../headers/no_grants.jsp" %>
 				</div>
 			</sec:authorize>
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_ARXIU')">
 				<div class="container">
 					<form:form method="POST" modelAttribute="clauForm" class="form-signin">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />

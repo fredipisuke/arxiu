@@ -168,7 +168,7 @@ function createTable(data){
 	if(nElementsMax>data.total)
 		nElementsMax = data.total;
 	if(data.total>0){
-		jQuery("#tableFitxersInfo").html("<b>Total: " + data.total + "&nbsp;&nbsp;&nbsp;&nbsp; Mostrant " + nElements + " de " + nElementsMax + "</b>");
+		jQuery("#tableFitxersInfo").html("<b>Total: " + data.total + "&nbsp;&nbsp;&nbsp;&nbsp; Mostrant element " + nElements + " al " + nElementsMax + "</b>");
 	} else {
 		jQuery("#tableFitxersInfo").html("No hi han resultats amb els par&agrave;metres introduits");
 	}

@@ -37,7 +37,7 @@ public class PDFList {
 			
 			if(key.getType().equals(Constants.TYPE_KEY_IMAGE)){
 				pD = new Phrase("Imatge", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
-			} else if(key.getType().equals(Constants.TYPE_KEY_DOCUMENTE)){
+			} else if(key.getType().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				pD = new Phrase("Document", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			} else {
 				pD = new Phrase(key.getType().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
@@ -104,7 +104,7 @@ public class PDFList {
 			
 			if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				pD = new Phrase("Imatge", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
-			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTE)){
+			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				pD = new Phrase("Document", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			} else {
 				pD = new Phrase(f.getTypeDocument().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
@@ -122,7 +122,7 @@ public class PDFList {
 
 			if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				pD = new Phrase(f.getUbicacio().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
-			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTE)){
+			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				pD = new Phrase(f.getUbicacioArxiu().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			}
 			tableCell = new PdfPCell(pD);

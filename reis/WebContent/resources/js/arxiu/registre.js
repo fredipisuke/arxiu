@@ -20,7 +20,9 @@ $(document).ready(function(){
 			if($("#typeDocument").val()=="1"){
 				$("#ubicacio").show();
 				$("#procedencia").show();
+				$("#ubicacioArxiu").hide();
 			} else if($("#typeDocument").val()=="2"){
+				$("#ubicacioArxiu").show();
 				$("#ubicacio").hide();
 				$("#procedencia").hide();
 			}
