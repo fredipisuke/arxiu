@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
@@ -45,18 +46,46 @@ public class ArxiuController {
     @Autowired
     private FitxerValidator fitxerValidator;
 
+    private static String SESSION_SEARCH = "SearchCriteriaFitxersSession";
     private static String UPLOADED_FOLDER = "D://temp//gd_reis1//";
     
     @RequestMapping(value = "/arxiu/consulta", method = RequestMethod.GET)
-    public String consulta(Model model) {
+    public String consulta(Model model, HttpServletRequest request) {
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuConsultaActive", "active");
+        
+        // Eliminamos los datos de la sessión
+        request.getSession().removeAttribute(SESSION_SEARCH);
+        
+        return "/arxiu/consulta";
+    }
+    
+    @RequestMapping(value = "/arxiu/consultaBack", method = RequestMethod.GET)
+    public String consultaBack(Model model, HttpServletRequest request) {
+    	model.addAttribute("NavBarArxiuActive", "active");
+        model.addAttribute("NavBarArxiuConsultaActive", "active");
+        
+        SearchCriteriaFitxers criteria = null;
+        try{ criteria = (SearchCriteriaFitxers)request.getSession().getAttribute(SESSION_SEARCH); } catch(Exception e){}
+        if(criteria!=null){
+        	model.addAttribute("titol", criteria.getTitol());
+        	model.addAttribute("year", criteria.getYear());
+        	model.addAttribute("typeDocument", criteria.getTypeDocument());
+        	if(criteria.getTypeDocument()!=null){
+	        	// Claus relacionades amb el tipus de document seleccionat
+	        	List<Clau> lK = clauService.findByType(criteria.getTypeDocument());
+	        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
+	        	model.addAttribute("paraulesClau", criteria.getParaulesClau());
+        	}
+        	model.addAttribute("pagina", criteria.getPagina());
+        	model.addAttribute("searchOn", "true");
+        }
         
         return "/arxiu/consulta";
     }
     
     @RequestMapping(value = "/arxiu/consultaFitxers", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-   	public @ResponseBody AjaxResponseBody consultaFitxers(@RequestBody SearchCriteriaFitxers criteria, BindingResult bindingResult, Model model) {
+   	public @ResponseBody AjaxResponseBody consultaFitxers(@RequestBody SearchCriteriaFitxers criteria, BindingResult bindingResult, Model model, HttpServletRequest request) {
 		if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau())){
 			// Convertim les paraules clau a Claus
 	    	HashSet<Clau> hsC = new HashSet<Clau>();
@@ -72,6 +101,8 @@ public class ArxiuController {
 		} catch(Exception e){
 			result.setMsg("S'ha produit un error recuperant les dades");
 		}
+		// Guardem els criteris de cerca a la sessió
+		request.getSession().setAttribute(SESSION_SEARCH, criteria);
 		return result;
     }
     

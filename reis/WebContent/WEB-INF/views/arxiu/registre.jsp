@@ -242,7 +242,7 @@
 						</c:if>
 						
 						<div align="center">
-							<button class="btn btn-lg btn-default" type="button" onclick="javascript:window.location='consulta';">Tornar</button>
+							<button class="btn btn-lg btn-default" type="button" onclick="javascript:window.location='consultaBack';">Tornar</button>
 							<c:if test="${editMode == true}">
 								<a href="#" class="btn btn-lg btn-danger" title="Eliminar" onclick="eliminarFitxer(${fitxerForm.id})">Eliminar</a>
 								<button class="btn btn-lg btn-primary" type="submit">Modificar</button>

@@ -2,6 +2,9 @@ $(document).ready(function(){
 	// Ocult per defecte
 	if($('#searchOn').val()!="true"){
 		hideData();
+	} else {
+		// Busquem les dades
+		search();
 	}
 	$("#titol").change(function(){
 		hideData();

@@ -101,7 +101,7 @@
 								</a>
 							</div>
 							
-							<input type="hidden" id="pagina" name="pagina" value="${pagina ? pagina : '0'}" />
+							<input type="hidden" id="pagina" name="pagina" value="${pagina!=null ? pagina : '0'}" />
 							<div class="row" id="tableFitxersLength" name="tableFitxersLength" style="${listFitxers.size()>0 ? 'display:;' : 'display:none;'}">
 								<div class="col-sm-6">
 									<div class="dataTables_length" id="tableFitxers_length">
