@@ -84,7 +84,7 @@ public class PDFList {
 		tableCell = new PdfPCell(pT);
 		createTitleCell(tableCell);
 		pdfTaula.addCell(tableCell);
-		pT = new Phrase("PROCEDÈNCIA", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		pT = new Phrase("REFERÈNCIA", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
 		tableCell = new PdfPCell(pT);
 		createTitleCell(tableCell);
 		pdfTaula.addCell(tableCell);
@@ -116,7 +116,7 @@ public class PDFList {
 			tableCell = new PdfPCell(pD);
 			pdfTaula.addCell(tableCell);
 
-			pD = new Phrase(f.getAutor().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			pD = new Phrase(f.getAutor_id().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			tableCell = new PdfPCell(pD);
 			pdfTaula.addCell(tableCell);
 
@@ -128,7 +128,7 @@ public class PDFList {
 			tableCell = new PdfPCell(pD);
 			pdfTaula.addCell(tableCell);
 
-			pD = new Phrase(f.getProcedencia().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			pD = new Phrase(f.getReferencia().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			tableCell = new PdfPCell(pD);
 			pdfTaula.addCell(tableCell);
 

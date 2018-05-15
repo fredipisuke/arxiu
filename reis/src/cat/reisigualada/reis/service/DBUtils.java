@@ -111,11 +111,11 @@ public class DBUtils {
 	        	f.setFileName(rs.getString("fileName"));
 	        	f.setFormat(rs.getString("format"));
 	        	f.setData(rs.getDate("data"));
-	        	f.setAutor(rs.getString("autor"));
+	        	f.setAutor_id(rs.getLong("autor_id"));
 	        	f.setDataCreacio(rs.getTimestamp("dataCreacio"));
 	        	f.setUbicacio(rs.getString("ubicacio"));
 	        	f.setUbicacioArxiu(rs.getString("ubicacioArxiu"));
-	        	f.setProcedencia(rs.getString("procedencia"));
+	        	f.setReferencia(rs.getString("referencia"));
 	        	// Obtenim el llistat de claus del fitxer
 	        	if(criteria.isSearchKeys()){
 	        		f.setClaus(searchClaus(f));
@@ -163,11 +163,11 @@ public class DBUtils {
 	        	f.setFileName(rs.getString("fileName"));
 	        	f.setFormat(rs.getString("format"));
 	        	f.setData(rs.getDate("data"));
-	        	f.setAutor(rs.getString("autor"));
+	        	f.setAutor_id(rs.getLong("autor_id"));
 	        	f.setDataCreacio(rs.getTimestamp("dataCreacio"));
 	        	f.setUbicacio(rs.getString("ubicacio"));
 	        	f.setUbicacioArxiu(rs.getString("ubicacioArxiu"));
-	        	f.setProcedencia(rs.getString("procedencia"));
+	        	f.setReferencia(rs.getString("referencia"));
 	        	// Obtenim el llistat de claus del fitxer
 	        	if(criteria.isSearchKeys()){
 	        		f.setClaus(searchClaus(f));
@@ -214,11 +214,11 @@ public class DBUtils {
 	        	f.setFileName(rs.getString("fileName"));
 	        	f.setFormat(rs.getString("format"));
 	        	f.setData(rs.getDate("data"));
-	        	f.setAutor(rs.getString("autor"));
+	        	f.setAutor_id(rs.getLong("autor_id"));
 	        	f.setDataCreacio(rs.getTimestamp("dataCreacio"));
 	        	f.setUbicacio(rs.getString("ubicacio"));
 	        	f.setUbicacioArxiu(rs.getString("ubicacioArxiu"));
-	        	f.setProcedencia(rs.getString("procedencia"));
+	        	f.setReferencia(rs.getString("referencia"));
 	        	// Obtenim el llistat de claus del fitxer
 	        	if(criteria.isSearchKeys()){
 	        		f.setClaus(searchClaus(f));
@@ -265,15 +265,24 @@ public class DBUtils {
 				WHERES += " and exists (select * from fitxer_clau fc where f.id=fc.fitxer_id and fc.clau_id=" + c.getId() + ")";
 			}
 		}
-		if(criteria.getYear()!=null){
-			WHERES += " and year(f.data) = " + criteria.getYear();
+		if(criteria.getFileName()!=null && !"".equals(criteria.getFileName())){
+			WHERES += " and fileName like '%" + criteria.getFileName() + "%'";
+		}
+		if(criteria.getReferencia()!=null && !"".equals(criteria.getReferencia())){
+			WHERES += " and referencia like '%" + criteria.getReferencia() + "%'";
 		}
 		if(criteria.getTitol()!=null && !"".equals(criteria.getTitol())){
 			WHERES += " and titol like '%" + criteria.getTitol() + "%' ";
 		}
+		if(criteria.getYear()!=null){
+			WHERES += " and year(f.data) = " + criteria.getYear();
+		}
 		if(criteria.getTypeDocument()!=null && !"".equals(criteria.getTypeDocument())){
 			WHERES += " and typeDocument = " + criteria.getTypeDocument();
-		}		
+		}
+		if(criteria.getAutor_id()!=null && !"".equals(criteria.getAutor_id())){
+			WHERES += " and autor_id = " + criteria.getAutor_id();
+		}
 		return WHERES;
 	}
 	

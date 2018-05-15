@@ -82,6 +82,10 @@
 							</div>
 						</c:if>
 				        
+				        <c:if test="${editMode == true}">
+							<h4 class="form-signin-heading"><b>Referència:</b> ${fitxerForm.fileName} </h4>
+						</c:if>
+				        
 				        <spring:bind path="titol">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
 								<form:input type="text" path="titol" class="form-control" placeholder="Títol document" autofocus="true" required="true"></form:input>
@@ -135,11 +139,16 @@
 							</div>
 						</spring:bind>
 						
-						<spring:bind path="autor">
+						<h4 class="form-signin-heading">Autor</h4>
+						<spring:bind path="autor_id">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
-								<form:input type="text" path="autor" class="form-control" placeholder="Autor" autofocus="true"></form:input>
-								<form:errors path="autor"></form:errors>
-								<!-- cssClass="error" -->
+								<form:select path="autor_id" class="form-control">
+									<form:option value="">-- Seleccionar  --</form:option>
+									<c:forEach var="autor" items="${autorList}">
+										<option value="${autor.id}" ${autor.id==autor_id ? 'selected' : ''} >${autor.name}</option>
+									</c:forEach>
+								</form:select>
+								<form:errors path="autor_id"></form:errors>
 							</div>
 						</spring:bind>
 						
@@ -157,15 +166,15 @@
 							</div>
 						</spring:bind>
 							
-						<spring:bind path="procedencia">
+						<spring:bind path="referencia">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
 								<c:if test="${fitxerForm.typeDocument == '1'}">
-									<form:input type="text" path="procedencia" class="form-control" placeholder="Procedencia" autofocus="true"></form:input>
+									<form:input type="text" path="referencia" class="form-control" placeholder="Referència arxiu" autofocus="true"></form:input>
 								</c:if>
 								<c:if test="${fitxerForm.typeDocument == '2'}">
-									<form:input type="text" path="procedencia" class="form-control" placeholder="Procedencia" autofocus="true" style="display: none;"></form:input>
+									<form:input type="text" path="referencia" class="form-control" placeholder="Referència arxiu" autofocus="true" style="display: none;"></form:input>
 								</c:if>
-								<form:errors path="procedencia"></form:errors>
+								<form:errors path="referencia"></form:errors>
 								<!-- cssClass="error" -->
 							</div>
 						</spring:bind>
@@ -174,10 +183,10 @@
 						<spring:bind path="ubicacioArxiu">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
 								<c:if test="${fitxerForm.typeDocument == '1'}">
-									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació al arxiu" autofocus="true" style="display: none;"></form:input>
+									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació a l'arxiu" autofocus="true" style="display: none;"></form:input>
 								</c:if>
 								<c:if test="${fitxerForm.typeDocument == '2'}">
-									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació al arxiu" autofocus="true"></form:input>
+									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació a l'arxiu" autofocus="true"></form:input>
 								</c:if>
 								<form:errors path="ubicacioArxiu"></form:errors>
 								<!-- cssClass="error" -->
@@ -227,7 +236,7 @@
 											</c:choose>
 											<div class="caption">
 												<h3>Document</h3>
-												<a href="/project/images/gd_reis1/${fitxerForm.fileName}" target="_blank" class="btn btn-sm btn-success">
+												<a href="/project/images/gd_reis1/${fitxerForm.fileName}.${fitxerForm.format}" target="_blank" class="btn btn-sm btn-success">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
 												</a>

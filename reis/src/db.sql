@@ -110,14 +110,15 @@ CREATE TABLE `fitxer` (
   `fileName` varchar(50) NOT NULL,
   `format` varchar(5) NOT NULL,
   `data` date NOT NULL,
-  `autor` varchar(100) NOT NULL,
+  `autor_id` int(11) NOT NULL,
   `dataCreacio` timestamp NOT NULL,
   -- PROPIETATS D'IMATGE
   `ubicacio` varchar(100) NULL,
-  `procedencia` varchar(100) NULL,
+  `referencia` varchar(100) NULL,
   -- PROPIETATS DE DOCUMENT
   `ubicacioArxiu` varchar(100) NULL,
   PRIMARY KEY (`id`)
+  CONSTRAINT `fk_fitxer_autor_id` FOREIGN KEY (`autor_id`) REFERENCES `autor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 --
 -- Table structure for table `fitxer-clau`
@@ -130,6 +131,19 @@ CREATE TABLE `fitxer_clau` (
   CONSTRAINT `fk_fitxer_clau_fitxer_id` FOREIGN KEY (`fitxer_id`) REFERENCES `fitxer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_fitxer_clau_clau_id` FOREIGN KEY (`clau_id`) REFERENCES `clau` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `keys`
+--
+DROP TABLE IF EXISTS `autor`;
+CREATE TABLE `autor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+-- Index unic clau/tipus
+ALTER TABLE `autor`
+  ADD UNIQUE KEY `NOM` (`name`);
 
 INSERT INTO `clau` (`id`, `name`, `type`) VALUES
 (1, 'arribada', 1),

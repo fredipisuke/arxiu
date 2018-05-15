@@ -6,16 +6,31 @@ import cat.reisigualada.reis.model.Clau;
 
 public class SearchCriteriaFitxers {
 
+	private String fileName;
+	private String referencia;
 	private String titol;
     private Long year;
     private Long typeDocument;
     private String paraulesClau;
     private Set<Clau> claus;
     private boolean searchKeys = false;
+    private Long autor_id;
     // Parametres del cercador
     private Long pagina = new Long(0);
     private Long nElementsPerPage = new Long(10);    
     
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getReferencia() {
+		return referencia;
+	}
+	public void setReferencia(String referencia) {
+		this.referencia = referencia;
+	}
 	public String getTitol() {
 		return titol;
 	}
@@ -51,6 +66,12 @@ public class SearchCriteriaFitxers {
 	}
 	public void setSearchKeys(boolean searchKeys) {
 		this.searchKeys = searchKeys;
+	}
+	public Long getAutor_id() {
+		return autor_id;
+	}
+	public void setAutor_id(Long autor_id) {
+		this.autor_id = autor_id;
 	}
 	public Long getPagina() {
 		return pagina;

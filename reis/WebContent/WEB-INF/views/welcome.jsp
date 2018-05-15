@@ -32,7 +32,7 @@
 				<div class="row">
 					<div class="col">
 				        <h2>
-				        	Benvingut al arxiu documental dels Reis d'Igualada
+				        	Benvingut a l'arxiu documental dels Reis d'Igualada
 				        </h2>
 					</div>
 				</div>
@@ -82,6 +82,17 @@
 						<strong>Nombre total de documents:</strong> ${estadistiques.totalDocuments}
 					</div>
 				</div>
+				
+				<div class="row">
+					<div class="col">
+				        <h2>
+				        	Copia de seguretat 
+				        	<a href="#" class="btn btn-success" id="btnSearch" name="btnSearch">
+								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+							</a>
+				        </h2>
+					</div>
+				</div>			
 			</div>
 	    </c:if>
 		

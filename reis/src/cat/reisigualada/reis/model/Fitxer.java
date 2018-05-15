@@ -33,11 +33,11 @@ public class Fitxer {
     private String format;
     @Temporal(TemporalType.DATE)
     private Date data;
-    private String autor;
+    private Long autor_id;
     private Timestamp dataCreacio;
     // PROPIETATS D'IMATGE
     private String ubicacio;
-    private String procedencia;
+    private String referencia;
     // PROPIETATS DE DOCUMENT
     private String ubicacioArxiu;
     
@@ -116,11 +116,11 @@ public class Fitxer {
 	public void setData(Date data) {
 		this.data = data;
 	}
-	public String getAutor() {
-		return autor;
+	public Long getAutor_id() {
+		return autor_id;
 	}
-	public void setAutor(String autor) {
-		this.autor = autor;
+	public void setAutor_id(Long autor_id) {
+		this.autor_id = autor_id;
 	}
 	public Timestamp getDataCreacio() {
 		return dataCreacio;
@@ -136,11 +136,11 @@ public class Fitxer {
 		this.ubicacio = ubicacio;
 	}
     // PROPIETATS DE DOCUMENT
-	public String getProcedencia() {
-		return procedencia;
+	public String getReferencia() {
+		return referencia;
 	}
-	public void setProcedencia(String procedencia) {
-		this.procedencia = procedencia;
+	public void setReferencia(String referencia) {
+		this.referencia = referencia;
 	}
 	public String getUbicacioArxiu() {
 		return ubicacioArxiu;
@@ -189,11 +189,11 @@ public class Fitxer {
 		builder.append(", fileName=" + fileName);
 		builder.append(", format=" + format);
 		builder.append(", data=" + data);
-		builder.append(", autor=" + autor);
+		builder.append(", autor_id=" + autor_id);
 		builder.append(", dataCreacio=" + dataCreacio);
 	    // PROPIETATS D'IMATGE
 		builder.append(", ubicacio=" + ubicacio);
-		builder.append(", procedencia=" + procedencia);
+		builder.append(", referencia=" + referencia);
 	    // PROPIETATS DE DOCUMENT
 		builder.append(", ubicacioArxiu=" + ubicacioArxiu);
 		return builder.toString();

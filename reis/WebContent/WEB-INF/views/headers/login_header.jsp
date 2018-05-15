@@ -30,6 +30,7 @@
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">Configuracions</li>
 							<li class="${NavBarClausActive}"><a href="${contextPath}/claus/consulta">Gestió de claus</a></li>
+							<li class="${NavBarAutorsActive}"><a href="${contextPath}/autors/consulta">Gestió d'autors</a></li>
 						</ul>
 					</li>
 				</sec:authorize>

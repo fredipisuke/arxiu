@@ -56,19 +56,33 @@
 					<div class="row">
 						<div class="col">
 					        <h2>
+					        	<a href="#" class="btn btn-primary" id="btnExpand" name="btnExpand" style="display: none;">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+								</a>
+					        	<a href="#" class="btn btn-primary" id="btnColapse" name="btnColapse" style="display:;">
+									<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+								</a>
 					        	Consulta
 					        </h2>
 					        
-				         	<div class="form-group">
+				         	<div class="form-group search-group">
+								<input id="fileName" name="fileName" type="text" class="form-control" placeholder="Referència" autofocus="true" required="true" value="${fileName}"></input>
+							</div>
+							
+							<div class="form-group search-group">
+								<input id="referencia" name="referencia" type="text" class="form-control" placeholder="Referència arxiu" autofocus="true" required="true" value="${referencia}"></input>
+							</div>
+							
+				         	<div class="form-group search-group">
 								<input id="titol" name="titol" type="text" class="form-control" placeholder="Títol document" autofocus="true" required="true" value="${titol}"></input>
 							</div>
 							
-							<div class="form-group">
+							<div class="form-group search-group">
 								<input id="year" name="year" type="text" class="form-control" placeholder="Data" autofocus="true" required="true" value="${year}"></input>
 							</div>
 							
-							<h4 class="form-signin-heading">Tipologia</h4>
-							<div class="form-group">
+							<h4 class="form-signin-heading search-group">Tipologia</h4>
+							<div class="form-group search-group">
 								<select id="typeDocument" name="typeDocument" class="form-control" required="true">
 									<option value="">-- Seleccionar  --</option>
 									<option value="1" ${typeDocument=="1" ? "selected" : ""}>Imatge</option>
@@ -76,9 +90,23 @@
 								</select>
 							</div>
 							
-							<div class="form-group">
+							<div class="form-group search-group">
 								<input type="text" id="paraulesClau" name="paraulesClau" class="form-control" placeholder="Paraules clau" autofocus="true" value="${paraulesClau}"></input>
 							</div>
+							
+							<h4 class="form-signin-heading search-group">Autor</h4>
+							<div class="form-group search-group">
+								<select id="autor_id" name="autor_id" class="form-control">
+									<option value="">-- Seleccionar  --</option>
+									<c:forEach var="autor" items="${autorList}" varStatus="loop">
+										<option value="${autor.id}" ${autor.id==autor_id ? 'selected' : ''} >${autor.name}</option>
+									</c:forEach>
+								</select>
+							</div>
+							
+							
+							<div class="row" id="searchValues" name="searchValues" style="display:none; margin-bottom: 5px;"></div>
+							
 							<div align="center">
 				        		<a href="#" class="btn btn-success" id="btnSearch" name="btnSearch">
 									<span class="glyphicon glyphicon-search" aria-hidden="true"></span>

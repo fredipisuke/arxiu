@@ -7,10 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,6 +26,7 @@ import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
 import cat.reisigualada.reis.model.lists.ExcelList;
 import cat.reisigualada.reis.model.lists.PDFList;
+import cat.reisigualada.reis.service.AutorService;
 import cat.reisigualada.reis.service.ClauService;
 import cat.reisigualada.reis.service.DBUtils;
 import cat.reisigualada.reis.service.FitxerService;
@@ -42,6 +41,8 @@ public class ArxiuController {
     @Autowired
     private ClauService clauService;
     @Autowired
+    private AutorService autorService;
+    @Autowired
     private FitxerService fitxerService;
     @Autowired
     private FitxerValidator fitxerValidator;
@@ -53,6 +54,7 @@ public class ArxiuController {
     public String consulta(Model model, HttpServletRequest request) {
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuConsultaActive", "active");
+        model.addAttribute("autorList", autorService.findAll());
         
         // Eliminamos los datos de la sessión
         request.getSession().removeAttribute(SESSION_SEARCH);
@@ -64,6 +66,7 @@ public class ArxiuController {
     public String consultaBack(Model model, HttpServletRequest request) {
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuConsultaActive", "active");
+        model.addAttribute("autorList", autorService.findAll());
         
         SearchCriteriaFitxers criteria = null;
         try{ criteria = (SearchCriteriaFitxers)request.getSession().getAttribute(SESSION_SEARCH); } catch(Exception e){}
@@ -187,6 +190,7 @@ public class ArxiuController {
         	List<Clau> lK = clauService.findByType(fForm.getTypeDocument());
         	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
     	}
+    	model.addAttribute("autorList", autorService.findAll());
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuRegistreActive", "active");
     	model.addAttribute("editMode", editMode);        
@@ -237,7 +241,11 @@ public class ArxiuController {
         if(newFile){
 	        try {
 	            byte[] bytes = file.getBytes();
-	            Path path = Paths.get(UPLOADED_FOLDER + fitxerForm.getFileName());
+	            String format = "";
+	            if(fitxerForm.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
+	            	format = "." + fitxerForm.getFormat();
+	        	}
+	            Path path = Paths.get(UPLOADED_FOLDER + fitxerForm.getFileName() + format);
 	            Files.write(path, bytes);
 	            model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
 	        } catch (IOException e) {
@@ -279,6 +287,7 @@ public class ArxiuController {
         } else {
         	model.addAttribute("editMode", true);
         }
+    	model.addAttribute("autorList", autorService.findAll());
         model.addAttribute("fitxerForm", fitxerForm);
     }
     
@@ -339,6 +348,7 @@ public class ArxiuController {
     	}
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuConsultaActive", "active");
+        model.addAttribute("autorList", autorService.findAll());
         
     	return "/arxiu/consulta";
     }

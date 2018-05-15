@@ -2,10 +2,25 @@ $(document).ready(function(){
 	// Ocult per defecte
 	if($('#searchOn').val()!="true"){
 		hideData();
+		$(".search-group").show();
+		$("#btnExpand").hide();
+		$("#btnColapse").show();
 	} else {
 		// Busquem les dades
 		search();
 	}
+	$("#btnExpand").click(function(){
+		$(".search-group").show();
+		$("#btnExpand").hide();
+		$("#btnColapse").show();
+		$("#searchValues").hide();
+	});
+	$("#btnColapse").click(function(){
+		$(".search-group").hide();
+		$("#btnExpand").show();
+		$("#btnColapse").hide();
+		$("#searchValues").show();
+	});
 	$("#titol").change(function(){
 		hideData();
 	});
@@ -70,6 +85,7 @@ function hideData(){
 	$('#tableFitxers').hide();
 	$('#tableFitxersLength').hide();
 	jQuery("#tableFitxersTotals").hide();
+	$("#searchValues").html("");
 	$('#btnExcel').hide();
 	$('#btnPDF').hide();
 }
@@ -88,11 +104,41 @@ function searchBack(){
 	search();
 }
 function search(){
-	var params = {}
+	var params = {};
+	params["fileName"] = $("#fileName").val();
+	params["referencia"] = $("#referencia").val();
 	params["titol"] = $("#titol").val();
 	params["year"] = $("#year").val();
 	params["typeDocument"] = $("#typeDocument").val();
 	params["paraulesClau"] = $("#paraulesClau").val();
+	params["autor_id"] = $("#autor_id").val();
+	// Paràmetres de la cerca
+	var searchValues = "";
+	if($("#fileName").val()!=null && $("#fileName").val()!=""){
+		searchValues += "[<b>Refer&egrave;ncia:</b> " + $("#fileName").val() + "] ";
+	}
+	if($("#referencia").val()!=null && $("#referencia").val()!=""){
+		searchValues += "[<b>Refer&egrave;ncia arxiu:</b> " + $("#referencia").val() + "] ";
+	}
+	if($("#titol").val()!=null && $("#titol").val()!=""){
+		searchValues += "[<b>T&iacute;tol:</b> " + $("#titol").val() + "] ";
+	}
+	if($("#year").val()!=null && $("#year").val()!=""){
+		searchValues += "[<b>Any:</b> " + $("#year").val() + "] ";
+	}
+	if($("#typeDocument").val()==1){
+		searchValues += " [<b>Tipoligia:</b> Imatge] ";
+	} else if($("#typeDocument").val()==2){
+		searchValues += "[<b>Tipoligia:</b> Document] ";
+	}
+	if($("#paraulesClau").val()!=null && $("#paraulesClau").val()!=""){
+		searchValues += "[<b>Paraules clau:</b> " + $("#paraulesClau").val() + "] ";
+	}
+	if($("#autor_id").val()!=null && $("#autor_id").val()!=""){
+		searchValues += "[<b>Autor:</b> " + $("#autor_id option:selected").text() + "] ";
+	}
+	$("#searchValues").html(searchValues);
+	$("#searchValues").show();
 	var pagina = $("#pagina").val();
 	if(pagina==null || pagina=="") pagina = 0;
 	params["pagina"] = pagina;
@@ -117,6 +163,9 @@ function goSuccess(data){
 			$('#btnExcel').show();
 			$('#btnPDF').show();
 		}
+		$(".search-group").hide();
+		$("#btnExpand").show();
+		$("#btnColapse").hide();
 	}
 }
 
@@ -148,8 +197,12 @@ function createTable(data){
 		jQuery("<td align='left'>")
 					.html("<strong>" + data.result[i].titol + "</strong><br>" + data.result[i].observacionsResum)
 					.appendTo(trow);
+		var format = "";
+		if(data.result[i].typeDocument==2){
+			format = "." + data.result[i].format;
+		}
 		jQuery("<td align='center' style='vertical-align: middle;'>")
-					.html("<a download=\"" + data.result[i].fileName + "\" href=\"/project/images/gd_reis1/" + data.result[i].fileName + "\" target=\"_blank\" class=\"btn btn-success\" title=\"Descarregar\">"
+					.html("<a download=\"" + data.result[i].fileName + format + "\" href=\"/project/images/gd_reis1/" + data.result[i].fileName + format + "\" target=\"_blank\" class=\"btn btn-success\" title=\"Descarregar\">"
 							+ "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
 							+ "</a>"
 							+ "&nbsp;"
