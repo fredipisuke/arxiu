@@ -71,6 +71,8 @@ public class ArxiuController {
         SearchCriteriaFitxers criteria = null;
         try{ criteria = (SearchCriteriaFitxers)request.getSession().getAttribute(SESSION_SEARCH); } catch(Exception e){}
         if(criteria!=null){
+        	model.addAttribute("fileName", criteria.getFileName());
+        	model.addAttribute("referencia", criteria.getReferencia());
         	model.addAttribute("titol", criteria.getTitol());
         	model.addAttribute("year", criteria.getYear());
         	model.addAttribute("typeDocument", criteria.getTypeDocument());
@@ -80,6 +82,7 @@ public class ArxiuController {
 	        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
 	        	model.addAttribute("paraulesClau", criteria.getParaulesClau());
         	}
+        	model.addAttribute("autor", criteria.getAutor_id());
         	model.addAttribute("pagina", criteria.getPagina());
         	model.addAttribute("searchOn", "true");
         }

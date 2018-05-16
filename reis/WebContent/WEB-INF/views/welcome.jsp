@@ -87,7 +87,7 @@
 					<div class="col">
 				        <h2>
 				        	Copia de seguretat 
-				        	<a href="#" class="btn btn-success" id="btnSearch" name="btnSearch">
+				        	<a href="#" class="btn btn-success" id="btnSearch" name="btnSearch" onclick="window.open('${contextPath}/backup/dataBase');">
 								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
 							</a>
 				        </h2>

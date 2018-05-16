@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
 import cat.reisdigualada.reis.vo.EstadistiquesVO;
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
@@ -316,5 +315,150 @@ public class DBUtils {
 			e.printStackTrace();
 		}
 		return hsC;
+	}
+	
+	public static String generateBackUp() throws Exception {
+		String BACK_UP = "";
+		
+		// AUTOR
+		try {
+			String SELECT_AUTORS = "select * from autor";
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.generateBackUp: " + SELECT_AUTORS);
+		    ResultSet rs = st.executeQuery(SELECT_AUTORS);
+			int i=0;
+	        while (rs.next()) {
+	        	if(i==0){
+	        		BACK_UP += "insert into autor (id, name) values \n";
+	        	}
+	        	BACK_UP += "(" + rs.getLong("id")
+	        	 			+ ", '" + dbScape(rs.getString("name")) + "')";
+	        	if(rs.isLast()){
+	        		BACK_UP += ";\n";
+	        	} else {
+	        		BACK_UP += ",\n";
+	        	}
+	        	i++;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			System.out.println("DBUtils.generateBackUp, Error: " + e.getMessage());
+		}		
+		
+		// CLAU
+		try {
+			String SELECT_CLAUS = "select * from clau";
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.generateBackUp: " + SELECT_CLAUS);
+		    ResultSet rs = st.executeQuery(SELECT_CLAUS);
+			int i=0;
+	        while (rs.next()) {
+	        	if(i==0){
+	        		BACK_UP += "\ninsert into clau (id, name, type) values \n";
+	        	}
+	        	BACK_UP += "(" + rs.getLong("id")
+	        	 			+ ", '" + dbScape(rs.getString("name")) + "'"
+				        	+ ", " + rs.getLong("type") + ")";
+	        	if(rs.isLast()){
+	        		BACK_UP += ";\n";
+	        	} else {
+	        		BACK_UP += ",\n";
+	        	}
+	        	i++;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			System.out.println("DBUtils.generateBackUp, Error: " + e.getMessage());
+		}
+
+	    // FITXERS
+		try {
+			String SELECT_FITXERS = "select * from fitxer";
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.generateBackUp: " + SELECT_FITXERS);
+		    ResultSet rs = st.executeQuery(SELECT_FITXERS);
+			int i=0;
+	        while (rs.next()) {
+	        	if(i==0){
+	        		BACK_UP += "\ninsert into fitxer (id, titol, typeDocument, observacions, fileName, format, data, autor_id, dataCreacio, ubicacio, referencia, ubicacioArxiu) values \n";
+	        	}
+	        	BACK_UP += "(" + rs.getLong("id")
+	        	 			+ ", '" + dbScape(rs.getString("titol")) + "'"
+				        	+ ", " + rs.getLong("typeDocument")
+				        	+ ", '" + dbScape(rs.getString("observacions")) + "'"
+				        	+ ", '" + rs.getString("fileName") + "'"
+				        	+ ", '" + rs.getString("format") + "'"
+				        	+ ", '" + rs.getDate("data") + "'"
+				        	+ ", " + rs.getLong("autor_id")
+				        	+ ", '" + rs.getTimestamp("dataCreacio") + "'"
+				        	+ ", '" + dbScape(rs.getString("ubicacio")) + "'"
+				        	+ ", '" + dbScape(rs.getString("ubicacioArxiu")) + "'"
+				        	+ ", '" + dbScape(rs.getString("referencia")) + "')";
+	        	if(rs.isLast()){
+	        		BACK_UP += ";\n";
+	        	} else {
+	        		BACK_UP += ",\n";
+	        	}
+	        	i++;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			System.out.println("DBUtils.generateBackUp, Error: " + e.getMessage());
+		}
+
+		// FITXERS-CLAU
+		try {
+			String SELECT_FTXER_CLAU = "select * from fitxer_clau";
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.generateBackUp: " + SELECT_FTXER_CLAU);
+		    ResultSet rs = st.executeQuery(SELECT_FTXER_CLAU);
+			int i=0;
+	        while (rs.next()) {
+	        	if(i==0){
+	        		BACK_UP += "\ninsert into fitxer_clau (fitxer_id, clau_id) values \n";
+	        	}
+	        	BACK_UP += "(" + rs.getLong("fitxer_id")
+				        	+ ", " + rs.getLong("clau_id") + ")";
+	        	if(rs.isLast()){
+	        		BACK_UP += ";\n";
+	        	} else {
+	        		BACK_UP += ",\n";
+	        	}
+	        	i++;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			System.out.println("DBUtils.generateBackUp, Error: " + e.getMessage());
+		}
+				
+		System.out.println("DBUtils.generateBackUp: result " + BACK_UP);
+	    return BACK_UP;
+	}
+	
+	private static String dbScape(String value){
+		value = value.replaceAll("'", "''");
+		value = value.replaceAll("\r\n", "\\\\r\\\\n");
+		value = value.replaceAll("\n", "\\\\n");
+		return value;
 	}
 }
