@@ -82,7 +82,7 @@ public class ArxiuController {
 	        	model.addAttribute("paraulesClauList", ListUtils.listClausToString(lK));
 	        	model.addAttribute("paraulesClau", criteria.getParaulesClau());
         	}
-        	model.addAttribute("autor", criteria.getAutor_id());
+        	model.addAttribute("autor_id", criteria.getAutor_id());
         	model.addAttribute("pagina", criteria.getPagina());
         	model.addAttribute("searchOn", "true");
         }

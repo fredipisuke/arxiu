@@ -133,16 +133,13 @@ public class DBUtils {
 	}
 	
 	public static List<Fitxer> searchForDocument(SearchCriteriaFitxers criteria){
-		String SELECT_FITXERS = "select distinct f.* from fitxer f where 1=1";
+		String SELECT_FITXERS = " select distinct f.*, a.name as autor "
+								+ " from fitxer f left join autor a on f.autor_id = a.id"
+								+ " where 1=1 ";
 		// CONDICIONANTS
 		SELECT_FITXERS += mountWheres(criteria);
 		// ORDENACIÓ
-		SELECT_FITXERS += " order by id ";
-		// LÍMITS I NÚMERO D'ELEMENTS
-		if(criteria.getnElementsPerPage()!=null){
-			Long offset = criteria.getnElementsPerPage() * criteria.getPagina();
-			SELECT_FITXERS += " LIMIT " + criteria.getnElementsPerPage() + " OFFSET " + offset;
-		}
+		SELECT_FITXERS += " order by f.id ";
 		
 		// EJECUTAMOS LA QUERY
 		List<Fitxer> listF = new ArrayList<Fitxer>();
@@ -163,6 +160,7 @@ public class DBUtils {
 	        	f.setFormat(rs.getString("format"));
 	        	f.setData(rs.getDate("data"));
 	        	f.setAutor_id(rs.getLong("autor_id"));
+	        	f.setAutor(rs.getString("autor"));
 	        	f.setDataCreacio(rs.getTimestamp("dataCreacio"));
 	        	f.setUbicacio(rs.getString("ubicacio"));
 	        	f.setUbicacioArxiu(rs.getString("ubicacioArxiu"));

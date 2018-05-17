@@ -34,6 +34,7 @@ public class Fitxer {
     @Temporal(TemporalType.DATE)
     private Date data;
     private Long autor_id;
+    private String autor;
     private Timestamp dataCreacio;
     // PROPIETATS D'IMATGE
     private String ubicacio;
@@ -149,6 +150,14 @@ public class Fitxer {
 		this.ubicacioArxiu = ubicacioArxiu;
 	}
 
+	@Transient
+	public String getAutor() {
+		return autor;
+	}
+	@Transient
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
 	@Transient
     public String getTitolResum() {
 		if(titol!=null){
