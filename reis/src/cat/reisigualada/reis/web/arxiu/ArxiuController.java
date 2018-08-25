@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import cat.reisigualada.reis.model.Autor;
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
 import cat.reisigualada.reis.model.lists.ExcelList;
@@ -34,7 +36,7 @@ import cat.reisigualada.reis.utils.AjaxResponseBody;
 import cat.reisigualada.reis.utils.Constants;
 import cat.reisigualada.reis.utils.FileUtils;
 import cat.reisigualada.reis.utils.ListUtils;
-import cat.reisigualada.reis.validator.FitxerValidator;
+import cat.reisigualada.reis.validator.ArxiuValidator;
 
 @Controller
 public class ArxiuController {
@@ -45,10 +47,9 @@ public class ArxiuController {
     @Autowired
     private FitxerService fitxerService;
     @Autowired
-    private FitxerValidator fitxerValidator;
+    private ArxiuValidator arxiuValidator;
 
     private static String SESSION_SEARCH = "SearchCriteriaFitxersSession";
-    private static String UPLOADED_FOLDER = "D://temp//gd_reis1//";
     
     @RequestMapping(value = "/arxiu/consulta", method = RequestMethod.GET)
     public String consulta(Model model, HttpServletRequest request) {
@@ -206,10 +207,10 @@ public class ArxiuController {
     	if(fitxerForm.getId()!=null) newFile = false;
     	
     	// Validem el formulari
-    	fitxerValidator.validate(fitxerForm, bindingResult);
+    	arxiuValidator.validate(fitxerForm, bindingResult);
     	// Comprovem els errors
         if (bindingResult.hasErrors()) {
-        	loadViewRegistre(model, fitxerForm, newFile);
+        	loadViewRegistre(model, fitxerForm, newFile, true);
         	return "/arxiu/registre";
         }
         
@@ -217,7 +218,7 @@ public class ArxiuController {
         if(fitxerForm.getId()==null){
 	    	if (file.isEmpty()) {
 	        	model.addAttribute("messageError", "Cal seleccionar un fitxer");
-	        	loadViewRegistre(model, fitxerForm, newFile);
+	        	loadViewRegistre(model, fitxerForm, newFile, false);
 	        	return "/arxiu/registre";
 	        } else {
 	        	// Obtenim el format
@@ -233,7 +234,7 @@ public class ArxiuController {
         	Clau c = clauService.findByNameAndType(clau.trim(), fitxerForm.getTypeDocument());
         	if(c==null){
             	model.addAttribute("messageError", "La clau '" + clau + "' no existeix");
-            	loadViewRegistre(model, fitxerForm, newFile);
+            	loadViewRegistre(model, fitxerForm, newFile, false);
 	        	return "/arxiu/registre";
         	}
         	hsC.add(c);
@@ -244,17 +245,14 @@ public class ArxiuController {
         if(newFile){
 	        try {
 	            byte[] bytes = file.getBytes();
-	            String format = "";
-	            if(fitxerForm.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
-	            	format = "." + fitxerForm.getFormat();
-	        	}
-	            Path path = Paths.get(UPLOADED_FOLDER + fitxerForm.getFileName() + format);
+	            Path path = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
 	            Files.write(path, bytes);
-	            model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
+	            // Creem el thumbnail
+	            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
-	            loadViewRegistre(model, fitxerForm, newFile);
+	            loadViewRegistre(model, fitxerForm, newFile, false);
 	            return "/arxiu/registre";
 	        }
         }
@@ -265,16 +263,39 @@ public class ArxiuController {
         } catch(Exception e){
         	e.printStackTrace();
         	model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear");
-            loadViewRegistre(model, fitxerForm, newFile);
+            loadViewRegistre(model, fitxerForm, newFile, false);
             return "/arxiu/registre";
         }
         
+        // Si arribem a aquest punt, tot ha anat correctament
+        model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
         // Parametres per poder carregar la vista
-        loadViewRegistre(model, fitxerForm, newFile);
+        loadViewRegistre(model, fitxerForm, newFile, false);
         return "/arxiu/registre";
     }
     
-    private void loadViewRegistre(Model model, Fitxer fitxerForm, boolean newFile){
+    @RequestMapping(value = "/arxiu/downloadImage", method = RequestMethod.GET)
+    public void downloadImage(Model model, Long id, HttpServletResponse response) throws Exception {
+    	if(id!=null){
+    		Fitxer fForm;
+        	fForm = fitxerService.findById(id);
+        	// Busquem el llistat d'autors
+        	List<Autor> autorList = autorService.findAll();
+        	for(Autor a : autorList){
+        		if(fForm.getAutor_id().equals(a.getId())){
+        			// Obtenim el nom de l'autor
+        			fForm.setAutor(a.getName());
+        			break;
+        		}
+        	}
+        	response.setContentType("application/x-pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=" + fForm.getFileName() + ".pdf");
+    	   	PDFList.pdfFitxaFitxer(response.getOutputStream(), fForm);
+    	}
+        response.flushBuffer();
+    }
+    
+    private void loadViewRegistre(Model model, Fitxer fitxerForm, boolean newFile, boolean validatorError){
     	model.addAttribute("NavBarArxiuActive", "active");
         model.addAttribute("NavBarArxiuRegistreActive", "active");
         // Reiniciem el fitxer
@@ -291,7 +312,9 @@ public class ArxiuController {
         	model.addAttribute("editMode", true);
         }
     	model.addAttribute("autorList", autorService.findAll());
-        model.addAttribute("fitxerForm", fitxerForm);
+    	if(!validatorError){
+    		model.addAttribute("fitxerForm", fitxerForm);
+    	}
     }
     
     @SuppressWarnings("unchecked")
@@ -301,7 +324,7 @@ public class ArxiuController {
     	Fitxer f = fitxerService.findById(id);
     	
     	// Eliminem el fitxer fisic del disc
-    	File file = new File(UPLOADED_FOLDER + f.getFileName());
+    	File file = new File(Constants.UPLOADED_FOLDER + f.getFileName());
     	if(file!=null){
 			if(file.delete()){
 				System.out.println(file.getName() + " esborrat");

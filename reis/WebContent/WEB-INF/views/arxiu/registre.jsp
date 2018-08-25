@@ -145,7 +145,7 @@
 								<form:select path="autor_id" class="form-control">
 									<form:option value="">-- Seleccionar  --</form:option>
 									<c:forEach var="autor" items="${autorList}">
-										<option value="${autor.id}" ${autor.id==autor_id ? 'selected' : ''} >${autor.name}</option>
+										<option value="${autor.id}" ${autor.id==fitxerForm.autor_id ? 'selected' : ''} >${autor.name}</option>
 									</c:forEach>
 								</form:select>
 								<form:errors path="autor_id"></form:errors>
@@ -169,10 +169,10 @@
 						<spring:bind path="referencia">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
 								<c:if test="${fitxerForm.typeDocument == '1'}">
-									<form:input type="text" path="referencia" class="form-control" placeholder="Referència arxiu" autofocus="true"></form:input>
+									<form:input type="text" path="referencia" class="form-control" placeholder="Referència antic arxiu" autofocus="true"></form:input>
 								</c:if>
 								<c:if test="${fitxerForm.typeDocument == '2'}">
-									<form:input type="text" path="referencia" class="form-control" placeholder="Referència arxiu" autofocus="true" style="display: none;"></form:input>
+									<form:input type="text" path="referencia" class="form-control" placeholder="Referència antic arxiu" autofocus="true" style="display: none;"></form:input>
 								</c:if>
 								<form:errors path="referencia"></form:errors>
 								<!-- cssClass="error" -->
@@ -216,12 +216,16 @@
 								<div style="width: 265px; float: center;">
 				                	<div class="thumbnail">
 				                		<c:if test="${fitxerForm.typeDocument == 1}">
-											<div style="background-image:url('/project/images/gd_reis1/${fitxerForm.fileName}'); position: relative; float: center width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+											<div style="background-image:url('/project/images/gd_reis1/thumbnails/${fitxerForm.fileName}.${fitxerForm.format}'); position: relative; float: center width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
 											<div class="caption">
 												<h3>Imatge</h3>
-												<a download="${fitxerForm.fileName}" href="/project/images/gd_reis1/${fitxerForm.fileName}" target="_blank" class="btn btn-sm btn-success">
+												<a download="${fitxerForm.fileName}.${fitxerForm.format}" href="/project/images/gd_reis1/${fitxerForm.fileName}.${fitxerForm.format}" target="_blank" class="btn btn-sm btn-success">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
+												</a>
+												<a href="#" class="btn btn-sm btn-success" id="btnPDF" name="btnPDF">
+													<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+													Fitxa
 												</a>
 											</div>
 										</c:if>

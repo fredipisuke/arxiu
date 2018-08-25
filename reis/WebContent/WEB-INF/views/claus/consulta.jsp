@@ -97,7 +97,7 @@
 								    		<td>
 								    			<div class="btn-group-xs" role="group">
 									    			<a href="${contextPath}/claus/registrationClau?id=${clau.id}" class="btn btn-primary">Editar</a>
-									    			<a href="${contextPath}/claus/deleteClaus?id=${clau.id}" class="btn btn-danger">Eliminar</a>
+									    			<a href="#" class="btn btn-danger" onclick="eliminarClaus(${clau.id})">Eliminar</a>
 									    		</div>
 								    		</td>
 								    	</tr>

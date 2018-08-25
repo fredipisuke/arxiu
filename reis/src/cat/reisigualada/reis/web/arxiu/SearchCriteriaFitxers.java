@@ -6,6 +6,7 @@ import cat.reisigualada.reis.model.Clau;
 
 public class SearchCriteriaFitxers {
 
+	private Long id;
 	private String fileName;
 	private String referencia;
 	private String titol;
@@ -19,6 +20,12 @@ public class SearchCriteriaFitxers {
     private Long pagina = new Long(0);
     private Long nElementsPerPage = new Long(10);    
     
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getFileName() {
 		return fileName;
 	}

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
 	// Ocult per defecte
 	if($('#searchOn').val()!="true"){
 		hideData();
@@ -178,8 +179,8 @@ function createTable(data){
 	for(var i=0; i<data.result.length; i++){
 		var miniImage = "";
 		if(data.result[i].typeDocument==1){
-			miniImage = "<a href=\"/project/images/gd_reis1/" + data.result[i].fileName + "\" data-lightbox=\"images\" data-title=\"" + data.result[i].titol + "\" title=\"Veure\">"
-				        	+ "<div style=\"background-image:url('/project/images/gd_reis1/" + data.result[i].fileName + "'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;\">"
+			miniImage = "<a href=\"/project/images/gd_reis1/" + data.result[i].fileName + "." + data.result[i].format + "\" data-lightbox=\"images\" data-title=\"" + data.result[i].titol + "\" title=\"Veure\">"
+				        	+ "<div style=\"background-image:url('/project/images/gd_reis1/thumbnails/" + data.result[i].fileName + "." + data.result[i].format + "'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;\">"
 				        		+ "<span class=\"glyphicon glyphicon-search\" aria-hidden=\"true\" style=\"margin-top: 30px; margin-left: 55px\"></span>"
 				        	+ "</div>"
 				        + "</a>";
@@ -195,14 +196,10 @@ function createTable(data){
 					.html(miniImage)
 					.appendTo(trow);
 		jQuery("<td align='left'>")
-					.html("<strong>" + data.result[i].titol + "</strong><br>" + data.result[i].observacionsResum)
+					.html("<strong>" + data.result[i].fileName + " - " + data.result[i].titol + "</strong><br>" + data.result[i].observacionsResum)
 					.appendTo(trow);
-		var format = "";
-		if(data.result[i].typeDocument==2){
-			format = "." + data.result[i].format;
-		}
 		jQuery("<td align='center' style='vertical-align: middle;'>")
-					.html("<a download=\"" + data.result[i].fileName + format + "\" href=\"/project/images/gd_reis1/" + data.result[i].fileName + format + "\" target=\"_blank\" class=\"btn btn-success\" title=\"Descarregar\">"
+					.html("<a download=\"" + data.result[i].fileName + "." + data.result[i].format + "\" href=\"/project/images/gd_reis1/" + data.result[i].fileName + "." + data.result[i].format + "\" target=\"_blank\" class=\"btn btn-success\" title=\"Descarregar\">"
 							+ "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
 							+ "</a>"
 							+ "&nbsp;"
@@ -367,6 +364,9 @@ function createTable(data){
 }
 
 function eliminarFitxer(id){
+	if(!confirm("Estar segur que vol eliminar el fitxer?")){
+		return;
+	}
 	window.location = "/reis/arxiu/eliminar?id=" + id
 						+ "&searchOn=true" 
 						+ "&titol=" + $("#titol").val()

@@ -29,9 +29,17 @@ $(document).ready(function(){
 			searchClaus();
 		}
 	});
+	
+	$('#btnPDF').click(function () {
+		var url = "/reis/arxiu/downloadImage?id=" + $("#id").val();
+		window.open(url);
+    });
 });
 
 function eliminarFitxer(id){
+	if(!confirm("Estar segur que vol eliminar el fitxer?")){
+		return;
+	}
 	window.location = "/reis/arxiu/eliminar?id=" + id;
 }
 

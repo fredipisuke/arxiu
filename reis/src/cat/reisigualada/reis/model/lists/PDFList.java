@@ -140,6 +140,121 @@ public class PDFList {
 		pdf.close();
 	}
 	
+	public static void pdfFitxaFitxer(ServletOutputStream out, Fitxer fitxer) throws Exception {
+		Document pdf = new Document(PageSize.A4, 36, 36, 36, 36);
+		PdfWriter.getInstance(pdf, out);
+		pdf.open();
+
+		// IMATGE CAPÇALERA
+		Image imgHeader = Image.getInstance("http://localhost:8080/reis/resources/images/logo_pdf.png");
+		imgHeader.scaleToFit(200, 200);
+		// TAULA CAPÇALERA
+		PdfPTable tableHeader = new PdfPTable(2);
+		PdfPCell imageHeaderCell = new PdfPCell(imgHeader);
+		imageHeaderCell.setBorderWidth(0);
+		imageHeaderCell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		tableHeader.addCell(imageHeaderCell);
+	    Phrase phraseHeader = new Phrase("ARXIU FOTOGRÀFIC \n"
+										+ "COMISSIÓ CAVALCADA \n" 
+										+ "DELS REIS D’IGUALADA, F. P.", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD));
+	    PdfPCell headerCell = new PdfPCell(phraseHeader);
+	    headerCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+	    headerCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+	    headerCell.setBorderWidth(0);
+	    tableHeader.addCell(headerCell);
+	    tableHeader.setSpacingAfter(50);
+		pdf.add(tableHeader);
+		
+		// REFERÈNCIA
+		PdfPTable tableREF = new PdfPTable(2);
+		PdfPCell refCell1 = new PdfPCell(new Phrase("REFERÈNCIA: ", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD)));
+		refCell1.setBorderWidth(0);
+		refCell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		tableREF.addCell(refCell1);
+		PdfPCell refCell2 = new PdfPCell(new Phrase(fitxer.getFileName(), new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL)));
+		refCell2.setBorderWidth(0);
+		refCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+		tableREF.addCell(refCell2);
+		tableREF.setSpacingAfter(20);
+		// AFEGIM LA TAULA AL DOCUMENT
+		pdf.add(tableREF);
+		
+		// TAULA DE DADES
+		// TÍTOL
+		PdfPTable tableData = new PdfPTable(2);
+		PdfPCell dataCell1 = new PdfPCell(new Phrase("TÍTOL: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+		dataCell1.setBorderWidth(0);
+		dataCell1.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		tableData.addCell(dataCell1);
+		PdfPCell dataCell2 = new PdfPCell(new Phrase(fitxer.getTitol(), new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL)));
+		dataCell2.setBorderWidth(0);
+		dataCell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+		tableData.addCell(dataCell2);
+		// DATA
+		PdfPCell dataCell3 = new PdfPCell(new Phrase("DATA: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+		dataCell3.setBorderWidth(0);
+		dataCell3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		tableData.addCell(dataCell3);
+		PdfPCell dataCell4 = new PdfPCell(new Phrase(fitxer.getData().toString(), new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL)));
+		dataCell4.setBorderWidth(0);
+		dataCell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+		tableData.addCell(dataCell4);
+		// PARAULES CLAU
+		PdfPCell dataCell5 = new PdfPCell(new Phrase("PARAULES CLAU: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+		dataCell5.setBorderWidth(0);
+		dataCell5.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		tableData.addCell(dataCell5);
+		PdfPCell dataCell6 = new PdfPCell(new Phrase(fitxer.getParaulesClau(), new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL)));
+		dataCell6.setBorderWidth(0);
+		dataCell6.setHorizontalAlignment(Element.ALIGN_LEFT);
+		tableData.addCell(dataCell6);
+		// AUTOR
+		PdfPCell dataCell7 = new PdfPCell(new Phrase("AUTOR: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+		dataCell7.setBorderWidth(0);
+		dataCell7.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		tableData.addCell(dataCell7);
+		PdfPCell dataCell8 = new PdfPCell(new Phrase(fitxer.getAutor(), new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL)));
+		dataCell8.setBorderWidth(0);
+		dataCell8.setHorizontalAlignment(Element.ALIGN_LEFT);
+		tableData.addCell(dataCell8);
+		// UBICACIÓ
+		PdfPCell dataCell9 = new PdfPCell(new Phrase("UBICACIÓ: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+		dataCell9.setBorderWidth(0);
+		dataCell9.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		tableData.addCell(dataCell9);
+		PdfPCell dataCell10 = new PdfPCell(new Phrase(fitxer.getUbicacio(), new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL)));
+		dataCell10.setBorderWidth(0);
+		dataCell10.setHorizontalAlignment(Element.ALIGN_LEFT);
+		tableData.addCell(dataCell10);
+		// AFEGIM LA TAULA AL DOCUMENT
+		pdf.add(tableData);
+		
+		// TAULA D'OBSERVACIONS
+		// OBSERVACIONS
+		PdfPTable tableObs = new PdfPTable(1);
+		PdfPCell dataObsCell1 = new PdfPCell();
+		dataObsCell1.addElement(new Phrase("OBSERVACIONS: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+		dataObsCell1.addElement(new Phrase(fitxer.getObservacions(), new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL)));
+		dataObsCell1.setBorderWidth(0);
+		dataObsCell1.setHorizontalAlignment(Element.ALIGN_JUSTIFIED_ALL);
+		tableObs.addCell(dataObsCell1);
+		tableObs.setSpacingAfter(20);
+		// AFEGIM LA TAULA AL DOCUMENT
+		pdf.add(tableObs);
+		
+		// IMATGE
+		Image img = Image.getInstance(Constants.UPLOADED_FOLDER_THUMBNAILS + fitxer.getFileName() + "." + fitxer.getFormat());
+		PdfPTable tableImgs = new PdfPTable(1);
+		PdfPCell imageCell = new PdfPCell(img);
+		imageCell.setBorderWidth(0);
+		imageCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		tableImgs.addCell(imageCell);
+		// AFEGIM LA TAULA AL DOCUMENT
+		pdf.add(tableImgs);
+		 
+		pdf.close();	
+	}	
+	
 	private static void createTitleCell(PdfPCell tableCell){
 		tableCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 		tableCell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);

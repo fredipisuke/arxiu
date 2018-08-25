@@ -36,3 +36,10 @@ $(document).ready(function(){
 	    });
 	});
 });
+
+function eliminarAutor(id){
+	if(!confirm("Estar segur que vol eliminar l'autor?")){
+		return;
+	}
+	window.location = "/reis//autors/deleteAutors?id=" + id;
+}

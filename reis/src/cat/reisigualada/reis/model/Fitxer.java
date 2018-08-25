@@ -188,6 +188,18 @@ public class Fitxer {
 			return null;
 		}
 	}
+	@Transient
+    public String getObservacionsWellcome() {
+		if(observacions!=null){
+			if(observacions.length()>93){
+				return observacions.substring(0, 90) + "...";
+			} else {
+				return observacions;	
+			}
+		} else {
+			return null;
+		}
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

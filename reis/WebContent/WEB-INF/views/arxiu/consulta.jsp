@@ -66,24 +66,24 @@
 					        </h2>
 					        
 				         	<div class="form-group search-group">
-								<input id="fileName" name="fileName" type="text" class="form-control" placeholder="Referència" autofocus="true" required="true" value="${fileName}"></input>
+								<input id="fileName" name="fileName" type="text" class="form-control" placeholder="Referència" autofocus="true" required="true" value="${fileName}" data-toggle="tooltip" title="Referència de l'aplicació" data-original-title="Referència de l'aplicació"></input>
 							</div>
 							
 							<div class="form-group search-group">
-								<input id="referencia" name="referencia" type="text" class="form-control" placeholder="Referència arxiu" autofocus="true" required="true" value="${referencia}"></input>
+								<input id="referencia" name="referencia" type="text" class="form-control" placeholder="Referència antic arxiu" autofocus="true" required="true" value="${referencia}" data-toggle="tooltip" title="Referència existent en un antic arxiu" data-original-title="Referència existent en un antic arxiu"></input>
 							</div>
 							
 				         	<div class="form-group search-group">
-								<input id="titol" name="titol" type="text" class="form-control" placeholder="Títol document" autofocus="true" required="true" value="${titol}"></input>
+								<input id="titol" name="titol" type="text" class="form-control" placeholder="Títol document" autofocus="true" required="true" value="${titol}" data-toggle="tooltip" title="Títol del document" data-original-title="Títol del document"></input>
 							</div>
 							
 							<div class="form-group search-group">
-								<input id="year" name="year" type="text" class="form-control" placeholder="Data" autofocus="true" required="true" value="${year}"></input>
+								<input id="year" name="year" type="text" class="form-control" placeholder="Data" autofocus="true" required="true" value="${year}"  data-toggle="tooltip" title="Any" data-original-title="Any"></input>
 							</div>
 							
 							<h4 class="form-signin-heading search-group">Tipologia</h4>
 							<div class="form-group search-group">
-								<select id="typeDocument" name="typeDocument" class="form-control" required="true">
+								<select id="typeDocument" name="typeDocument" class="form-control" required="true"  data-toggle="tooltip" title="Tipologia del document" data-original-title="Tipologia del document">
 									<option value="">-- Seleccionar  --</option>
 									<option value="1" ${typeDocument=="1" ? "selected" : ""}>Imatge</option>
 									<option value="2" ${typeDocument=="2" ? "selected" : ""}>Document</option>
@@ -91,12 +91,12 @@
 							</div>
 							
 							<div class="form-group search-group">
-								<input type="text" id="paraulesClau" name="paraulesClau" class="form-control" placeholder="Paraules clau" autofocus="true" value="${paraulesClau}"></input>
+								<input type="text" id="paraulesClau" name="paraulesClau" class="form-control" placeholder="Paraules clau" autofocus="true" value="${paraulesClau}" data-toggle="tooltip" title="Paraules clau" data-original-title="Paraules clau"></input>
 							</div>
 							
 							<h4 class="form-signin-heading search-group">Autor</h4>
 							<div class="form-group search-group">
-								<select id="autor_id" name="autor_id" class="form-control">
+								<select id="autor_id" name="autor_id" class="form-control" data-toggle="tooltip" title="Autor del fitxer" data-original-title="Autor del fitxer">
 									<option value="">-- Seleccionar  --</option>
 									<c:forEach var="autor" items="${autorList}" varStatus="loop">
 										<option value="${autor.id}" ${autor.id==autor_id ? 'selected' : ''} >${autor.name}</option>

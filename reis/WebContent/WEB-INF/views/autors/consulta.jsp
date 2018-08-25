@@ -76,7 +76,7 @@
 								    		<td>
 								    			<div class="btn-group-xs" role="group">
 									    			<a href="${contextPath}/autors/registrationAutor?id=${autor.id}" class="btn btn-primary">Editar</a>
-									    			<a href="${contextPath}/autors/deleteAutors?id=${autor.id}" class="btn btn-danger">Eliminar</a>
+									    			<a href="#" class="btn btn-danger" onclick="eliminarAutor(${autor.id})">Eliminar</a>
 									    		</div>
 								    		</td>
 								    	</tr>

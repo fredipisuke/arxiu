@@ -37,6 +37,13 @@ $(document).ready(function(){
 	});
 });
 
+function eliminarClaus(id){
+	if(!confirm("Estar segur que vol eliminar la clau?")){
+		return;
+	}
+	window.location = "/reis/claus/deleteClaus?id=" + id;
+}
+
 function searchClaus(){
 	var params = {}
 	params["name"] = $("#name").val();

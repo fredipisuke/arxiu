@@ -1,17 +1,13 @@
 package cat.reisigualada.reis.validator;
 
 import cat.reisigualada.reis.model.Fitxer;
-import cat.reisigualada.reis.service.FitxerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class FitxerValidator implements Validator {
-    @Autowired
-    private FitxerService fitxerService;
-
+public class ArxiuValidator implements Validator {
+	
     @Override
     public boolean supports(Class<?> aClass) {
         return Fitxer.class.equals(aClass);

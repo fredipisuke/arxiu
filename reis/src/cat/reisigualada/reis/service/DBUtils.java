@@ -257,6 +257,9 @@ public class DBUtils {
 	
 	private static String mountWheres(SearchCriteriaFitxers criteria){
 		String WHERES = "";
+		if(criteria.getId()!=null){
+			WHERES += " and id = " + criteria.getId();
+		}
 		if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau()) && criteria.getClaus()!=null && criteria.getClaus().size()>0){
 			for(Clau c : criteria.getClaus()){
 				WHERES += " and exists (select * from fitxer_clau fc where f.id=fc.fitxer_id and fc.clau_id=" + c.getId() + ")";
