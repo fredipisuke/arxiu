@@ -1,4 +1,4 @@
-package cat.reisigualada.reis.model.lists;
+package cat.reisigualada.reis.model.documentacio;
 
 import java.util.List;
 import javax.servlet.ServletOutputStream;
@@ -10,7 +10,7 @@ import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
 import cat.reisigualada.reis.utils.Constants;
 
-public class ExcelList {
+public class ExcelUtils {
 	
 	@SuppressWarnings("resource")
 	public static void excelClaus(ServletOutputStream out, List<Clau> listClaus) throws Exception {
@@ -89,25 +89,25 @@ public class ExcelList {
 		for (Fitxer f : listFitxers) {
 			row = spreadsheet.createRow(rowid++);
 			Cell cellValue = row.createCell(0);
-			cellValue.setCellValue(f.getId());
+			cellValue.setCellValue(f.getPk().getId());
 			cellValue = row.createCell(1);
 			cellValue.setCellValue(f.getTitol());
 			cellValue = row.createCell(2);
-			if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
+			if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				cellValue.setCellValue("Imatge");
-			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
+			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				cellValue.setCellValue("Document");
 			} else {
-				cellValue.setCellValue(f.getTypeDocument());
+				cellValue.setCellValue(f.getPk().getTypeDocument());
 			}
 			cellValue = row.createCell(3);
 			cellValue.setCellValue(f.getParaulesClau());
 			cellValue = row.createCell(4);
 			cellValue.setCellValue(f.getAutor());
 			cellValue = row.createCell(5);
-			if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
+			if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				cellValue.setCellValue(f.getUbicacio());
-			} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
+			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				cellValue.setCellValue(f.getUbicacioArxiu());
 			}
 			cellValue = row.createCell(6);

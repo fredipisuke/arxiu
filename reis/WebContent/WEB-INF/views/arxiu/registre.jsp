@@ -45,8 +45,8 @@
 		    	<div class="container">
 		    		<form:form method="POST" modelAttribute="fitxerForm" class="form-signin" action="${pageContext.request.contextPath}/arxiu/create?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
 						<input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}" />
-						<spring:bind path="id">
-							<form:input type="hidden" path="id" class="form-control"></form:input>
+						<spring:bind path="pk.id">
+							<form:input type="hidden" path="pk.id" class="form-control"></form:input>
 						</spring:bind>
 						<spring:bind path="fileName">
 							<form:input type="hidden" path="fileName" class="form-control"></form:input>
@@ -105,29 +105,29 @@
 						
 						<c:if test="${editMode == false}">
 							<h4 class="form-signin-heading">Tipologia</h4>
-							<spring:bind path="typeDocument">
+							<spring:bind path="pk.typeDocument">
 								<div class="form-group ${status.error ? 'has-error' : ''}">
-									<form:select path="typeDocument" class="form-control" required="true">
+									<form:select path="pk.typeDocument" class="form-control" required="true">
 										<form:option value="">-- Seleccionar  --</form:option>
 										<form:option value="1">Imatge</form:option>
 										<form:option value="2">Document</form:option>
 									</form:select>
-									<form:errors path="typeDocument"></form:errors>
+									<form:errors path="pk.typeDocument"></form:errors>
 								</div>
 							</spring:bind>
 						</c:if>
 						<c:if test="${editMode == true}">
 							<h4 class="form-signin-heading">
 								Tipologia:
-								<c:if test="${fitxerForm.typeDocument == '1'}">
+								<c:if test="${fitxerForm.pk.typeDocument == '1'}">
 									<b>Imatge</b>
 								</c:if>
-								<c:if test="${fitxerForm.typeDocument == '2'}">
+								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
 									<b>Document</b>
 								</c:if>
 							</h4>
-							<spring:bind path="typeDocument">
-								<form:input type="hidden" path="typeDocument" class="form-control"></form:input>
+							<spring:bind path="pk.typeDocument">
+								<form:input type="hidden" path="pk.typeDocument" class="form-control"></form:input>
 							</spring:bind>
 						</c:if>
 						
@@ -151,27 +151,13 @@
 								<form:errors path="autor_id"></form:errors>
 							</div>
 						</spring:bind>
-						
-						<!-- PARAMETRES PROPIS DE IMATGE -->
-						<spring:bind path="ubicacio">
-							<div class="form-group ${status.error ? 'has-error' : ''}">
-								<c:if test="${fitxerForm.typeDocument == '1'}">
-									<form:input type="text" path="ubicacio" class="form-control" placeholder="Ubicació" autofocus="true"></form:input>
-								</c:if>
-								<c:if test="${fitxerForm.typeDocument == '2'}">
-									<form:input type="text" path="ubicacio" class="form-control" placeholder="Ubicació" autofocus="true" style="display: none;"></form:input>
-								</c:if>
-								<form:errors path="ubicacio"></form:errors>
-								<!-- cssClass="error" -->
-							</div>
-						</spring:bind>
 							
 						<spring:bind path="referencia">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
-								<c:if test="${fitxerForm.typeDocument == '1'}">
+								<c:if test="${fitxerForm.pk.typeDocument == '1'}">
 									<form:input type="text" path="referencia" class="form-control" placeholder="Referència antic arxiu" autofocus="true"></form:input>
 								</c:if>
-								<c:if test="${fitxerForm.typeDocument == '2'}">
+								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
 									<form:input type="text" path="referencia" class="form-control" placeholder="Referència antic arxiu" autofocus="true" style="display: none;"></form:input>
 								</c:if>
 								<form:errors path="referencia"></form:errors>
@@ -179,13 +165,27 @@
 							</div>
 						</spring:bind>
 						
+						<!-- PARAMETRES PROPIS DE IMATGE -->
+						<spring:bind path="ubicacio">
+							<div class="form-group ${status.error ? 'has-error' : ''}">
+								<c:if test="${fitxerForm.pk.typeDocument == '1'}">
+									<form:input type="text" path="ubicacio" class="form-control" placeholder="Ubicació" autofocus="true"></form:input>
+								</c:if>
+								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
+									<form:input type="text" path="ubicacio" class="form-control" placeholder="Ubicació" autofocus="true" style="display: none;"></form:input>
+								</c:if>
+								<form:errors path="ubicacio"></form:errors>
+								<!-- cssClass="error" -->
+							</div>
+						</spring:bind>
+						
 						<!-- PARAMETRES PROPIS DE DOCUMENT -->
 						<spring:bind path="ubicacioArxiu">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
-								<c:if test="${fitxerForm.typeDocument == '1'}">
+								<c:if test="${fitxerForm.pk.typeDocument == '1'}">
 									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació a l'arxiu" autofocus="true" style="display: none;"></form:input>
 								</c:if>
-								<c:if test="${fitxerForm.typeDocument == '2'}">
+								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
 									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació a l'arxiu" autofocus="true"></form:input>
 								</c:if>
 								<form:errors path="ubicacioArxiu"></form:errors>
@@ -215,21 +215,17 @@
 							<div class="tz-gallery-edit">
 								<div style="width: 265px; float: center;">
 				                	<div class="thumbnail">
-				                		<c:if test="${fitxerForm.typeDocument == 1}">
+				                		<c:if test="${fitxerForm.pk.typeDocument == 1}">
 											<div style="background-image:url('/project/images/gd_reis1/thumbnails/${fitxerForm.fileName}.${fitxerForm.format}'); position: relative; float: center width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
 											<div class="caption">
 												<h3>Imatge</h3>
-												<a download="${fitxerForm.fileName}.${fitxerForm.format}" href="/project/images/gd_reis1/${fitxerForm.fileName}.${fitxerForm.format}" target="_blank" class="btn btn-sm btn-success">
+												<a href="/reis/arxiu/downloadImage?id=${fitxerForm.pk.id}&typeDocument=${fitxerForm.pk.typeDocument}" target="_blank" class="btn btn-sm btn-success">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
 												</a>
-												<a href="#" class="btn btn-sm btn-success" id="btnPDF" name="btnPDF">
-													<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-													Fitxa
-												</a>
 											</div>
 										</c:if>
-										<c:if test="${fitxerForm.typeDocument == 2}">
+										<c:if test="${fitxerForm.pk.typeDocument == 2}">
 											<c:choose>
 											    <c:when test="${fitxerForm.format == 'doc' || fitxerForm.format == 'docx' || fitxerForm.format == 'xls' || fitxerForm.format == 'xlsx' || fitxerForm.format == 'pdf'}">
 											        <div style="background-image:url('${contextPath}/resources/images/${fitxerForm.format}.png'); position: relative; float: center width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
@@ -240,7 +236,7 @@
 											</c:choose>
 											<div class="caption">
 												<h3>Document</h3>
-												<a href="/project/images/gd_reis1/${fitxerForm.fileName}.${fitxerForm.format}" target="_blank" class="btn btn-sm btn-success">
+												<a href="/reis/arxiu/downloadImage?id=${fitxerForm.pk.id}&typeDocument=${fitxerForm.pk.typeDocument}" target="_blank" class="btn btn-sm btn-success">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
 												</a>
@@ -257,7 +253,7 @@
 						<div align="center">
 							<button class="btn btn-lg btn-default" type="button" onclick="javascript:window.location='consultaBack';">Tornar</button>
 							<c:if test="${editMode == true}">
-								<a href="#" class="btn btn-lg btn-danger" title="Eliminar" onclick="eliminarFitxer(${fitxerForm.id})">Eliminar</a>
+								<a href="#" class="btn btn-lg btn-danger" title="Eliminar" onclick="eliminarFitxer(${fitxerForm.pk.id}, ${fitxerForm.pk.typeDocument})">Eliminar</a>
 								<button class="btn btn-lg btn-primary" type="submit">Modificar</button>
 							</c:if>
 							<c:if test="${editMode == false}">

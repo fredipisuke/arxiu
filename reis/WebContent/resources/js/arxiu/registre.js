@@ -13,39 +13,32 @@ $(document).ready(function(){
   		}
   	});
 	
-	$("#typeDocument").change(function(){
+	$("#pk\\.typeDocument").change(function(){
 		$('#paraulesClau').tokenfield('destroy');
 		$('#paraulesClau').val("");
-		if($("#typeDocument").val()!=null && $("#typeDocument").val()!=""){
-			if($("#typeDocument").val()=="1"){
+		if($("#pk\\.typeDocument").val()!=null && $("#pk\\.typeDocument").val()!=""){
+			if($("#pk\\.typeDocument").val()=="1"){
 				$("#ubicacio").show();
-				$("#procedencia").show();
 				$("#ubicacioArxiu").hide();
-			} else if($("#typeDocument").val()=="2"){
+			} else if($("#pk\\.typeDocument").val()=="2"){
 				$("#ubicacioArxiu").show();
 				$("#ubicacio").hide();
-				$("#procedencia").hide();
 			}
 			searchClaus();
 		}
 	});
-	
-	$('#btnPDF').click(function () {
-		var url = "/reis/arxiu/downloadImage?id=" + $("#id").val();
-		window.open(url);
-    });
 });
 
-function eliminarFitxer(id){
+function eliminarFitxer(id, typeDocument){
 	if(!confirm("Estar segur que vol eliminar el fitxer?")){
 		return;
 	}
-	window.location = "/reis/arxiu/eliminar?id=" + id;
+	window.location = "/reis/arxiu/eliminar?id=" + id + "&typeDocumentPk=" + typeDocument;
 }
 
 function searchClaus(){
 	var params = {}
-	params["typeDocument"] = $("#typeDocument").val();
+	params["typeDocument"] = $("#pk\\.typeDocument").val();
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",

@@ -1,39 +1,37 @@
 package cat.reisigualada.reis.model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
+import java.util.Date;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
+import cat.reisdigualada.reis.vo.FitxerKey;
 
 @Entity
 @Table(name = "fitxer")
 public class Fitxer {
 	
-	private Long id;
+	@EmbeddedId 
+	private FitxerKey pk = new FitxerKey();
     private String titol;
-    private Long typeDocument;
+    @Transient
     private String paraulesClau;
-    // Perfils
-    private Set<Clau> claus;
+    @Transient
+    private ArrayList<Clau> claus;
     private String observacions;
     private String fileName;
     private String format;
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date data;
     private Long autor_id;
+    @Transient
     private String autor;
     private Timestamp dataCreacio;
     // PROPIETATS D'IMATGE
@@ -41,27 +39,18 @@ public class Fitxer {
     private String referencia;
     // PROPIETATS DE DOCUMENT
     private String ubicacioArxiu;
-    
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}	
-	public String getTitol() {
+
+    public FitxerKey getPk(){
+    	return pk;
+    }
+    public void setPk(FitxerKey pk){
+    	this.pk = pk;
+    }
+    public String getTitol() {
 		return titol;
 	}
 	public void setTitol(String titol) {
 		this.titol = titol;
-	}
-	public Long getTypeDocument() {
-		return typeDocument;
-	}
-	public void setTypeDocument(Long typeDocument) {
-		this.typeDocument = typeDocument;
 	}
 	@Transient
 	public String getParaulesClau() {
@@ -83,13 +72,12 @@ public class Fitxer {
 	public void setParaulesClau(String paraulesClau) {
 		this.paraulesClau = paraulesClau;
 	}
-	@JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "fitxer_clau", joinColumns = { @JoinColumn(name = "fitxer_id") }, inverseJoinColumns = { @JoinColumn(name = "clau_id") })
-    public Set<Clau> getClaus() {
+	@Transient
+    public ArrayList<Clau> getClaus() {
         return claus;
     }
-    public void setClaus(Set<Clau> claus) {
+	@Transient
+    public void setClaus(ArrayList<Clau> claus) {
         this.claus = claus;
     }
 	public String getObservacions() {
@@ -180,7 +168,7 @@ public class Fitxer {
     public String getObservacionsResum() {
 		if(observacions!=null){
 			if(observacions.length()>200){
-				return observacions.substring(0, 250) + "...";
+				return observacions.substring(0, 200) + "...";
 			} else {
 				return observacions;	
 			}
@@ -191,8 +179,8 @@ public class Fitxer {
 	@Transient
     public String getObservacionsWellcome() {
 		if(observacions!=null){
-			if(observacions.length()>93){
-				return observacions.substring(0, 90) + "...";
+			if(observacions.length()>75){
+				return observacions.substring(0, 75) + "...";
 			} else {
 				return observacions;	
 			}
@@ -203,9 +191,8 @@ public class Fitxer {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Fitxer [id=" + id);
+		builder.append("Fitxer [FitxerKey=" + pk);
 		builder.append(", titol=" + titol);
-		builder.append(", typeDocument=" + typeDocument);
 		builder.append(", paraulesClau=" + paraulesClau);
 		builder.append(", fileName=" + fileName);
 		builder.append(", format=" + format);

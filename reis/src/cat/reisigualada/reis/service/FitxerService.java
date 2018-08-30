@@ -1,15 +1,17 @@
 package cat.reisigualada.reis.service;
 
 import java.util.List;
+
+import cat.reisdigualada.reis.vo.FitxerKey;
 import cat.reisigualada.reis.model.Fitxer;
 
 public interface FitxerService {
 	/** Buscar Fitxer per id */
-    Fitxer findById(Long id);
+    Fitxer findByPk(FitxerKey pk);
     /** Buscar tots els fitxers */
-	List<Fitxer> findAllByOrderById();
+	List<Fitxer> findAllByOrderByPk();
 	/** Guardar un Fitxer */
 	void save(Fitxer fitxer);
 	/** Esborrar un Fitxer */
-	void deleteById(Long id);	
+	void delete(Fitxer fitxer);	
 }

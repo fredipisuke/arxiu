@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import cat.reisdigualada.reis.vo.EstadistiquesVO;
 import cat.reisigualada.reis.model.Clau;
@@ -16,8 +15,8 @@ import cat.reisigualada.reis.web.arxiu.SearchCriteriaFitxers;
 
 public class DBUtils {
 	
-	public static Long getMaxIdFitxer(){
-		String QUERY = "select max(id) from fitxer";
+	public static Long getMaxIdFitxer(Long typeDocument){
+		String QUERY = "select max(id) from fitxer where typeDocument=" + typeDocument;
 		System.out.println("DBUtils.getMaxIdFitxer: " + QUERY);
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -31,6 +30,42 @@ public class DBUtils {
 	        rs.close();
 	        st.close();
 	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Integer deleteAllClaus(Fitxer fitxer){
+		String QUERY = "delete from fitxer_clau where fitxer_id=" + fitxer.getPk().getId() + " and typeDocument_id=" + fitxer.getPk().getTypeDocument();
+		System.out.println("DBUtils.deleteAllClaus: " + QUERY);
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+		    int result = st.executeUpdate(QUERY);
+	        st.close();
+	        conn.close();
+	        return result;
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Integer addFitxerClau(Long fitxer_id, Long typeDocument_id, Long clau_id){
+		String QUERY = "insert into fitxer_clau (fitxer_id, typeDocument_id, clau_id) values (" + fitxer_id + ", " + typeDocument_id + ", " + clau_id +")";
+		System.out.println("DBUtils.addFitxerClau: " + QUERY);
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+		    int result = st.executeUpdate(QUERY);
+	        st.close();
+	        conn.close();
+	        return result;
 		} catch(Exception e){ 
 			e.printStackTrace();
 		}
@@ -103,9 +138,9 @@ public class DBUtils {
 		    ResultSet rs = st.executeQuery(SELECT_FITXERS);
 	        while (rs.next()) {
 	        	Fitxer f = new Fitxer();
-	        	f.setId(rs.getLong("id"));
+	        	f.getPk().setId(rs.getLong("id"));
 	        	f.setTitol(rs.getString("titol"));
-	        	f.setTypeDocument(rs.getLong("typeDocument"));
+	        	f.getPk().setTypeDocument(rs.getLong("typeDocument"));
 	        	f.setObservacions(rs.getString("observacions"));
 	        	f.setFileName(rs.getString("fileName"));
 	        	f.setFormat(rs.getString("format"));
@@ -115,10 +150,6 @@ public class DBUtils {
 	        	f.setUbicacio(rs.getString("ubicacio"));
 	        	f.setUbicacioArxiu(rs.getString("ubicacioArxiu"));
 	        	f.setReferencia(rs.getString("referencia"));
-	        	// Obtenim el llistat de claus del fitxer
-	        	if(criteria.isSearchKeys()){
-	        		f.setClaus(searchClaus(f));
-	        	}
 	        	listF.add(f);
 	        }
 	        rs.close();
@@ -139,7 +170,7 @@ public class DBUtils {
 		// CONDICIONANTS
 		SELECT_FITXERS += mountWheres(criteria);
 		// ORDENACIÓ
-		SELECT_FITXERS += " order by f.id ";
+		SELECT_FITXERS += " order by f.dataCreacio ";
 		
 		// EJECUTAMOS LA QUERY
 		List<Fitxer> listF = new ArrayList<Fitxer>();
@@ -152,9 +183,9 @@ public class DBUtils {
 		    ResultSet rs = st.executeQuery(SELECT_FITXERS);
 	        while (rs.next()) {
 	        	Fitxer f = new Fitxer();
-	        	f.setId(rs.getLong("id"));
+	        	f.getPk().setId(rs.getLong("id"));
 	        	f.setTitol(rs.getString("titol"));
-	        	f.setTypeDocument(rs.getLong("typeDocument"));
+	        	f.getPk().setTypeDocument(rs.getLong("typeDocument"));
 	        	f.setObservacions(rs.getString("observacions"));
 	        	f.setFileName(rs.getString("fileName"));
 	        	f.setFormat(rs.getString("format"));
@@ -186,7 +217,7 @@ public class DBUtils {
 		// CONDICIONANTS
 		SELECT_FITXERS += mountWheres(criteria);
 		// ORDENACIÓ
-		SELECT_FITXERS += " order by id ";
+		SELECT_FITXERS += " order by dataCreacio ";
 		// LÍMITS I NÚMERO D'ELEMENTS
 		if(criteria.getnElementsPerPage()!=null){
 			Long offset = criteria.getnElementsPerPage() * criteria.getPagina();
@@ -204,9 +235,9 @@ public class DBUtils {
 		    ResultSet rs = st.executeQuery(SELECT_FITXERS);
 	        while (rs.next()) {
 	        	Fitxer f = new Fitxer();
-	        	f.setId(rs.getLong("id"));
+	        	f.getPk().setId(rs.getLong("id"));
 	        	f.setTitol(rs.getString("titol"));
-	        	f.setTypeDocument(rs.getLong("typeDocument"));
+	        	f.getPk().setTypeDocument(rs.getLong("typeDocument"));
 	        	f.setObservacions(rs.getString("observacions"));
 	        	f.setFileName(rs.getString("fileName"));
 	        	f.setFormat(rs.getString("format"));
@@ -262,14 +293,14 @@ public class DBUtils {
 		}
 		if(criteria.getParaulesClau()!=null && !"".equals(criteria.getParaulesClau()) && criteria.getClaus()!=null && criteria.getClaus().size()>0){
 			for(Clau c : criteria.getClaus()){
-				WHERES += " and exists (select * from fitxer_clau fc where f.id=fc.fitxer_id and fc.clau_id=" + c.getId() + ")";
+				WHERES += " and exists (select * from fitxer_clau fc where f.id=fc.fitxer_id and f.typeDocument=fc.typeDocument_id and fc.clau_id=" + c.getId() + ")";
 			}
 		}
-		if(criteria.getFileName()!=null && !"".equals(criteria.getFileName())){
-			WHERES += " and fileName like '%" + criteria.getFileName() + "%'";
-		}
 		if(criteria.getReferencia()!=null && !"".equals(criteria.getReferencia())){
-			WHERES += " and referencia like '%" + criteria.getReferencia() + "%'";
+			WHERES += " and fileName like '%" + criteria.getReferencia() + "%'";
+		}
+		if(criteria.getReferenciaArxiu()!=null && !"".equals(criteria.getReferenciaArxiu())){
+			WHERES += " and referencia like '%" + criteria.getReferenciaArxiu() + "%'";
 		}
 		if(criteria.getTitol()!=null && !"".equals(criteria.getTitol())){
 			WHERES += " and titol like '%" + criteria.getTitol() + "%' ";
@@ -286,16 +317,17 @@ public class DBUtils {
 		return WHERES;
 	}
 	
-	public static HashSet<Clau> searchClaus(Fitxer f){
+	public static ArrayList<Clau> searchClaus(Fitxer f){
 		String SELECT_CLAUS = "select c.* from clau c "
-							+ " left join fitxer_clau fc ON c.id = fc.clau_id "
-							+ " where fitxer_id = " + f.getId();
+							+ " left join fitxer_clau fc ON c.id = fc.clau_id"
+							+ " where fitxer_id = " + f.getPk().getId()
+							+ " and typeDocument_id = " + f.getPk().getTypeDocument();
 		
 		SELECT_CLAUS += " order by name ";
 		System.out.println("DBUtils.searchClaus: " + SELECT_CLAUS);
 		
 		// EJECUTAMOS LA QUERY
-		HashSet<Clau> hsC = new HashSet<Clau>();
+		ArrayList<Clau> hsC = new ArrayList<Clau>();
 		try{
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
@@ -434,9 +466,10 @@ public class DBUtils {
 			int i=0;
 	        while (rs.next()) {
 	        	if(i==0){
-	        		BACK_UP += "\ninsert into fitxer_clau (fitxer_id, clau_id) values \n";
+	        		BACK_UP += "\ninsert into fitxer_clau (fitxer_id, typeDocument_id, clau_id) values \n";
 	        	}
 	        	BACK_UP += "(" + rs.getLong("fitxer_id")
+	        				+ ", " + rs.getLong("typeDocument_id")
 				        	+ ", " + rs.getLong("clau_id") + ")";
 	        	if(rs.isLast()){
 	        		BACK_UP += ";\n";

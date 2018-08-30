@@ -22,7 +22,7 @@ public class ArxiuValidator implements Validator {
         } else if (fitxer.getTitol().length() < 4 || fitxer.getTitol().length() > 100) {
             errors.rejectValue("titol", "size.fitxerForm.titol");
         }
-        if(fitxer.getTypeDocument()==null || fitxer.getTypeDocument()<1 || fitxer.getTypeDocument()>2){
+        if(fitxer.getPk().getTypeDocument()==null || fitxer.getPk().getTypeDocument()<1 || fitxer.getPk().getTypeDocument()>2){
         	errors.rejectValue("typeDocument", "required");
         }
         if(fitxer.getParaulesClau()==null || "".equals(fitxer.getParaulesClau())){

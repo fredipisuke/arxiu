@@ -1,5 +1,7 @@
 package cat.reisigualada.reis.service;
 
+import cat.reisdigualada.reis.vo.FitxerKey;
+import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
 import cat.reisigualada.reis.repository.FitxerRepository;
 import java.util.List;
@@ -12,22 +14,28 @@ public class FitxerServiceImpl implements FitxerService {
     private FitxerRepository fitxerRepository;
 
     @Override
-    public Fitxer findById(Long id) {
-        return fitxerRepository.findById(id);
+    public Fitxer findByPk(FitxerKey pk) {
+        return fitxerRepository.findByPk(pk);
     }
 
     @Override
-    public List<Fitxer> findAllByOrderById() {
-    	return fitxerRepository.findAllByOrderById();
+    public List<Fitxer> findAllByOrderByPk() {
+    	return fitxerRepository.findAllByOrderByPk();
     }
 
     @Override
     public void save(Fitxer fitxer) {
     	fitxerRepository.save(fitxer);
+    	DBUtils.deleteAllClaus(fitxer);
+    	if(fitxer.getClaus()!=null){
+    		for(Clau c : fitxer.getClaus()){
+    			DBUtils.addFitxerClau(fitxer.getPk().getId(), fitxer.getPk().getTypeDocument(), c.getId());
+    		}
+    	}
     }
     
     @Override
-    public void deleteById(Long id) {
-    	fitxerRepository.delete(id);
+    public void delete(Fitxer fitxer) {
+    	fitxerRepository.delete(fitxer);
     }
 }

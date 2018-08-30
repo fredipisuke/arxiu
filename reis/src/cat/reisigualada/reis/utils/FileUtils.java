@@ -18,18 +18,20 @@ public class FileUtils {
     	return UUID.randomUUID().toString();
     }
     
-	public static String generateFileName(Fitxer f){
-    	Long id = f.getId();
-    	if(id==null)
-    		id = DBUtils.getMaxIdFitxer();
-
+	public static void generateFileName(Fitxer f){
+    	Long id = f.getPk().getId();
+    	if(id==null){
+    		id = DBUtils.getMaxIdFitxer(f.getPk().getTypeDocument());
+    		f.getPk().setId(id);
+    	}
+    	
     	String name = "";
-    	if(f.getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
+    	if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
     		name = "PIC_" + f.getYear() + "_" + generateCode(id, 10);
-    	} else if(f.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
+    	} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
     		name = "DOC_" + f.getYear() + "_" + generateCode(id, 10);
     	}    	
-    	return name;
+    	f.setFileName(name);
     }
     
     private static String generateCode(Long id, int longitud){
@@ -47,7 +49,7 @@ public class FileUtils {
     }
     
 	private static BufferedImage scale(BufferedImage source) {
-		int w = 250;
+		int w = 235;
 		int h = (int) (source.getHeight() * w / source.getWidth());
 		BufferedImage bi = getCompatibleImage(w, h);
 		Graphics2D g2d = bi.createGraphics();

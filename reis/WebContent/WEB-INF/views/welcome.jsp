@@ -43,7 +43,7 @@
 							<c:forEach var="entry" items="${listImages}" varStatus="loop">
 								<div style="width: 265px; float: left; padding-left: 15px; padding-right: 15px">
 					                <div class="thumbnail">
-					                	<c:if test="${entry.typeDocument == 1}">
+					                	<c:if test="${entry.pk.typeDocument == 1}">
 					                    	<div style="background-image:url('/project/images/gd_reis1/thumbnails/${entry.fileName}.${entry.format}'); position: relative; float: left; width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
 					                    </c:if>
 					                    <div class="caption">
@@ -86,10 +86,7 @@
 							</a>
 				        </h2>
 					</div>
-				</div>
-				
-				<sec:authorize access="hasRole('ROLE_ADMIN')">
-					<div class="row">
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<div class="col">
 					        <h2>
 					        	Crear Thumbnails
@@ -98,8 +95,8 @@
 								</a>
 					        </h2>
 						</div>
-					</div>
-				</sec:authorize>
+					</sec:authorize>
+				</div>
 			</div>
 	    </c:if>
 		

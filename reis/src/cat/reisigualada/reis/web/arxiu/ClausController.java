@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import cat.reisigualada.reis.model.Clau;
-import cat.reisigualada.reis.model.lists.ExcelList;
-import cat.reisigualada.reis.model.lists.PDFList;
+import cat.reisigualada.reis.model.documentacio.ExcelUtils;
+import cat.reisigualada.reis.model.documentacio.PDFUtils;
 import cat.reisigualada.reis.service.ClauService;
 import cat.reisigualada.reis.utils.AjaxResponseBody;
 import cat.reisigualada.reis.validator.ClauValidator;
@@ -52,7 +52,7 @@ public class ClausController {
         response.setHeader("Content-Disposition", "attachment; filename=claus.xlsx");
 
         List<Clau> lK = clauService.findAllByOrderByTypeAscNameAsc();        
-    	ExcelList.excelClaus(response.getOutputStream(), lK);
+    	ExcelUtils.excelClaus(response.getOutputStream(), lK);
         response.flushBuffer();
     }
     
@@ -62,7 +62,7 @@ public class ClausController {
         response.setHeader("Content-Disposition", "attachment; filename=claus.pdf");
 
         List<Clau> lK = clauService.findAllByOrderByTypeAscNameAsc();
-    	PDFList.pdfClaus(response.getOutputStream(), lK);
+    	PDFUtils.pdfClaus(response.getOutputStream(), lK);
         response.flushBuffer();
     }
     
