@@ -368,7 +368,7 @@ public class PDFUtils {
 		// AFEGIM LA TAULA AL DOCUMENT
 		pdf.add(tableObs);
 		
-		if(fitxer.getPk().getTypeDocument()==Constants.TYPE_KEY_IMAGE){
+		if(fitxer.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 			// IMATGE
 			Image img = Image.getInstance(Constants.UPLOADED_FOLDER + fitxer.getFileName() + "." + fitxer.getFormat());
 			img.scaleToFit(200, 200);

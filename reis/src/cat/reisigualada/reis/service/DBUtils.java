@@ -217,7 +217,7 @@ public class DBUtils {
 		// CONDICIONANTS
 		SELECT_FITXERS += mountWheres(criteria);
 		// ORDENACIÓ
-		SELECT_FITXERS += " order by dataCreacio ";
+		SELECT_FITXERS += " order by data, id ";
 		// LÍMITS I NÚMERO D'ELEMENTS
 		if(criteria.getnElementsPerPage()!=null){
 			Long offset = criteria.getnElementsPerPage() * criteria.getPagina();
