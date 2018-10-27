@@ -223,6 +223,32 @@ public class ArxiuController {
         return "/arxiu/registre";
     }
     
+    @RequestMapping(value = "/arxiu/updateFile", method = RequestMethod.POST)
+    public String updateFile(@RequestParam("file") MultipartFile file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
+    	// Actualitzar el fitexr
+    	try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
+            Files.write(path, bytes);
+            if(fitxerForm.getPk().getTypeDocument()==Constants.TYPE_KEY_IMAGE){
+	            // Creem el thumbnail
+	            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
+            loadViewRegistre(model, fitxerForm, false, false);
+            return "/arxiu/registre";
+        }
+
+        // Si arribem a aquest punt, tot ha anat correctament
+        model.addAttribute("messageOk", "Fitxer actualitzat correctament");
+        // Parametres per poder carregar la vista
+        loadViewRegistre(model, fitxerForm, false, false);
+        return "/arxiu/registre";
+    }
+    
+    
     @RequestMapping(value = "/arxiu/create", method = RequestMethod.POST)
     public String create(@RequestParam("file") MultipartFile file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
     	boolean newFile = true;
@@ -277,8 +303,10 @@ public class ArxiuController {
 	            byte[] bytes = file.getBytes();
 	            Path path = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
 	            Files.write(path, bytes);
-	            // Creem el thumbnail
-	            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
+	            if(fitxerForm.getPk().getTypeDocument()==Constants.TYPE_KEY_IMAGE){
+		            // Creem el thumbnail
+		            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
+	            }
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");

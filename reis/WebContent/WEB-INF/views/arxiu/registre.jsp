@@ -213,32 +213,40 @@
 							    <input type="file" id="file" name="file" style="display: none;">
 							</div>
 							<div class="tz-gallery-edit">
-								<div style="width: 265px; float: center;">
+								<div style="width: 300px; float: center;">
 				                	<div class="thumbnail">
 				                		<c:if test="${fitxerForm.pk.typeDocument == 1}">
-											<div style="background-image:url('/project/images/gd_reis1/thumbnails/${fitxerForm.fileName}.${fitxerForm.format}'); position: relative; float: center width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+											<div style="background-image:url('/project/images/gd_reis1/thumbnails/${fitxerForm.fileName}.${fitxerForm.format}'); position: relative; float: center width: 265px; height: 214px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
 											<div class="caption">
 												<h3>Imatge</h3>
 												<a href="/reis/arxiu/downloadImage?id=${fitxerForm.pk.id}&typeDocument=${fitxerForm.pk.typeDocument}" target="_blank" class="btn btn-sm btn-success">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
 												</a>
+												<a href="#" data-toggle="modal" data-target="#miModal" class="btn btn-sm btn-danger">
+													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+													Modificar imatge
+												</a>
 											</div>
 										</c:if>
 										<c:if test="${fitxerForm.pk.typeDocument == 2}">
 											<c:choose>
 											    <c:when test="${fitxerForm.format == 'doc' || fitxerForm.format == 'docx' || fitxerForm.format == 'xls' || fitxerForm.format == 'xlsx' || fitxerForm.format == 'pdf'}">
-											        <div style="background-image:url('${contextPath}/resources/images/${fitxerForm.format}.png'); position: relative; float: center width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+											        <div style="background-image:url('${contextPath}/resources/images/${fitxerForm.format}.png'); position: relative; float: center width: 265px; height: 214px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
 											    </c:when>
 											    <c:otherwise>
-											        <div style="background-image:url('${contextPath}/resources/images/file.png'); position: relative; float: center width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+											        <div style="background-image:url('${contextPath}/resources/images/file.png'); position: relative; float: center width: 265px; height: 214px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
 											    </c:otherwise>
 											</c:choose>
 											<div class="caption">
 												<h3>Document</h3>
-												<a href="/reis/arxiu/downloadImage?id=${fitxerForm.pk.id}&typeDocument=${fitxerForm.pk.typeDocument}" target="_blank" class="btn btn-sm btn-success">
+												<a href="/reis/arxiu/downloadImage?id=${fitxerForm.pk.id}&typeDocument=${fitxerForm.pk.typeDocument}" target="_blank" class="btn btn-sm btn-danger">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
+												</a>
+												<a href="#" data-toggle="modal" data-target="#miModal" class="btn btn-sm btn-danger">
+													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+													Modificar document
 												</a>
 											</div>
 										</c:if>
@@ -263,6 +271,46 @@
 						<br>
 					</form:form>
 				</div>
+				
+				<c:if test="${editMode == true}">
+					<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h3 class="modal-title" id="myModalLabel">
+										Modificar fitxer
+									</h3>
+								</div>
+								<div class="modal-body">
+									<form:form method="POST" modelAttribute="fitxerForm" class="form-signin" action="${pageContext.request.contextPath}/arxiu/updateFile?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
+										<!--  HIDDENS -->
+										<spring:bind path="pk.id">
+											<form:input type="hidden" path="pk.id" class="form-control"></form:input>
+										</spring:bind>
+										<spring:bind path="pk.typeDocument">
+											<form:input type="hidden" path="pk.typeDocument" class="form-control"></form:input>
+										</spring:bind>
+										<spring:bind path="fileName">
+											<form:input type="hidden" path="fileName" class="form-control"></form:input>
+										</spring:bind>
+										<spring:bind path="format">
+											<form:input type="hidden" path="format" class="form-control"></form:input>
+										</spring:bind>
+										
+										<div class="form-group">
+											<label for="file">Fitxer</label>
+										    <input type="file" id="file" name="file">
+										</div>
+										<button class="btn btn-sm btn-primary" type="submit">Modificar</button>
+									</form:form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</c:if>
 			</sec:authorize>
 	    </c:if>
 		
