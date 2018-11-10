@@ -230,7 +230,7 @@ public class ArxiuController {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
             Files.write(path, bytes);
-            if(fitxerForm.getPk().getTypeDocument()==Constants.TYPE_KEY_IMAGE){
+            if(fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 	            // Creem el thumbnail
 	            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
             }
@@ -303,7 +303,7 @@ public class ArxiuController {
 	            byte[] bytes = file.getBytes();
 	            Path path = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
 	            Files.write(path, bytes);
-	            if(fitxerForm.getPk().getTypeDocument()==Constants.TYPE_KEY_IMAGE){
+	            if(fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 		            // Creem el thumbnail
 		            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
 	            }
