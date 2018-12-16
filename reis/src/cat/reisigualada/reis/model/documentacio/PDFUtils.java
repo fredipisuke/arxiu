@@ -260,7 +260,7 @@ public class PDFUtils {
 	
 	public static Document pdfFitxaFitxer(OutputStream out, Fitxer fitxer) throws Exception {
 		Document pdf = new Document(PageSize.A4, 36, 36, 36, 36);
-		PdfWriter.getInstance(pdf, out);
+		PdfWriter pdfWriter = PdfWriter.getInstance(pdf, out);
 		pdf.open();
 
 		// IMATGE CAPÇALERA
@@ -380,7 +380,7 @@ public class PDFUtils {
 			// AFEGIM LA TAULA AL DOCUMENT
 			pdf.add(tableImgs);
 		}
-		 
+		
 		// Cerramos el documento
 		pdf.close();
 		// Retornamos el documento PDF
@@ -391,5 +391,39 @@ public class PDFUtils {
 		tableCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 		tableCell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
 		tableCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+	}
+	
+	private static Image generateBarCode39(PdfContentByte pdfContentByte, String code){
+		// PdfContentByte cb = pdfWriter.getDirectContent();
+		Barcode39 barCode = new Barcode39();
+		barCode.setCode(code);
+		Image barCodeImage = barCode.createImageWithBarcode(pdfContentByte, null, null);
+		return barCodeImage;
+	}
+	
+	private static Image generateBarCode128(PdfContentByte pdfContentByte, String code){
+		// PdfContentByte cb = pdfWriter.getDirectContent();
+		Barcode128 barCode = new Barcode128();
+		barCode.setCode(code);
+		barCode.setCodeType(Barcode.CODE128);
+        Image barCodeImage = barCode.createImageWithBarcode(pdfContentByte, null, null);
+		return barCodeImage;
+	}
+	
+	private static Image generateBarCodeEAN(PdfContentByte pdfContentByte, String code){
+		// PdfContentByte cb = pdfWriter.getDirectContent();
+		BarcodeEAN barCode = new BarcodeEAN();
+		barCode.setCode(code);
+		barCode.setCodeType(Barcode.EAN13);
+		Image barCodeImage = barCode.createImageWithBarcode(pdfContentByte, null, null);
+		return barCodeImage;
+	}
+	
+	private static Image generateQR(PdfContentByte pdfContentByte, String code) throws BadElementException{
+		// PdfContentByte cb = pdfWriter.getDirectContent();
+		BarcodeQRCode codeQR = new BarcodeQRCode(code, 1000, 1000, null);
+        Image codeQRImage = codeQR.getImage();
+        codeQRImage.scaleAbsolute(100, 100);
+		return codeQRImage;
 	}
 }
