@@ -29,6 +29,6 @@
     <bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		 <!-- setting maximum upload size -->
-		<property name="maxUploadSize" value="100000000" /> <!-- 100Mb -->
+		<property name="maxUploadSize" value="350000000" /> <!-- 350Mb -->
 	</bean>
 </beans>

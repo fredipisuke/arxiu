@@ -6,11 +6,12 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import cat.reisdigualada.reis.vo.EstadistiquesVO;
+
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
 import cat.reisigualada.reis.utils.AjaxResponseBody;
 import cat.reisigualada.reis.utils.Constants;
+import cat.reisigualada.reis.vo.EstadistiquesVO;
 import cat.reisigualada.reis.web.arxiu.SearchCriteriaFitxers;
 
 public class DBUtils {

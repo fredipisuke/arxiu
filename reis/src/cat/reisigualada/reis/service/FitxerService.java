@@ -2,8 +2,8 @@ package cat.reisigualada.reis.service;
 
 import java.util.List;
 
-import cat.reisdigualada.reis.vo.FitxerKey;
 import cat.reisigualada.reis.model.Fitxer;
+import cat.reisigualada.reis.vo.FitxerKey;
 
 public interface FitxerService {
 	/** Buscar Fitxer per id */

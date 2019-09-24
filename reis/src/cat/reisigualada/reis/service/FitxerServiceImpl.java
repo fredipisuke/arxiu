@@ -1,9 +1,10 @@
 package cat.reisigualada.reis.service;
 
-import cat.reisdigualada.reis.vo.FitxerKey;
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
 import cat.reisigualada.reis.repository.FitxerRepository;
+import cat.reisigualada.reis.vo.FitxerKey;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

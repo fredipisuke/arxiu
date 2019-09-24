@@ -11,7 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
-import cat.reisdigualada.reis.vo.FitxerKey;
+import cat.reisigualada.reis.vo.FitxerKey;
 
 @Entity
 @Table(name = "fitxer")

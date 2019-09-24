@@ -1,4 +1,4 @@
-package cat.reisdigualada.reis.vo;
+package cat.reisigualada.reis.vo;
 
 import java.io.Serializable;
 

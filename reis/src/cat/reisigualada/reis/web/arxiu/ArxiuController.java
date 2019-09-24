@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import cat.reisdigualada.reis.vo.FitxerKey;
+import cat.reisigualada.reis.vo.FitxerKey;
 import cat.reisigualada.reis.model.Autor;
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
