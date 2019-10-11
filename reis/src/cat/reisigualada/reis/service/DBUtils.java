@@ -115,6 +115,26 @@ public class DBUtils {
 		} catch(Exception e){ 
 			e.printStackTrace();
 		}
+		
+		// TOTAL DIGITALS
+		QUERY = "select count(1) from fitxer where typeDocument = " + Constants.TYPE_KEY_DIGITAL;
+		System.out.println("DBUtils.getMaxIdFitxer: " + QUERY);
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+		    ResultSet rs = st.executeQuery(QUERY);
+	        while (rs.next()) {
+	        	estadistiques.setTotalDigitals(rs.getLong(1));
+	            break;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
 		return estadistiques;
 	}
 	

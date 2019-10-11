@@ -1,11 +1,11 @@
 $(document).ready(function(){
 	$('#paraulesClau').tokenfield({
-		  autocomplete: {
-		    source: elements,
-		    delay: 100
-		  },
-		  showAutocompleteOnFocus: true
-		});
+	  autocomplete: {
+	    source: elements,
+	    delay: 100
+	  },
+	  showAutocompleteOnFocus: true
+	});
   	$('#paraulesClau').on('tokenfield:createtoken', function (e) {
   		if(!elements.includes(e.attrs.value)){
   			alert("Clau invalida")
@@ -20,9 +20,18 @@ $(document).ready(function(){
 			if($("#pk\\.typeDocument").val()=="1"){
 				$("#ubicacio").show();
 				$("#ubicacioArxiu").hide();
+				$("#titleFile").show();
+				$("#divFile").show();
 			} else if($("#pk\\.typeDocument").val()=="2"){
 				$("#ubicacioArxiu").show();
 				$("#ubicacio").hide();
+				$("#titleFile").show();
+				$("#divFile").show();
+			} else if($("#pk\\.typeDocument").val()=="3"){
+				$("#ubicacioArxiu").show();
+				$("#ubicacio").hide();
+				$("#titleFile").hide();
+				$("#divFile").hide();
 			}
 			searchClaus();
 		}

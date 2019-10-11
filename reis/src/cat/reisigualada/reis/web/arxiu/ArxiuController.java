@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -222,35 +223,9 @@ public class ArxiuController {
     	model.addAttribute("editMode", editMode);        
         return "/arxiu/registre";
     }
-    
-    @RequestMapping(value = "/arxiu/updateFile", method = RequestMethod.POST)
-    public String updateFile(@RequestParam("file") MultipartFile file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
-    	// Actualitzar el fitexr
-    	try {
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
-            Files.write(path, bytes);
-            if(fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
-	            // Creem el thumbnail
-	            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
-            loadViewRegistre(model, fitxerForm, false, false);
-            return "/arxiu/registre";
-        }
-
-        // Si arribem a aquest punt, tot ha anat correctament
-        model.addAttribute("messageOk", "Fitxer actualitzat correctament");
-        // Parametres per poder carregar la vista
-        loadViewRegistre(model, fitxerForm, false, false);
-        return "/arxiu/registre";
-    }
-    
-    
+        
     @RequestMapping(value = "/arxiu/create", method = RequestMethod.POST)
-    public String create(@RequestParam("file") MultipartFile file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
+    public String create(@RequestParam("file") String file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
     	boolean newFile = true;
     	Fitxer olderForm = null;
     	if(fitxerForm.getPk().getId()!=null){
@@ -269,16 +244,19 @@ public class ArxiuController {
         
         // Només en les altes
         if(fitxerForm.getPk().getId()==null){
-	    	if (file.isEmpty()) {
-	        	model.addAttribute("messageError", "Cal seleccionar un fitxer");
-	        	loadViewRegistre(model, fitxerForm, newFile, false);
-	        	return "/arxiu/registre";
-	        } else {
-	        	// Obtenim el format
-	        	fitxerForm.setFormat(FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
-	        	// Generem el nom del fitxer
-	        	FileUtils.generateFileName(fitxerForm);
-	        }
+        	// Només per fitxers
+        	if(!fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL)){
+	        	if (file==null || "".equals(file)) {
+		        	model.addAttribute("messageError", "Cal seleccionar un fitxer");
+		        	loadViewRegistre(model, fitxerForm, newFile, false);
+		        	return "/arxiu/registre";
+		        } else {
+		        	// Obtenim el format
+		        	fitxerForm.setFormat(FilenameUtils.getExtension(file).toLowerCase());
+		        	// Generem el nom del fitxer
+		        	FileUtils.generateFileName(fitxerForm);
+		        }
+        	}
         } else {
         	// Generem el nom del fitxer
         	FileUtils.generateFileName(fitxerForm);
@@ -300,14 +278,23 @@ public class ArxiuController {
     	// Guardem el fitxer
         if(newFile){
 	        try {
-	            byte[] bytes = file.getBytes();
-	            Path path = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
-	            Files.write(path, bytes);
-	            if(fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
-		            // Creem el thumbnail
-		            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
-	            }
-	        } catch (IOException e) {
+	        	if(!fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL)){
+	        		Path sourcepath = Paths.get(Constants.LOAD_FOLDER + file);
+	        		Path destinationepath = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
+	        		try {
+	        			Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+	        		} catch(Exception e){
+	        			e.printStackTrace();
+	        			model.addAttribute("messageError", "El fitxer no s'ha pogut crear");
+	                	loadViewRegistre(model, fitxerForm, newFile, false);
+	    	        	return "/arxiu/registre";
+	        		}
+		            if(fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
+			            // Creem el thumbnail
+			            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
+		            }
+	        	}
+	        } catch (Exception e) {
 	            e.printStackTrace();
 	            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
 	            loadViewRegistre(model, fitxerForm, newFile, false);
@@ -342,6 +329,31 @@ public class ArxiuController {
         model.addAttribute("messageOk", "Document registrat correctament " + fitxerForm.getFileName());
         // Parametres per poder carregar la vista
         loadViewRegistre(model, fitxerForm, newFile, false);
+        return "/arxiu/registre";
+    }
+
+    @RequestMapping(value = "/arxiu/updateFile", method = RequestMethod.POST)
+    public String updateFile(@RequestParam("file") String file, @ModelAttribute("fitxerForm") Fitxer fitxerForm, BindingResult bindingResult, Model model) {
+    	// Actualitzar el fitexr
+    	try {
+    		Path sourcepath = Paths.get(Constants.LOAD_FOLDER + file);
+    		Path destinationepath = Paths.get(Constants.UPLOADED_FOLDER + fitxerForm.getFileName() + "." + fitxerForm.getFormat());
+    		Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+            if(fitxerForm.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
+	            // Creem el thumbnail
+	            try { FileUtils.createThumbnails(fitxerForm); } catch(Exception e){}
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            model.addAttribute("messageError", "El document " + fitxerForm.getFileName() + " no s'ha pogut crear al disc");
+            loadViewRegistre(model, fitxerForm, false, false);
+            return "/arxiu/registre";
+        }
+
+        // Si arribem a aquest punt, tot ha anat correctament
+        model.addAttribute("messageOk", "Fitxer actualitzat correctament");
+        // Parametres per poder carregar la vista
+        loadViewRegistre(model, fitxerForm, false, false);
         return "/arxiu/registre";
     }
     

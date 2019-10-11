@@ -87,6 +87,7 @@
 									<option value="">-- Seleccionar  --</option>
 									<option value="1" ${typeDocument=="1" ? "selected" : ""}>Imatge</option>
 									<option value="2" ${typeDocument=="2" ? "selected" : ""}>Document</option>
+									<option value="3" ${typeDocument=="3" ? "selected" : ""}>Digital</option>
 								</select>
 							</div>
 							

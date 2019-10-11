@@ -30,6 +30,8 @@ public class FileUtils {
     		name = "PIC_" + f.getYear() + "_" + generateCode(id, 10);
     	} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
     		name = "DOC_" + f.getYear() + "_" + generateCode(id, 10);
+    	} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL)){
+    		name = "DIG_" + f.getYear() + "_" + generateCode(id, 10);
     	}    	
     	f.setFileName(name);
     }

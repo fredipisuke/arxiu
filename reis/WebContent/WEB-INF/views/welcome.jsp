@@ -76,6 +76,11 @@
 						<strong>Nombre total de documents:</strong> ${estadistiques.totalDocuments}
 					</div>
 				</div>
+				<div class="row">
+					<div class="col">
+						<strong>Nombre total de digitalitzacions:</strong> ${estadistiques.totalDigitals}
+					</div>
+				</div>
 				
 				<div class="row">
 					<div class="col">

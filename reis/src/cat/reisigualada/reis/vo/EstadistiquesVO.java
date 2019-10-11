@@ -4,6 +4,7 @@ public class EstadistiquesVO {
 	
 	private Long totalImatges = new Long(0);
 	private Long totalDocuments = new Long(0);
+	private Long totalDigitals = new Long(0);
 	
 	public Long getTotalImatges() {
 		return totalImatges;
@@ -16,5 +17,11 @@ public class EstadistiquesVO {
 	}
 	public void setTotalDocuments(Long totalDocuments) {
 		this.totalDocuments = totalDocuments;
+	}
+	public Long getTotalDigitals() {
+		return totalDigitals;
+	}
+	public void setTotalDigitals(Long totalDigitals) {
+		this.totalDigitals = totalDigitals;
 	}
 }

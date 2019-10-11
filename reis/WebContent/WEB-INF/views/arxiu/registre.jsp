@@ -43,7 +43,7 @@
 			</sec:authorize>
 			<sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_ARXIU')">
 		    	<div class="container">
-		    		<form:form method="POST" modelAttribute="fitxerForm" class="form-signin" action="${pageContext.request.contextPath}/arxiu/create?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
+		    		<form:form method="POST" modelAttribute="fitxerForm" class="form-signin" action="${pageContext.request.contextPath}/arxiu/create?${_csrf.parameterName}=${_csrf.token}">
 						<input type="hidden" id="${_csrf.parameterName}" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<spring:bind path="pk.id">
 							<form:input type="hidden" path="pk.id" class="form-control"></form:input>
@@ -111,6 +111,7 @@
 										<form:option value="">-- Seleccionar  --</form:option>
 										<form:option value="1">Imatge</form:option>
 										<form:option value="2">Document</form:option>
+										<form:option value="3">Digital</form:option>
 									</form:select>
 									<form:errors path="pk.typeDocument"></form:errors>
 								</div>
@@ -124,6 +125,9 @@
 								</c:if>
 								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
 									<b>Document</b>
+								</c:if>
+								<c:if test="${fitxerForm.pk.typeDocument == '3'}">
+									<b>Digital</b>
 								</c:if>
 							</h4>
 							<spring:bind path="pk.typeDocument">
@@ -160,6 +164,9 @@
 								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
 									<form:input type="text" path="referencia" class="form-control" placeholder="Referència antic arxiu" autofocus="true" style="display: none;"></form:input>
 								</c:if>
+								<c:if test="${fitxerForm.pk.typeDocument == '3'}">
+									<form:input type="text" path="referencia" class="form-control" placeholder="Referència antic arxiu" autofocus="true" style="display: none;"></form:input>
+								</c:if>
 								<form:errors path="referencia"></form:errors>
 								<!-- cssClass="error" -->
 							</div>
@@ -172,6 +179,9 @@
 									<form:input type="text" path="ubicacio" class="form-control" placeholder="Ubicació" autofocus="true"></form:input>
 								</c:if>
 								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
+									<form:input type="text" path="ubicacio" class="form-control" placeholder="Ubicació" autofocus="true" style="display: none;"></form:input>
+								</c:if>
+								<c:if test="${fitxerForm.pk.typeDocument == '3'}">
 									<form:input type="text" path="ubicacio" class="form-control" placeholder="Ubicació" autofocus="true" style="display: none;"></form:input>
 								</c:if>
 								<form:errors path="ubicacio"></form:errors>
@@ -188,6 +198,9 @@
 								<c:if test="${fitxerForm.pk.typeDocument == '2'}">
 									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació a l'arxiu" autofocus="true"></form:input>
 								</c:if>
+								<c:if test="${fitxerForm.pk.typeDocument == '3'}">
+									<form:input type="text" path="ubicacioArxiu" class="form-control" placeholder="Ubicació a l'arxiu" autofocus="true"></form:input>
+								</c:if>
 								<form:errors path="ubicacioArxiu"></form:errors>
 								<!-- cssClass="error" -->
 							</div>
@@ -202,10 +215,15 @@
 						</spring:bind>
 						
 						<c:if test="${editMode == false}">
-							<div class="form-group">
-								<label for="file">Fitxer</label>
-							    <input type="file" id="file" name="file">
-							</div>
+							<c:if test="${fitxerForm.pk.typeDocument != 3}">
+								<h4 id="titleFile" class="form-signin-heading">Fitxer</h4>
+								<div id="divFile" name="divFile" class="form-group">
+									<label for="file">Selecciona un fitxer</label>
+									<input type="file" id="file" name="file">
+								    <!-- <input type="file" id="fileBrowser" name="fileBrowser">
+								    <input type="hidden" id="file" name="file"> -->
+								</div>
+							</c:if>
 						</c:if>
 						<c:if test="${editMode == true}">
 							<div class="form-group" style="display: none;">
@@ -213,7 +231,7 @@
 							    <input type="file" id="file" name="file" style="display: none;">
 							</div>
 							<div class="tz-gallery-edit">
-								<div style="width: 300px; float: center;">
+								<div style="width: 310px; float: center;">
 				                	<div class="thumbnail">
 				                		<c:if test="${fitxerForm.pk.typeDocument == 1}">
 											<div style="background-image:url('/project/images/gd_reis1/thumbnails/${fitxerForm.fileName}.${fitxerForm.format}'); position: relative; float: center width: 265px; height: 214px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
@@ -239,7 +257,7 @@
 											    </c:otherwise>
 											</c:choose>
 											<div class="caption">
-												<h3>Document</h3>
+												<h3>Document ${fitxerForm.fileName}.${fitxerForm.format}</h3>
 												<a href="/reis/arxiu/downloadImage?id=${fitxerForm.pk.id}&typeDocument=${fitxerForm.pk.typeDocument}" target="_blank" class="btn btn-sm btn-danger">
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Descarregar
@@ -248,6 +266,12 @@
 													<span class="glyphicon glyphicon-download" aria-hidden="true"></span>
 													Modificar document
 												</a>
+											</div>
+										</c:if>
+										<c:if test="${fitxerForm.pk.typeDocument == 3}">
+											<div style="background-image:url('${contextPath}/resources/images/digital.png'); position: relative; float: center width: 265px; height: 214px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+											<div class="caption">
+												<h3>Digitalització</h3>
 											</div>
 										</c:if>
 									</div>
@@ -302,7 +326,8 @@
 										
 										<div class="form-group">
 											<label for="file">Fitxer</label>
-										    <input type="file" id="file" name="file">
+										    <input type="file" id="fileBrowser" name="fileBrowser">
+										    <input type="hidden" id="file" name="file">
 										</div>
 										<button class="btn btn-sm btn-primary" type="submit">Modificar</button>
 									</form:form>

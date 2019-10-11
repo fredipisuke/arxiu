@@ -42,6 +42,8 @@ public class ExcelUtils {
 				cellValue.setCellValue("Imatge");
 			} else if(key.getType().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				cellValue.setCellValue("Document");
+			} else if(key.getType().equals(Constants.TYPE_KEY_DIGITAL)){
+				cellValue.setCellValue("Digital");
 			} else {
 				cellValue.setCellValue(key.getType());
 			}
@@ -97,6 +99,8 @@ public class ExcelUtils {
 				cellValue.setCellValue("Imatge");
 			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				cellValue.setCellValue("Document");
+			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL)){
+				cellValue.setCellValue("Digital");
 			} else {
 				cellValue.setCellValue(f.getPk().getTypeDocument());
 			}
@@ -107,7 +111,7 @@ public class ExcelUtils {
 			cellValue = row.createCell(5);
 			if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				cellValue.setCellValue(f.getUbicacio());
-			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
+			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS) || f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL)){
 				cellValue.setCellValue(f.getUbicacioArxiu());
 			}
 			cellValue = row.createCell(6);

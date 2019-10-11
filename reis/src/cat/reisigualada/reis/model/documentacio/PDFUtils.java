@@ -42,6 +42,8 @@ public class PDFUtils {
 				pD = new Phrase("Imatge", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			} else if(key.getType().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				pD = new Phrase("Document", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			} else if(key.getType().equals(Constants.TYPE_KEY_DIGITAL)){
+				pD = new Phrase("Digital", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			} else {
 				pD = new Phrase(key.getType().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			}
@@ -134,6 +136,8 @@ public class PDFUtils {
 				tipusTipologia = "Imatge";
 			else if(criteria.getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS))
 				tipusTipologia = "Document";
+			else if(criteria.getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL))
+				tipusTipologia = "Digital";
 			Phrase pT2 = new Phrase(tipusTipologia, new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL));
 			searchCell = new PdfPCell(pT2);
 			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
@@ -221,6 +225,8 @@ public class PDFUtils {
 				pD = new Phrase("Imatge", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
 				pD = new Phrase("Document", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL)){
+				pD = new Phrase("Digital", new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			} else {
 				pD = new Phrase(f.getPk().getTypeDocument().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
 			}
@@ -240,9 +246,9 @@ public class PDFUtils {
 
 			if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE)){
 				pD = new Phrase(f.getUbicacio().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
-			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS)){
+			} else if(f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS) || f.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL)){
 				pD = new Phrase(f.getUbicacioArxiu().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
-			}
+			} 
 			tableCell = new PdfPCell(pD);
 			pdfTaula.addCell(tableCell);
 
@@ -342,7 +348,7 @@ public class PDFUtils {
 		String TIPUS_UBICACIO = "";
 		if(fitxer.getPk().getTypeDocument().equals(Constants.TYPE_KEY_IMAGE))
 			TIPUS_UBICACIO = "UBICACIÓ: ";
-		else if(fitxer.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS))
+		else if(fitxer.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DOCUMENTS) || fitxer.getPk().getTypeDocument().equals(Constants.TYPE_KEY_DIGITAL))
 			TIPUS_UBICACIO = "UBICACIÓ A L'ARXIU: ";
 		PdfPCell dataCell9 = new PdfPCell(new Phrase(TIPUS_UBICACIO, new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD)));
 		dataCell9.setBorderWidth(0);
