@@ -218,10 +218,8 @@
 							<c:if test="${fitxerForm.pk.typeDocument != 3}">
 								<h4 id="titleFile" class="form-signin-heading">Fitxer</h4>
 								<div id="divFile" name="divFile" class="form-group">
-									<label for="file">Selecciona un fitxer</label>
+									<label for="file">Selecciona un fitxer (C:/reis/load/)</label>
 									<input type="file" id="file" name="file">
-								    <!-- <input type="file" id="fileBrowser" name="fileBrowser">
-								    <input type="hidden" id="file" name="file"> -->
 								</div>
 							</c:if>
 						</c:if>
@@ -309,7 +307,7 @@
 									</h3>
 								</div>
 								<div class="modal-body">
-									<form:form method="POST" modelAttribute="fitxerForm" class="form-signin" action="${pageContext.request.contextPath}/arxiu/updateFile?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
+									<form:form method="POST" modelAttribute="fitxerForm" class="form-signin" action="${pageContext.request.contextPath}/arxiu/updateFile?${_csrf.parameterName}=${_csrf.token}">
 										<!--  HIDDENS -->
 										<spring:bind path="pk.id">
 											<form:input type="hidden" path="pk.id" class="form-control"></form:input>
@@ -325,9 +323,8 @@
 										</spring:bind>
 										
 										<div class="form-group">
-											<label for="file">Fitxer</label>
-										    <input type="file" id="fileBrowser" name="fileBrowser">
-										    <input type="hidden" id="file" name="file">
+											<label for="file">Fitxer (C:/reis/load/)</label>
+										    <input type="file" id="file" name="file">
 										</div>
 										<button class="btn btn-sm btn-primary" type="submit">Modificar</button>
 									</form:form>
