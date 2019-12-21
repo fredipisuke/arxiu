@@ -35,6 +35,19 @@
 					</li>
 				</sec:authorize>
 				
+				<sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_NENS')">
+					<li class="dropdown ${NavBarNensActive}">
+						<a href="${contextPath}/nens" class="dropdown-toggle"	data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Nens <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li class="${NavBarNensConsultaActive}"><a href="${contextPath}/nens/consulta">Consulta</a></li>
+							<li class="${NavBarNensRegistreActive}"><a href="${contextPath}/nens/registre">Registre</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Configuracions</li>
+							<li class="${NavBarEscolesActive}"><a href="${contextPath}/escoles/consulta">Gestió de escoles</a></li>
+						</ul>
+					</li>
+				</sec:authorize>
+				
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
 					<li class="dropdown ${NavBarConfigurationActive}">
 						<a href="${contextPath}/configuration" class="dropdown-toggle"	data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Configuració <span class="caret"></span></a>

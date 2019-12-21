@@ -32,7 +32,7 @@
 				<div style="text-align: center;">
 					<img class="img-circle" src="${contextPath}/resources/images/icon-192x192.png">
 				</div>
-				<h2 class="form-heading" style="text-align: center;">Accès Arxiu Reis d'Igualada</h2>
+				<h2 class="form-heading" style="text-align: center;">Accès Reis d'Igualada</h2>
 	
 				<div class="form-group ${error != null ? 'has-error' : ''}" style="text-align: center;">
 					<span>${message}</span> 

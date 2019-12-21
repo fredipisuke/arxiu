@@ -6,13 +6,15 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import cat.reisigualada.reis.model.Clau;
+import cat.reisigualada.reis.model.Escola;
 import cat.reisigualada.reis.model.Fitxer;
+import cat.reisigualada.reis.model.Nen;
 import cat.reisigualada.reis.utils.AjaxResponseBody;
 import cat.reisigualada.reis.utils.Constants;
 import cat.reisigualada.reis.vo.EstadistiquesVO;
 import cat.reisigualada.reis.web.arxiu.SearchCriteriaFitxers;
+import cat.reisigualada.reis.web.nens.SearchCriteriaNens;
 
 public class DBUtils {
 	
@@ -234,7 +236,7 @@ public class DBUtils {
 	
 	public static AjaxResponseBody searchForView(SearchCriteriaFitxers criteria){
 		AjaxResponseBody result = new AjaxResponseBody();
-		String SELECT_FITXERS = "select distinct f.* from fitxer f where 1=1";
+		String SELECT_FITXERS = "select distinct f.* from fitxer f where 1=1 ";
 		// CONDICIONANTS
 		SELECT_FITXERS += mountWheres(criteria);
 		// ORDENACIÓ
@@ -283,7 +285,7 @@ public class DBUtils {
 		result.setResult(listF);
 		
 		// CARGAMOS EL CONTADOR DE ELEMNTOS TOTALES
-		SELECT_FITXERS = "select count(id) num_total from fitxer f where 1=1";
+		SELECT_FITXERS = "select count(id) num_total from fitxer f where 1=1 ";
 		// CONDICIONANTS
 		SELECT_FITXERS += mountWheres(criteria);
 		try{
@@ -369,6 +371,148 @@ public class DBUtils {
 			e.printStackTrace();
 		}
 		return hsC;
+	}
+	
+	public static List<Nen> searchForDocument(SearchCriteriaNens criteria){
+		String SELECT_NENS = " select distinct n.*, "
+								+ " e.descripcio as escola "
+								+ " from nen n "
+									+ " left join escola e on n.escola_id = e.id "
+								+ " where 1=1 ";
+		// CONDICIONANTS
+		SELECT_NENS += mountWheres(criteria);
+		// ORDENACIÓ
+		SELECT_NENS += " order by n.nom ";
+		
+		// EJECUTAMOS LA QUERY
+		List<Nen> listN = new ArrayList<Nen>();
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.searchByCriteria: " + SELECT_NENS);
+		    ResultSet rs = st.executeQuery(SELECT_NENS);
+	        while (rs.next()) {
+	        	Nen n = new Nen();
+	        	n.setId(rs.getLong("id"));
+	        	n.setDocument(rs.getString("document"));
+	        	n.setNom(rs.getString("nom"));
+	        	n.setSexe(rs.getString("sexe"));
+	        	n.setDataNaixement(rs.getDate("dataNaixement"));
+	        	n.setObservacionsAmics(rs.getString("observacionsAmics"));
+	        	n.setObservacionsJeep(rs.getString("observacionsJeep"));
+	        	n.setSurt(rs.getBoolean("surt"));
+	        	n.setCaramelsPagats(rs.getBoolean("caramelsPagats"));
+	        	// Escola
+	        	Escola e = new Escola();
+	        	e.setDescripcio(rs.getString("escola"));
+	        	n.setEscola(e);
+	        	listN.add(n);
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		return listN;
+	}
+	
+	public static AjaxResponseBody searchForView(SearchCriteriaNens criteria){
+		AjaxResponseBody result = new AjaxResponseBody();
+		String SELECT_NENS = " select distinct n.*, "
+								+ " e.descripcio as escola "
+								+ " from nen n "
+									+ " left join escola e on n.escola_id = e.id "
+								+ " where 1=1 ";
+		// CONDICIONANTS
+		SELECT_NENS += mountWheres(criteria);
+		// ORDENACIÓ
+		SELECT_NENS += " order by n.nom ";
+		// LÍMITS I NÚMERO D'ELEMENTS
+		if(criteria.getnElementsPerPage()!=null){
+			Long offset = criteria.getnElementsPerPage() * criteria.getPagina();
+			SELECT_NENS += " LIMIT " + criteria.getnElementsPerPage() + " OFFSET " + offset;
+		}
+		
+		// EJECUTAMOS LA QUERY
+		List<Nen> listN = new ArrayList<Nen>();
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.searchByCriteria: " + SELECT_NENS);
+		    ResultSet rs = st.executeQuery(SELECT_NENS);
+		    while (rs.next()) {
+	        	Nen n = new Nen();
+	        	n.setId(rs.getLong("id"));
+	        	n.setDocument(rs.getString("document"));
+	        	n.setNom(rs.getString("nom"));
+	        	n.setSexe(rs.getString("sexe"));
+	        	n.setDataNaixement(rs.getDate("dataNaixement"));
+	        	n.setObservacionsAmics(rs.getString("observacionsAmics"));
+	        	n.setObservacionsJeep(rs.getString("observacionsJeep"));
+	        	n.setSurt(rs.getBoolean("surt"));
+	        	n.setCaramelsPagats(rs.getBoolean("caramelsPagats"));
+	        	// Escola
+	        	Escola e = new Escola();
+	        	e.setDescripcio(rs.getString("escola"));
+	        	n.setEscola(e);
+	        	listN.add(n);
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		result.setResult(listN);
+		
+		// CARGAMOS EL CONTADOR DE ELEMNTOS TOTALES
+		SELECT_NENS = "select count(id) num_total from nen n where 1=1 ";
+		// CONDICIONANTS
+		SELECT_NENS += mountWheres(criteria);
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/reisigualada", "reis", "reisigualada");
+		    Statement st = conn.createStatement();
+		    st = conn.createStatement();
+			System.out.println("DBUtils.searchByCriteria: " + SELECT_NENS);
+		    ResultSet rs = st.executeQuery(SELECT_NENS);
+	        while (rs.next()) {
+	        	result.setTotal(rs.getLong("num_total"));
+	        	break;
+	        }
+	        rs.close();
+	        st.close();
+	        conn.close();
+		} catch(Exception e){ 
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	private static String mountWheres(SearchCriteriaNens criteria){
+		String WHERES = "";
+		if(criteria.getId()!=null){
+			WHERES += " and n.id = " + criteria.getId();
+		}
+		if(criteria.getNom()!=null && !"".equals(criteria.getNom())){
+			WHERES += " and n.nom like '%" + criteria.getNom() + "%' ";
+		}
+		if(criteria.getEscola_id()!=null && !"".equals(criteria.getEscola_id())){
+			WHERES += " and n.escola_id = " + criteria.getEscola_id() + " ";
+		}
+		if(criteria.getSexe()!=null && !"".equals(criteria.getSexe())){
+			WHERES += " and n.sexe = '" + criteria.getSexe() + "' ";
+		}
+		if(criteria.getEdat()!=null){
+			WHERES += " and year(n.dataNaixement) = " + criteria.getEdat();
+		}
+		return WHERES;
 	}
 	
 	public static String generateBackUp() throws Exception {

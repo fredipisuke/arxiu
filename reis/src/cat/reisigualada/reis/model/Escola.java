@@ -7,11 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "autor")
-public class Autor {
+@Table(name = "escola")
+public class Escola {
 
 	private Long id;
-    private String name;
+    private String descripcio;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,19 +20,19 @@ public class Autor {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}	
+	public String getDescripcio() {
+		return descripcio;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
+	public void setDescripcio(String descripcio) {
+		this.descripcio = descripcio;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Autor [id=" + id);
-		builder.append(", name=" + name);
+		builder.append("Escola [id=" + id);
+		builder.append(", descripcio=" + descripcio);
 		builder.append("]");
 		return builder.toString();
 	}

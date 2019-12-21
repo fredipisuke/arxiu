@@ -11,7 +11,7 @@ public interface AutorService {
 	/** Buscar totes les claus */
 	List<Autor> findAll();
 	/** Guardar una clau */
-	void save(Autor clau);
+	void save(Autor autor);
 	/** Esborrar una clau */
 	void deleteById(Long id);	
 }

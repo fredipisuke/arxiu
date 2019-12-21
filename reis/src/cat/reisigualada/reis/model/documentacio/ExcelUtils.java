@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
+import cat.reisigualada.reis.model.Nen;
 import cat.reisigualada.reis.utils.Constants;
 
 public class ExcelUtils {
@@ -118,6 +119,63 @@ public class ExcelUtils {
 			cellValue.setCellValue(f.getReferencia());
 			cellValue = row.createCell(7);
 			cellValue.setCellValue(f.getObservacions());
+		}
+
+		// Write the workbook in file system
+		workbook.write(out);
+		out.close();
+		System.out.println("Writesheet.xlsx written successfully");
+	}
+	
+	@SuppressWarnings("resource")
+	public static void excelNens(ServletOutputStream out, List<Nen> listNens) throws Exception {
+		// Create blank workbook
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		// Create a blank sheet
+		XSSFSheet spreadsheet = workbook.createSheet(" Nens ");
+
+		// Create row object
+		XSSFRow row;
+
+		// Capçalera
+		int rowid = 0;
+		row = spreadsheet.createRow(rowid++);
+		Cell cellTitle = row.createCell(0);
+		cellTitle.setCellValue("ID");
+		cellTitle = row.createCell(1);
+		cellTitle.setCellValue("NOM");
+		cellTitle = row.createCell(2);
+		cellTitle.setCellValue("DOCUMENT");
+		cellTitle = row.createCell(3);
+		cellTitle.setCellValue("DATA DE NAIXEMENT");
+		cellTitle = row.createCell(4);
+		cellTitle.setCellValue("SEXE");
+		cellTitle = row.createCell(5);
+		cellTitle.setCellValue("ESCOLA");
+		cellTitle = row.createCell(6);
+		cellTitle.setCellValue("SURT");
+		cellTitle = row.createCell(7);
+		cellTitle.setCellValue("CARAMELS PAGATS");
+		
+		// Iterate over data and write to sheet
+		for (Nen n : listNens) {
+			row = spreadsheet.createRow(rowid++);
+			Cell cellValue = row.createCell(0);
+			cellValue.setCellValue(n.getId());
+			cellValue = row.createCell(1);
+			cellValue.setCellValue(n.getNom());
+			cellValue = row.createCell(2);
+			cellValue.setCellValue(n.getDocument());
+			cellValue = row.createCell(3);
+			cellValue.setCellValue(n.getDataNaixement());
+			cellValue = row.createCell(4);
+			cellValue.setCellValue(n.getSexe());
+			cellValue = row.createCell(5);
+			cellValue.setCellValue(n.getEscola().getDescripcio());
+			cellValue = row.createCell(6);
+			cellValue.setCellValue(n.isSurt());
+			cellValue = row.createCell(7);
+			cellValue.setCellValue(n.isCaramelsPagats());
 		}
 
 		// Write the workbook in file system

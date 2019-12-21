@@ -8,8 +8,10 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import cat.reisigualada.reis.model.Clau;
 import cat.reisigualada.reis.model.Fitxer;
+import cat.reisigualada.reis.model.Nen;
 import cat.reisigualada.reis.utils.Constants;
 import cat.reisigualada.reis.web.arxiu.SearchCriteriaFitxers;
+import cat.reisigualada.reis.web.nens.SearchCriteriaNens;
 
 public class PDFUtils {
 	
@@ -391,7 +393,148 @@ public class PDFUtils {
 		pdf.close();
 		// Retornamos el documento PDF
 		return pdf;
-	}	
+	}
+	
+	public static void pdfNens(ServletOutputStream out, SearchCriteriaNens criteria, List<Nen> listNens) throws Exception {
+		Document pdf = new Document(PageSize.A4.rotate(), 5, 5, 36, 36);
+		PdfWriter.getInstance(pdf, out);
+		pdf.open();
+		
+		// Parametres de la cerca
+		PdfPTable pdfSearch = new PdfPTable(2);
+		pdfSearch.setWidths(new int[]{1, 3});
+		PdfPCell searchCell;
+		// Referencia
+		if(criteria.getNom()!=null && !"".equals(criteria.getNom())){
+			Phrase pT1 = new Phrase("Nom:", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+			searchCell = new PdfPCell(pT1);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+			Phrase pT2 = new Phrase(criteria.getNom(), new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL));
+			searchCell = new PdfPCell(pT2);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+		}
+		if(criteria.getSexe()!=null && !"".equals(criteria.getSexe())){
+			Phrase pT1 = new Phrase("Sexe:", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+			searchCell = new PdfPCell(pT1);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+			Phrase pT2 = new Phrase(criteria.getSexe(), new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL));
+			searchCell = new PdfPCell(pT2);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+		}
+		if(criteria.getEdat()!=null){
+			Phrase pT1 = new Phrase("Edat:", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+			searchCell = new PdfPCell(pT1);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+			Phrase pT2 = new Phrase(criteria.getEdat().toString(), new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL));
+			searchCell = new PdfPCell(pT2);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+		}
+		if(criteria.getEscola_id()!=null){
+			Phrase pT1 = new Phrase("Escola:", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+			searchCell = new PdfPCell(pT1);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+			Phrase pT2 = new Phrase(criteria.getEscola(), new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL));
+			searchCell = new PdfPCell(pT2);
+			searchCell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+			searchCell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+			searchCell.setBorderWidth(0);
+			pdfSearch.addCell(searchCell);
+		}
+		pdfSearch.setSpacingAfter(10);
+		pdf.add(pdfSearch);
+		
+		// Taula de resultats 
+		PdfPTable pdfTaula = new PdfPTable(8);
+		PdfPCell tableCell;
+		Phrase pT = new Phrase("ID", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		pT = new Phrase("NOM", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		pT = new Phrase("DOCUMENT", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		pT = new Phrase("DATA DE NAIXEMENT", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		pT = new Phrase("SEXE", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		pT = new Phrase("ESCOLA", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		pT = new Phrase("SURT", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		pT = new Phrase("CARAMELS PAGATS", new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD));
+		tableCell = new PdfPCell(pT);
+		createTitleCell(tableCell);
+		pdfTaula.addCell(tableCell);
+		
+		for (Nen n : listNens) {
+			Phrase pD = new Phrase(n.getId().toString(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			tableCell = new PdfPCell(pD);
+			pdfTaula.addCell(tableCell);
+
+			pD = new Phrase(n.getNom(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			tableCell = new PdfPCell(pD);
+			pdfTaula.addCell(tableCell);
+			
+			pD = new Phrase(n.getDocument(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			tableCell = new PdfPCell(pD);
+			pdfTaula.addCell(tableCell);
+
+			pD = new Phrase(n.getSexe(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			tableCell = new PdfPCell(pD);
+			pdfTaula.addCell(tableCell);
+			
+			String escola = "";
+			if(n.getEscola()!=null)
+				escola = n.getEscola().getDescripcio();
+			pD = new Phrase(escola, new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			tableCell = new PdfPCell(pD);
+			pdfTaula.addCell(tableCell);
+
+			pD = new Phrase("" + n.isSurt(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			tableCell = new PdfPCell(pD);
+			pdfTaula.addCell(tableCell);
+
+			pD = new Phrase("" + n.isCaramelsPagats(), new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL));
+			tableCell = new PdfPCell(pD);
+			pdfTaula.addCell(tableCell);
+		}
+		pdf.add(pdfTaula);
+		pdf.close();
+	}
 	
 	private static void createTitleCell(PdfPCell tableCell){
 		tableCell.setBackgroundColor(BaseColor.LIGHT_GRAY);

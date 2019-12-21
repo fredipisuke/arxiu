@@ -14,7 +14,7 @@
 	    <meta name="description" content="">
 	    <meta name="author" content="Reis d'Igualada">
 	
-	    <title>Arxiu Reis d'Igualada :: Benvinguts</title>
+	    <title>Reis d'Igualada :: Benvinguts</title>
 		<link rel="icon" href="${contextPath}/resources/images/favicon.ico" type="image/x-icon">
 	    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 	    <link href="${contextPath}/resources/css/thumbnail-gallery.css" rel="stylesheet">
@@ -32,66 +32,83 @@
 				<div class="row">
 					<div class="col">
 				        <h2>
-				        	Benvingut a l'arxiu documental dels Reis d'Igualada
+				        	<sec:authorize access="hasRole('ROLE_ARXIU')">
+				        		Benvingut a l'arxiu documental dels Reis d'Igualada
+				        	</sec:authorize>
+				        	<sec:authorize access="hasRole('ROLE_NENS')">
+				        		Benvingut a l'aplicació de Nens dels Reis d'Igualada
+				        	</sec:authorize>
+				        	<sec:authorize access="hasRole('ROLE_PATGES')">
+				        		Benvingut a l'aplicació de Patges dels Reis d'Igualada
+				        	</sec:authorize>
+				        	<sec:authorize access="hasRole('ROLE_PAQUETS')">
+				        		Benvingut a l'aplicació de Paquets dels Reis d'Igualada
+				        	</sec:authorize>
+				        	<sec:authorize access="hasRole('ROLE_ADMIN')">
+				        		Benvingut a l'aplicació dels Reis d'Igualada
+				        	</sec:authorize>				        	
 				        </h2>
 					</div>
 				</div>
 				
-				<div class="row">
-					<div class="col">
-						<div class="tz-gallery">
-							<c:forEach var="entry" items="${listImages}" varStatus="loop">
-								<div style="width: 265px; float: left; padding-left: 15px; padding-right: 15px">
-					                <div class="thumbnail">
-					                	<c:if test="${entry.pk.typeDocument == 1}">
-					                    	<div style="background-image:url('/project/images/gd_reis1/thumbnails/${entry.fileName}.${entry.format}'); position: relative; float: left; width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
-					                    </c:if>
-					                    <div class="caption">
-					                        <h3>${entry.titolResum}</h3>
-					                        <p style="font-style: italic; text-align: justify; height: 40px;">
-					                        	${entry.observacionsWellcome}
-					                        </p>
-					                    </div>
-					                </div>
-					            </div>
-							</c:forEach>
+				<sec:authorize access="hasRole('ROLE_ARXIU')">
+					<div class="row">
+						<div class="col">
+							<div class="tz-gallery">
+								<c:forEach var="entry" items="${listImages}" varStatus="loop">
+									<div style="width: 265px; float: left; padding-left: 15px; padding-right: 15px">
+						                <div class="thumbnail">
+						                	<c:if test="${entry.pk.typeDocument == 1}">
+						                    	<div style="background-image:url('/project/images/gd_reis1/thumbnails/${entry.fileName}.${entry.format}'); position: relative; float: left; width: 235px; height: 179px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover; margin-bottom: 20px;"></div>
+						                    </c:if>
+						                    <div class="caption">
+						                        <h3>${entry.titolResum}</h3>
+						                        <p style="font-style: italic; text-align: justify; height: 40px;">
+						                        	${entry.observacionsWellcome}
+						                        </p>
+						                    </div>
+						                </div>
+						            </div>
+								</c:forEach>
+							</div>
 						</div>
 					</div>
-				</div>
+					
+					<div class="row">
+						<div class="col">
+					        <h2>
+					        	Estadístiques
+					        </h2>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<strong>Nombre total d'imatges:</strong> ${estadistiques.totalImatges}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<strong>Nombre total de documents:</strong> ${estadistiques.totalDocuments}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<strong>Nombre total de digitalitzacions:</strong> ${estadistiques.totalDigitals}
+						</div>
+					</div>
+				</sec:authorize>
 				
-				<div class="row">
-					<div class="col">
-				        <h2>
-				        	Estadístiques
-				        </h2>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						<strong>Nombre total d'imatges:</strong> ${estadistiques.totalImatges}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						<strong>Nombre total de documents:</strong> ${estadistiques.totalDocuments}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col">
-						<strong>Nombre total de digitalitzacions:</strong> ${estadistiques.totalDigitals}
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col">
-				        <h2>
-				        	Copia de seguretat 
-				        	<a href="#" class="btn btn-success" id="btnBackup" name="btnBackup" onclick="window.open('${contextPath}/backup/dataBase');">
-								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
-							</a>
-				        </h2>
-					</div>
-					<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<div class="row">
+						<div class="col">
+					        <h2>
+					        	Copia de seguretat 
+					        	<a href="#" class="btn btn-success" id="btnBackup" name="btnBackup" onclick="window.open('${contextPath}/backup/dataBase');">
+									<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+								</a>
+					        </h2>
+						</div>
+					
 						<div class="col">
 					        <h2>
 					        	Crear Thumbnails
@@ -100,8 +117,8 @@
 								</a>
 					        </h2>
 						</div>
-					</sec:authorize>
-				</div>
+					</div>
+				</sec:authorize>
 			</div>
 	    </c:if>
 		
