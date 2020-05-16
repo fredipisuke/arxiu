@@ -11,14 +11,12 @@ import javax.persistence.Table;
 public class Tutor {
 
 	private Long id;
-	private String tipusDocument;
     private String document;
     private String nom;
     private String direccio;
     private String codiPostal;
     private String poblacio;
     private String telefon;
-    private String mobil;
     private String email;
 
     @Id
@@ -28,12 +26,6 @@ public class Tutor {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public String getTipusDocument() {
-		return tipusDocument;
-	}
-	public void setTipusDocument(String tipusDocument) {
-		this.tipusDocument = tipusDocument;
 	}
 	public String getDocument() {
 		return document;
@@ -71,12 +63,6 @@ public class Tutor {
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
 	}
-	public String getMobil() {
-		return mobil;
-	}
-	public void setMobil(String mobil) {
-		this.mobil = mobil;
-	}
 	public String getEmail() {
 		return email;
 	}
@@ -87,14 +73,12 @@ public class Tutor {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Tutor [id=" + id);
-		builder.append(", tipusDocument=" + tipusDocument);
 		builder.append(", document=" + document);
 		builder.append(", nom=" + nom);
 		builder.append(", direccio=" + direccio);
 		builder.append(", codiPostal=" + codiPostal);
 		builder.append(", poblacio=" + poblacio);
 		builder.append(", telefon=" + telefon);
-		builder.append(", mobil=" + mobil);
 		builder.append(", email=" + email);
 		builder.append("]");
 		return builder.toString();

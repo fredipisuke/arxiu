@@ -1,5 +1,18 @@
 $(document).ready(function(){	
+	if($("#tipusDocument").val()=="1"){
+		$("#divDocument").show();
+	} else {
+		$("#divDocument").hide();
+	}
 	
+	$("#tipusDocument").change(function(){
+		if($("#tipusDocument").val()=="1"){
+			$("#divDocument").show();
+		} else {
+			$("#divDocument").hide();
+		}
+		$("#document").val("");
+	});
 });
 
 function eliminarFitxer(id){

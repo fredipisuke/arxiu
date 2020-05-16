@@ -22,11 +22,20 @@ public class EscolaValidator implements Validator {
         Escola escola = (Escola) o;
 
         if (escola.getDescripcio()==null || "".equals(escola.getDescripcio())){
-        	errors.rejectValue("escola", "required");
+        	errors.rejectValue("descripcio", "required");
         } else if (escola.getDescripcio().length() < 0 || escola.getDescripcio().length() > 32) {
-            errors.rejectValue("escola", "size.escolaForm.descripcio");
-        } else if (escolaService.findByDescripcio(escola.getDescripcio()) != null) {
-            errors.rejectValue("descripcio", "duplicate.escolaForm.descripcio");
+            errors.rejectValue("descripcio", "size.escolaForm.descripcio");
+        }
+        Escola escolaDB = escolaService.findByDescripcio(escola.getDescripcio());
+        // Nova escola
+        if(escola.getId()==null){
+        	if(escolaDB!=null){
+        		errors.rejectValue("descripcio", "duplicate.escolaForm.descripcio");	
+        	}
+        } else {
+        	if(escolaDB!=null && escolaDB.getId().longValue()!=escola.getId().longValue()){
+        		errors.rejectValue("descripcio", "duplicate.escolaForm.descripcio");
+        	}
         }
     }
 }

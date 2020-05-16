@@ -48,7 +48,7 @@ $(document).ready(function(){
 				+ "?nom=" + $("#nom").val()
 				+ "&edat=" + $("#edat").val()
 				+ "&sexe=" + $("#sexe").val()
-				+ "&escola=" + $("#escola_id").val();
+				+ "&escola_id=" + $("#escola_id").val();
 		window.open(url);
     });
 	$('#btnPDF').click(function () {
@@ -56,7 +56,7 @@ $(document).ready(function(){
 				+ "?nom=" + $("#nom").val()
 				+ "&edat=" + $("#edat").val()
 				+ "&sexe=" + $("#sexe").val()
-				+ "&escola=" + $("#escola_id").val();
+				+ "&escola_id=" + $("#escola_id").val();
 		window.open(url);
     });
 });
@@ -69,7 +69,6 @@ function hideData(){
 	$('#btnExcel').hide();
 	$('#btnPDF').hide();
 }
-
 
 function searchPage(pg){
 	$("#pagina").val(pg);
@@ -98,9 +97,9 @@ function search(){
 		searchValues += "[<b>Edat:</b> " + $("#edat").val() + "] ";
 	}
 	if($("#sexe").val()=='H'){
-		searchValues += " [<b>Sexe:</b> Home] ";
+		searchValues += " [<b>Sexe:</b> Nen] ";
 	} else if($("#typeDocument").val()=='D'){
-		searchValues += "[<b>Sexe:</b> Dona] ";
+		searchValues += "[<b>Sexe:</b> Nena] ";
 	}
 	if($("#escola_id").val()!=null && $("#escola_id").val()!=""){
 		searchValues += "[<b>Escola:</b> " + $("#escola_id option:selected").text() + "] ";
@@ -144,37 +143,19 @@ function createTable(data){
 	var tbody = jQuery("#tableNens");
 	// Carraguem els nous valors a la taula
 	for(var i=0; i<data.result.length; i++){
-		var miniImage = "";
-		if(data.result[i].pk.typeDocument==1){
-			miniImage = "<a href=\"/project/images/gd_reis1/" + data.result[i].fileName + "." + data.result[i].format + "\" data-lightbox=\"images\" data-title=\"" + data.result[i].titol + "\" title=\"Veure\">"
-				        	+ "<div style=\"background-image:url('/project/images/gd_reis1/thumbnails/" + data.result[i].fileName + "." + data.result[i].format + "'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;\">"
-				        		+ "<span class=\"glyphicon glyphicon-search\" aria-hidden=\"true\" style=\"margin-top: 30px; margin-left: 55px\"></span>"
-				        	+ "</div>"
-				        + "</a>";
-		} else if(data.result[i].pk.typeDocument==2){
-			if(data.result[i].format == 'doc' || data.result[i].format == 'docx' || data.result[i].format == 'xls' || data.result[i].format == 'xlsx' || data.result[i].format == 'ppt' || data.result[i].format == 'pdf'){
-				miniImage = "<div style=\"background-image:url('/reis/resources/images/" + data.result[i].format + ".png'); position: relative; float: center; width: 50px; height: 50px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;\"></div>";
-			} else {
-				miniImage = "<div style=\"background-image:url('/reis/resources/images/file.png'); position: relative; float: center; width: 45px; height: 45px; background-position: 50% 50%; background-repeat: no-repeat;background-size: cover;\"></div>";
-			}
-		}
 		var trow = jQuery("<tr>");
-		jQuery("<td align='center'>")
-					.html(miniImage)
+		jQuery("<td align='left'>")
+					.html(data.result[i].document)
 					.appendTo(trow);
 		jQuery("<td align='left'>")
-					.html("<strong>" + data.result[i].fileName + " - " + data.result[i].titol + "</strong><br>" + data.result[i].observacionsResum)
+					.html(data.result[i].nom)
 					.appendTo(trow);
 		jQuery("<td align='center' style='vertical-align: middle;'>")
-					.html("<a href=\"/reis/nens/downloadImage?id=" + data.result[i].pk.id + "&typeDocument=" + data.result[i].pk.typeDocument + "\" target=\"_blank\" class=\"btn btn-success\" title=\"Descarregar\">"
-							+ "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
-							+ "</a>"
-							+ "&nbsp;"
-							+ "<a href=\"registre?id=" + data.result[i].pk.id + "&typeDocument=" + data.result[i].pk.typeDocument + "\" class=\"btn btn-primary\" title=\"Editar\">"
+					.html( "<a href=\"registre?id=" + data.result[i].id + "\" class=\"btn btn-primary\" title=\"Editar\">"
 								+ "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
 							+ "</a>"
 							+ "&nbsp;"
-							+ "<a href=\"#\" class=\"btn btn-danger\" title=\"Eliminar\" onclick=\"eliminarFitxer(" + data.result[i].pk.id + ", " + data.result[i].pk.typeDocument + ")\">"
+							+ "<a href=\"#\" class=\"btn btn-danger\" title=\"Eliminar\" onclick=\"eliminarNen(" + data.result[i].id + ")\">"
 								+ "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\" style=\"font-size: 1.6em;vertical-align: middle;\"></span>"
 							+ "</a>")
 					.appendTo(trow);
@@ -330,16 +311,11 @@ function createTable(data){
 	jQuery("#tableNensTotals").show();
 }
 
-function eliminarFitxer(id, typeDocument){
-	if(!confirm("Estar segur que vol eliminar el fitxer?")){
+function eliminarNen(id, typeDocument){
+	if(!confirm("Estar segur que vol eliminar el patge infantil?")){
 		return;
 	}
-	window.location = "/reis/nens/eliminar?id=" + id
-						+ "&searchOn=true" 
-						+ "&nom=" + $("#nom").val()
-						+ "&edat=" + $("#edat").val()
-						+ "&sexe=" + $("#sexe").val()
-						+ "&escola=" + $("#escola_id").val();;
+	window.location = "/reis/nens/eliminar?id=" + id;
 }
 
 function goError(data){

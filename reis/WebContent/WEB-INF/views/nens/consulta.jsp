@@ -77,8 +77,8 @@
 							<div class="form-group search-group">
 								<select id="sexe" name="sexe" class="form-control" required="true" data-toggle="tooltip" title="Sexe" data-original-title="Sexe">
 									<option value="">-- Seleccionar  --</option>
-									<option value="H" ${sexe=="H" ? "selected" : ""}>Home</option>
-									<option value="D" ${sexe=="D" ? "selected" : ""}>Dona</option>
+									<option value="H" ${sexe=="H" ? "selected" : ""}>Nen</option>
+									<option value="D" ${sexe=="D" ? "selected" : ""}>Nena</option>
 								</select>
 							</div>
 							

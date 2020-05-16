@@ -4,7 +4,6 @@
 DROP TABLE IF EXISTS `tutor`;
 CREATE TABLE `tutor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tipusDocument` int(11) DEFAULT NULL,
   `document` varchar(15) DEFAULT NULL,
   `nom` varchar(150) DEFAULT NULL,
   `direccio` varchar(150) DEFAULT NULL,

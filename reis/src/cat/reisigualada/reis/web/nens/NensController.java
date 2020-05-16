@@ -147,11 +147,8 @@ public class NensController {
     @RequestMapping(value = "/nens/create", method = RequestMethod.POST)
     public String create(@ModelAttribute("nenForm") Nen nenForm, BindingResult bindingResult, Model model) {
     	boolean newFile = true;
-    	Nen olderForm = null;
     	if(nenForm.getId()!=null){
     		newFile = false;
-    		// Obtenim el valor de l'antic fitxer
-    		olderForm = nensService.findById(nenForm.getId());
     	}
     	
     	// Validem el formulari

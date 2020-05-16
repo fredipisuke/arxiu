@@ -75,8 +75,21 @@
 							</div>
 						</c:if>
 				        
-				        <spring:bind path="document">
+				        <h4 class="form-signin-heading">Tipus document</h4>
+						<spring:bind path="tipusDocument">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
+								<form:select path="tipusDocument" class="form-control" required="true">
+									<form:option value="">-- Seleccionar  --</form:option>
+									<form:option value="1">DNI</form:option>
+									<form:option value="2">Passaport</form:option>
+									<form:option value="3">Llibre de familia</form:option>
+								</form:select>
+								<form:errors path="tipusDocument"></form:errors>
+							</div>
+						</spring:bind>
+				        
+				        <spring:bind path="document">
+							<div class="form-group ${status.error ? 'has-error' : ''}" id="divDocument">
 								<form:input type="text" path="document" class="form-control" placeholder="Document" autofocus="true" required="true"></form:input>
 								<form:errors path="document"></form:errors>
 								<!-- cssClass="error" -->
@@ -104,8 +117,8 @@
 							<div class="form-group ${status.error ? 'has-error' : ''}">
 								<form:select path="sexe" class="form-control" required="true">
 									<form:option value="">-- Seleccionar  --</form:option>
-									<form:option value="H">Home</form:option>
-									<form:option value="D">Dona</form:option>
+									<form:option value="H">Nen</form:option>
+									<form:option value="D">Nena</form:option>
 								</form:select>
 								<form:errors path="sexe"></form:errors>
 							</div>
@@ -128,7 +141,7 @@
 						
 				        <spring:bind path="tutor.document">
 							<div class="form-group ${status.error ? 'has-error' : ''}">
-								<form:input type="text" path="tutor.document" class="form-control" placeholder="Document" autofocus="true" required="true"></form:input>
+								<form:input type="text" path="tutor.document" class="form-control" placeholder="DNI" autofocus="true" required="true"></form:input>
 								<form:errors path="tutor.document"></form:errors>
 								<!-- cssClass="error" -->
 							</div>
@@ -162,6 +175,22 @@
 							<div class="form-group ${status.error ? 'has-error' : ''}">
 								<form:input type="text" path="tutor.poblacio" class="form-control" placeholder="Població" autofocus="true" required="true"></form:input>
 								<form:errors path="tutor.poblacio"></form:errors>
+								<!-- cssClass="error" -->
+							</div>
+						</spring:bind>
+						
+						<spring:bind path="tutor.telefon">
+							<div class="form-group ${status.error ? 'has-error' : ''}">
+								<form:input type="text" path="tutor.telefon" class="form-control" placeholder="Telèfon contacte" autofocus="true" required="true"></form:input>
+								<form:errors path="tutor.telefon"></form:errors>
+								<!-- cssClass="error" -->
+							</div>
+						</spring:bind>
+						
+						<spring:bind path="tutor.email">
+							<div class="form-group ${status.error ? 'has-error' : ''}">
+								<form:input type="text" path="tutor.email" class="form-control" placeholder="E-mail contacte" autofocus="true" required="true"></form:input>
+								<form:errors path="tutor.email"></form:errors>
 								<!-- cssClass="error" -->
 							</div>
 						</spring:bind>
