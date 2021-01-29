@@ -61,7 +61,7 @@
 								
 				        		<a href="${contextPath}/arxiu/registre" class="btn btn-success" style="float: right;">
 									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-									Nou registre
+									Nou registre (F3)
 								</a>
 							</h2>
 						</c:if>
@@ -284,10 +284,10 @@
 							<button class="btn btn-lg btn-default" type="button" onclick="javascript:window.location='consultaBack';">Tornar</button>
 							<c:if test="${editMode == true}">
 								<a href="#" class="btn btn-lg btn-danger" title="Eliminar" onclick="eliminarFitxer(${fitxerForm.pk.id}, ${fitxerForm.pk.typeDocument})">Eliminar</a>
-								<button class="btn btn-lg btn-primary" type="submit">Modificar</button>
+								<button class="btn btn-lg btn-primary" type="submit">Modificar (F4)</button>
 							</c:if>
 							<c:if test="${editMode == false}">
-								<button class="btn btn-lg btn-primary" type="submit">Crear</button>
+								<button class="btn btn-lg btn-primary" type="submit">Crear (F4)</button>
 							</c:if>
 						</div>
 						<br>
@@ -326,7 +326,7 @@
 											<label for="file">Fitxer (C:/reis/load/)</label>
 										    <input type="file" id="file" name="file">
 										</div>
-										<button class="btn btn-sm btn-primary" type="submit">Modificar</button>
+										<button class="btn btn-sm btn-primary" type="submit">Modificar (F4)</button>
 									</form:form>
 								</div>
 							</div>

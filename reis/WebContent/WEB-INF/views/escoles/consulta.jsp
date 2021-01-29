@@ -50,7 +50,7 @@
 				        	<div align="right">
 								<a href="${contextPath}/escoles/registrationEscola" class="btn btn-success">
 									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-									Crear
+									Crear (F4)
 								</a>
 							</div>
 							

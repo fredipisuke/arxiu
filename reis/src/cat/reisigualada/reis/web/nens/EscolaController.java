@@ -67,8 +67,8 @@ public class EscolaController {
         return "redirect:/escoles/consulta";
     }
     
-    @RequestMapping(value = "/escoles/deleteEscoles", method = RequestMethod.GET)
-    public String deleteEscoles(Model model, Long id) {
+    @RequestMapping(value = "/escoles/deleteEscola", method = RequestMethod.GET)
+    public String deleteEscola(Model model, Long id) {
         // Eliminem el perfil
     	escolaService.deleteById(id);
     	

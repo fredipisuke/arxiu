@@ -37,9 +37,16 @@ $(document).ready(function(){
 	});
 });
 
-function eliminarAutor(id){
+$(document).on('keydown', 'body', function(event) {
+    if(event.keyCode==115){ //F4
+        event.preventDefault();
+        window.location = "/reis/escoles/registrationEscola";
+     }
+});
+
+function eliminarEscola(id){
 	if(!confirm("Estar segur que vol eliminar l'escola?")){
 		return;
 	}
-	window.location = "/reis/escolas/deleteEscola?id=" + id;
+	window.location = "/reis/escoles/deleteEscola?id=" + id;
 }

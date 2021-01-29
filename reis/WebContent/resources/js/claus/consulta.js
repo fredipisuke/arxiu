@@ -37,7 +37,14 @@ $(document).ready(function(){
 	});
 });
 
-function eliminarClaus(id){
+$(document).on('keydown', 'body', function(event) {
+    if(event.keyCode==115){ //F4
+        event.preventDefault();
+        window.location = "/reis/claus/registrationClau";
+     }
+});
+
+function eliminarClau(id){
 	if(!confirm("Estar segur que vol eliminar la clau?")){
 		return;
 	}

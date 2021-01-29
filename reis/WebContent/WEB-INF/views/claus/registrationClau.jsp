@@ -75,10 +75,11 @@
 						<div align="center">
 							<button class="btn btn-lg btn-default" type="button" onclick="javascript:window.location='consulta';">Tornar</button>
 							<c:if test="${editMode == true}">
-								<button class="btn btn-lg btn-primary" type="submit">Modificar</button>
+								<button class="btn btn-lg btn-primary" type="submit">Modificar (F4)</button>
+								<a href="#" class="btn btn-lg btn-danger" title="Eliminar" onclick="eliminarClau(${clauForm.id})">Eliminar</a>
 							</c:if>
 							<c:if test="${editMode == false}">
-								<button class="btn btn-lg btn-primary" type="submit">Crear</button>
+								<button class="btn btn-lg btn-primary" type="submit">Crear (F4)</button>
 							</c:if>
 						</div>
 					</form:form>
@@ -88,5 +89,6 @@
 		<!-- /container -->
 		<script src="${contextPath}/resources/js/jquery/1.11.2/jquery.min.js"></script>
 		<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+		<script src="${contextPath}/resources/js/claus/registre.js"></script>
 	</body>
 </html>

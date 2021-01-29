@@ -38,6 +38,17 @@ $(document).ready(function(){
 	});
 });
 
+$(document).on('keydown', 'body', function(event) {
+    if(event.keyCode==115){ //F4
+    	event.preventDefault();
+    	$("form").submit();
+    }
+    if(event.keyCode==114){ //F3
+    	event.preventDefault();
+        window.location = "/reis/arxiu/registre";
+    }
+});
+
 function eliminarFitxer(id, typeDocument){
 	if(!confirm("Estar segur que vol eliminar el fitxer?")){
 		return;

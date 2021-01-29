@@ -88,6 +88,13 @@ $(document).ready(function(){
     });
 });
 
+$(document).on('keydown', 'body', function(event) {
+    if(event.keyCode==115){ //F4
+        event.preventDefault();
+        window.location = "/reis/arxiu/registre";
+    }
+});
+
 function hideData(){
 	$('#tableFitxers').hide();
 	$('#tableFitxersLength').hide();

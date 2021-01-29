@@ -50,7 +50,7 @@
 				        	<div align="right">
 								<a href="${contextPath}/claus/registrationClau" class="btn btn-success">
 									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-									Crear
+									Crear (F4)
 								</a>
 								<a href="${contextPath}/claus/downloadExcel" class="btn btn-success">
 									<span class="glyphicon glyphicon-book" aria-hidden="true"></span>
@@ -97,7 +97,7 @@
 								    		<td>
 								    			<div class="btn-group-xs" role="group">
 									    			<a href="${contextPath}/claus/registrationClau?id=${clau.id}" class="btn btn-primary">Editar</a>
-									    			<a href="#" class="btn btn-danger" onclick="eliminarClaus(${clau.id})">Eliminar</a>
+									    			<a href="#" class="btn btn-danger" onclick="eliminarClau(${clau.id})">Eliminar</a>
 									    		</div>
 								    		</td>
 								    	</tr>

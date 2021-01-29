@@ -118,7 +118,7 @@
 				        	<div align="right">
 				        		<a href="${contextPath}/arxiu/registre" class="btn btn-success">
 									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-									Crear
+									Crear (F4)
 								</a>
 								<a href="#" class="btn btn-success" id="btnExcel" name="btnExcel">
 									<span class="glyphicon glyphicon-book" aria-hidden="true"></span>

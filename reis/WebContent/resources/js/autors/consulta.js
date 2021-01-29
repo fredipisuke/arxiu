@@ -37,9 +37,16 @@ $(document).ready(function(){
 	});
 });
 
+$(document).on('keydown', 'body', function(event) {
+    if(event.keyCode==115){ //F4
+        event.preventDefault();
+        window.location = "/reis/autors/registrationAutor";
+     }
+});
+
 function eliminarAutor(id){
 	if(!confirm("Estar segur que vol eliminar l'autor?")){
 		return;
 	}
-	window.location = "/reis//autors/deleteAutors?id=" + id;
+	window.location = "/reis/autors/deleteAutors?id=" + id;
 }
